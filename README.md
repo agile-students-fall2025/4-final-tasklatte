@@ -7,6 +7,18 @@ It’s not just another to-do list — it’s a **smart scheduling companion** t
 
 ---
 
+## Team
+Sprint 0
+| Name | GitHub |
+|------|---------|
+| **Susan Thao** | [@susan-t](https://github.com/susan-t)
+| **Muhammad Abyan Ahmed (Product Owner)** | [@mabyan22](https://github.com/mabyan22)
+| **Valeria Chang (Scrum Master)** | [@ValeriaChang](https://github.com/ValeriaChang) |
+| **Mandy Mao** | [@manrongm](https://github.com/manrongm) | 
+| **Yasmine Ksiyer** | [@yasminek27](https://github.com/yasminek27) | 
+
+---
+
 ## Project Overview
 
 **TaskLatte** encourages healthy study habits and time management through adaptive scheduling and wellness reminders.  
@@ -56,18 +68,6 @@ Then **TaskLatte** is the perfect companion to help you study smarter, not harde
 
 5. **Café visualization:**  
    The coffee shop UI changes based on workload — from calm mornings to busy rush hours — providing a creative visualization of balance and stress levels.
-
----
-
-## Team
-
-| Name | GitHub |
-|------|---------|
-| **Susan T.** | [@susan-t](https://github.com/susan-t)
-| **Muhammad A.** | [@mabyan22](https://github.com/mabyan22)
-| **Valeria C.** | [@ValeriaChang](https://github.com/ValeriaChang) |
-| **Mandy M.** | [@manrongm](https://github.com/manrongm) | 
-| **Yasmine K.** | [@yasminek27](https://github.com/yasminek27) | 
 
 ---
 
