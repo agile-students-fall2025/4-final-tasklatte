@@ -28,6 +28,7 @@ User Profile → check Goals and update info (e.g. Time-Zone, School, Major, Bio
 ## Wireframe
 
 Each page below represents a different screen or user interface component of the app.  
+[Link to the wireframe](https://www.figma.com/design/PSvBhg3W6DRRxdASL4Bamq/Tasklatte?node-id=0-1&t=CjTC0cJKEBsTICyp-1)
 
 ---
 
