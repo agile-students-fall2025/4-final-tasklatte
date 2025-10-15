@@ -102,7 +102,7 @@ npm start
 
 - [Proposal Document](https://github.com/agile-students-fall2025/1-project-proposal-sleep/blob/main/README.md)
 - [Wireframes](https://www.figma.com/design/PSvBhg3W6DRRxdASL4Bamq/Tasklatte?node-id=0-1&t=CjTC0cJKEBsTICyp-1)
-- [App Map](.https://drive.google.com/file/d/1PRT98SwQDq7Cg2TRRQ7L4PUbS1O74H0Z/view?usp=sharing)
+- [App Map](https://drive.google.com/file/d/1PRT98SwQDq7Cg2TRRQ7L4PUbS1O74H0Z/view?usp=sharing)
 - [Contributing Guide](./CONTRIBUTING.md)
 
 ---
