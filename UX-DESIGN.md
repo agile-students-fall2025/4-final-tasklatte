@@ -72,7 +72,7 @@ Shows all tasks organized by date, allowing users to view and add assignments ea
 
 ---
 
-### 6. Task List Page
+### 6. All Task List Page
 ![Task List page](./ux-design/tasklist.png)
 
 **Description:**  
@@ -104,7 +104,7 @@ Displays all tasks scheduled for a specific date, helping users track daily prog
 
 ---
 
-### 9. Add Task Page
+### 10. Add Task Page
 ![add task page](./ux-design/addtask.png)
 
 **Description:**  
@@ -112,15 +112,23 @@ Allows users to create a new task by entering its title, details, course, due da
 
 ---
 
-### 9. Edit Task Page
-![Edit task page](./ux-design/edittask.png)
+### 11. Edit Task One Page
+![Edit task page](./ux-design/edittaskone.png)
 
 **Description:**  
-Lets users update task details or delete an existing task to keep their schedule accurate.
+Lets users update task details or delete an existing task to keep their schedule accurate on X amount of tasks. This is the 1/2 tasks for 1 date.
 
 ---
 
-### 10. Goals Page
+### 12. Edit Task Two Page
+![Edit task page](./ux-design/edittasktwo.png)
+
+**Description:**  
+Lets users update task details or delete an existing task to keep their schedule accurate on X amount of tasks. This is the 2/2 tasks for 1 date.
+
+---
+
+### 13. Look At Goals Page
 ![Goals page](./ux-design/goals.png)
 
 **Description:**  
@@ -128,7 +136,7 @@ Allows users to view long-term goals with descriptions to track personal and aca
 
 ---
 
-### 11. Settings Page
+### 14. Settings Page
 ![Goals page](./ux-design/settings.png)
 
 **Description:**  
@@ -136,7 +144,7 @@ Lets users update profile information, manage account preferences, log out, or d
 
 ---
 
-### 12. Change Goals Page
+### 15. Change Goals Page
 ![Goals page](./ux-design/changegoal.png)
 
 **Description:**  
@@ -144,7 +152,7 @@ Allows users to modify or add long-term goals to stay aligned with evolving obje
 
 ---
 
-### 13. Change Bio Page
+### 16. Change Bio Page
 ![Goals page](./ux-design/changebio.png)
 
 **Description:**  
@@ -152,7 +160,7 @@ Lets users edit and update their personal bio to reflect who they are or their c
 
 ---
 
-### 14. Change School Page
+### 17. Change School Page
 ![Goals page](./ux-design/changeschool.png)
 
 **Description:**  
@@ -160,7 +168,7 @@ Provides a simple form for users to edit their current school or institution det
 
 ---
 
-### 15. Change Major Page
+### 18. Change Major Page
 ![Goals page](./ux-design/changemajor.png)
 
 **Description:**  
@@ -168,12 +176,133 @@ Enables users to update their academic major or field of study information.
 
 ---
 
-### 15. Change Time-Zone Page
+### 19. Change Time-Zone Page
 ![Goals page](./ux-design/changetimezone.png)
 
 **Description:**  
 Allows users to adjust their time zone settings to keep schedules accurate across regions.
 
+---
+
+### 20. Home Drop Down Page
+![Goals page](./ux-design/homedropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Home Page.
+
+---
+
+### 21. Daily Tasks Down Page
+![Goals page](./ux-design/dailytaskdropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Daily Task Page.
+
+---
+
+### 22. AI Suggestions Drop Down Page
+![Goals page](./ux-design/AIdropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the AI Suggestions Page.
+
+---
+
+### 23. Settings Drop Down Page
+![Goals page](./ux-design/settingdropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Settings Page.
+
+---
+
+### 24. Change Bio Drop Down Page
+![Goals page](./ux-design/biodropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Change Bio Page.
+
+---
+
+### 24. Profile Drop Down Page
+![Goals page](./ux-design/profiledropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Profile Page.
+
+---
+
+### 25. Change Bio Drop Down Page
+![Goals page](./ux-design/biodropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Change Bio Page.
+
+---
+
+### 26. Profile Drop Down Page
+![Goals page](./ux-design/profiledropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Profile Page.
+
+---
+
+### 27. All Tasks Drop Down Page
+![Goals page](./ux-design/alltasksdropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the All Tasks Page.
+
+---
+
+### 28. Calendar Drop Down Page
+![Goals page](./ux-design/calendardropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Calendar Page.
+
+---
+
+### 29. Delete Account Confirmation Page
+![Goals page](./ux-design/deleteaccount.png)
+
+**Description:**  
+Prompts users to confirm whether or not they want to proceed with deleting their account.
+
+---
+
+### 30. Change Goals Drop Down Page
+![Goals page](./ux-design/goalsdropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Goal/Long Term Page.
+
+---
+
+### 31. Change Major Drop Down Page
+![Goals page](./ux-design/majordropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Change Major Page.
+
+---
+
+### 32. Change School Drop Down Page
+![Goals page](./ux-design/schooldropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Change School Page.
+
+---
+
+### 33. Change Time-Zone Drop Down Page
+![Goals page](./ux-design/timezonedropdown.png)
+
+**Description:**  
+Enables users navigate through the menu dropdown on the top-left of the screen through the Change Time-Zone Page.
+
+---
 
 ## Notes
 
