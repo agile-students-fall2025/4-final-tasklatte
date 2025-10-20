@@ -1,7 +1,7 @@
 # User Experience Design
 
 - [app map](https://drive.google.com/file/d/1PRT98SwQDq7Cg2TRRQ7L4PUbS1O74H0Z/view?usp=sharing)
-- [wireframe](https://www.figma.com/design/PSvBhg3W6DRRxdASL4Bamq/Tasklatte?node-id=0-1&t=CjTC0cJKEBsTICyp-1)
+- [wireframe](https://www.figma.com/design/PSvBhg3W6DRRxdASL4Bamq/Tasklatte?node-id=0-1&m=dev&t=uWFulohyiY4h3vvt-1)
 
 ---
 
@@ -100,7 +100,7 @@ Lets users view and edit personal information, academic details, and long-term g
 ![daily task page](./ux-design/dailytask.png)
 
 **Description:**  
-Displays all tasks scheduled for a specific date, helping users track daily progress.
+Displays all tasks scheduled for a specific date, helping users track daily progress. Users can choose the date they want to go at the top of the screen.
 
 ---
 
@@ -224,7 +224,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 24. Profile Drop Down Page
+### 25. Profile Drop Down Page
 ![Goals page](./ux-design/profiledropdown.png)
 
 **Description:**  
@@ -232,7 +232,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 25. Change Bio Drop Down Page
+### 26. Change Bio Drop Down Page
 ![Goals page](./ux-design/biodropdown.png)
 
 **Description:**  
@@ -240,7 +240,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 26. Profile Drop Down Page
+### 27. Profile Drop Down Page
 ![Goals page](./ux-design/profiledropdown.png)
 
 **Description:**  
@@ -248,7 +248,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 27. All Tasks Drop Down Page
+### 28. All Tasks Drop Down Page
 ![Goals page](./ux-design/alltasksdropdown.png)
 
 **Description:**  
@@ -256,7 +256,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 28. Calendar Drop Down Page
+### 29. Calendar Drop Down Page
 ![Goals page](./ux-design/calendardropdown.png)
 
 **Description:**  
@@ -264,7 +264,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 29. Delete Account Confirmation Page
+### 30. Delete Account Confirmation Page
 ![Goals page](./ux-design/deleteaccount.png)
 
 **Description:**  
@@ -272,7 +272,7 @@ Prompts users to confirm whether or not they want to proceed with deleting their
 
 ---
 
-### 30. Change Goals Drop Down Page
+### 31. Change Goals Drop Down Page
 ![Goals page](./ux-design/goalsdropdown.png)
 
 **Description:**  
@@ -280,7 +280,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 31. Change Major Drop Down Page
+### 32. Change Major Drop Down Page
 ![Goals page](./ux-design/majordropdown.png)
 
 **Description:**  
@@ -288,7 +288,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 32. Change School Drop Down Page
+### 33. Change School Drop Down Page
 ![Goals page](./ux-design/schooldropdown.png)
 
 **Description:**  
@@ -296,7 +296,7 @@ Enables users navigate through the menu dropdown on the top-left of the screen t
 
 ---
 
-### 33. Change Time-Zone Drop Down Page
+### 34. Change Time-Zone Drop Down Page
 ![Goals page](./ux-design/timezonedropdown.png)
 
 **Description:**  
