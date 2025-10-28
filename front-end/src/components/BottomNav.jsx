@@ -16,7 +16,7 @@ export default function BottomNav() {
       <NavLink to="/ai" className={cls}>
         AI Suggestions
       </NavLink>
-      <NavLink to="/profile" className={cls}>
+      <NavLink to="/profilePage" className={cls}>
         Profile
       </NavLink>
     </nav>
