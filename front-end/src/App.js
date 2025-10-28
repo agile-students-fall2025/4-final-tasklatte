@@ -27,7 +27,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DailyTasks from "./pages/DailyTasks.jsx";
 import Placeholder from "./pages/EditTask.jsx";
-import Settings from "/Users/manrongmao/4-final-tasklatte/front-end/src/Settings.js";
+import Settings from "./Settings.js";
 import AllTasks from "./pages/AllTasks.jsx";
 import CalendarPage from "./Calendar.js";
 import AddTask from "./pages/AddTasks.jsx";
