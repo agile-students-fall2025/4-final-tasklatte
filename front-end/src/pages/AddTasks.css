@@ -1,7 +1,7 @@
 .addtask-container {
   width: 402px;
   height: 830px;
-  background: #f7f7f7;
+  background: #f4e7d3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,9 +9,13 @@
   border-radius: 24px;
   border: 1px solid #222;
   overflow: hidden;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* pixel vibe */
+  font-family: "Press Start 2P", monospace;
+  color: #4b2e05;
 }
 
+/* keep HeaderBar as-is; just ensure it spans full width on this page */
 .addtask-container > .header-bar {
   width: 100%;
   border-top-left-radius: 24px;
@@ -24,92 +28,126 @@
   transform: translateX(-50%);
 }
 
+/* === Scroll area === */
 .addtask-main {
   width: 100%;
   flex: 1;
-  padding: 16px;
+  padding: 1.25rem;
   display: grid;
-  place-items: center;
+  place-items: start center;
   overflow-y: auto;
-  padding-bottom: 88px;
+  padding-bottom: 88px; /* leave room for bottom nav */
 }
 
-.sheet {
-  width: calc(100% - 32px);
-  max-width: 360px;
-  background: #fff;
-  border: 2px solid #111;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+/* === Pixel card (like suggestion-card) === */
+.addtask-sheet {
+  width: 100%;
+  max-width: 500px;                    /* matches AI page max */
+  background: #fff8ec;
+  border: 4px solid #5a3c15;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 #b9895a;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: 0.9rem;
 }
 
-.label {
-  font-size: 13px;
-  color: #222;
-  font-weight: 600;
-}
-
-.input,
-.textarea,
-select.input {
-  width: 100%;
+/* reset within the sheet to avoid collision with global styles */
+.addtask-sheet, .addtask-sheet * {
   box-sizing: border-box;
-  font-size: 14px;
-  padding: 12px 12px;
-  border: 1px solid #d6d6d6;
-  background: #efefef;
-  border-radius: 10px;
+  font: inherit;
+  letter-spacing: normal;
+  margin: 0;
+}
+
+/* === Labels === */
+.addtask-label {
+  font-size: 10px;
+  color: #5a3c15;
+  text-transform: uppercase;
+}
+
+/* === Inputs / Textareas (pixel-frame) === */
+.addtask-input,
+.addtask-textarea,
+select.addtask-input {
+  width: 100%;
+  background: #fdf4e3;
+  border: 3px solid #5a3c15;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 #b9895a inset;
+  color: #4b2e05;
+  padding: 10px 12px;
   outline: none;
 }
-.input:focus,
-.textarea:focus,
-select.input:focus {
-  border-color: #9aa0a6;
-  background: #fff;
+
+.addtask-input::placeholder,
+.addtask-textarea::placeholder {
+  color: #9b6b3b;
+  opacity: 0.9;
 }
 
-.textarea {
+.addtask-input:focus,
+.addtask-textarea:focus,
+select.addtask-input:focus {
+  background: #fffaf0;
+  border-color: #4b2e05;
+  box-shadow: 3px 3px 0 #b9895a inset, 0 0 0 2px rgba(90,60,21,0.12);
+}
+
+/* sizes */
+.addtask-input,
+select.addtask-input { height: 42px; }
+
+.addtask-textarea {
+  min-height: 96px;
   resize: vertical;
+  line-height: 1.35;
 }
 
-.actions {
+/* === Button row === */
+.addtask-actions {
   display: flex;
-  gap: 10px;
   justify-content: flex-end;
-  margin-top: 6px;
+  gap: 10px;
+  margin-top: 0.2rem;
 }
 
-.btn {
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  border: none;
+/* === Pixel buttons (match .pixel-button) === */
+.addtask-btn {
+  background: #8b5a2b;
+  color: #fff8ec;
+  border: 3px solid #4b2e05;
+  padding: 0.6rem 1.0rem;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 #4b2e05;
+  text-transform: uppercase;
+  font-size: 10px;
   cursor: pointer;
 }
 
-.btn.ghost {
-  background: #e9e9e9;
-  border: 1px solid #d5d5d5;
-  color: #222;
-}
-.btn.ghost:hover {
-  background: #e1e1e1;
+.addtask-btn:hover {
+  background: #a16b36;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #4b2e05;
 }
 
-.btn.solid {
-  background: #a7a7a7;
-  color: #fff;
+/* ghost variant for Cancel */
+.addtask-btn.ghost {
+  background: #e4c9a4;
+  color: #4b2e05;
+  border-color: #5a3c15;
+  box-shadow: 3px 3px 0 #b9895a;
 }
-.btn.solid:hover {
-  background: #8e8e8e;
+.addtask-btn.ghost:hover {
+  background: #efd7b4;
+  box-shadow: 4px 4px 0 #b9895a;
 }
 
+/* small screens (short height) */
 @media (max-height: 760px) {
   .addtask-container { height: 760px; }
-  .sheet { max-width: 340px; }
+  .addtask-main { padding-bottom: 80px; }
+  .addtask-sheet { max-width: 460px; }
 }
