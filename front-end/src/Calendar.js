@@ -3,9 +3,14 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; 
 import { useNavigate } from "react-router-dom";
 import "./Calendar.css"; 
+import HeaderBar from "./components/HeaderBar.jsx";
+import BottomNav from "./components/BottomNav.jsx";
+import MenuOverlay from "./components/MenuOverlay.jsx";
+import AddTask from "./pages/AddTasks.jsx";
 
 export default function CalendarPage() {
   const [date, setDate] = useState(new Date());
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleDayClick = (value) => {
@@ -15,7 +20,12 @@ export default function CalendarPage() {
 
   return (
     <div className="calendar-container">
-      <h1 className="calendar-title">Calendar</h1>
+      <HeaderBar
+        title="Calendar" 
+        onHamburger={() => setMenuOpen(true)}
+        onLogo={() => {}}
+      />
+      {/* <h1 className="calendar-title">Calendar</h1> */}
 
       <div className="calendar-wrapper">
         <Calendar
@@ -25,7 +35,12 @@ export default function CalendarPage() {
         />
       </div>
 
-      <button className="add-task-button">Add Task</button>
+      {/* <button className="add-task-button">Add Task</button> */}
+      <button className="add-task-button" onClick={() => navigate("/calendar/new")}>
+        AddTask
+      </button>
+      <BottomNav />
+      {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
     </div>
   );
 }

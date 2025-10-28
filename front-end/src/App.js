@@ -28,7 +28,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DailyTasks from "./pages/DailyTasks.jsx";
 import Placeholder from "./pages/EditTask.jsx";
 import Settings from "/Users/manrongmao/4-final-tasklatte/front-end/src/Settings.js";
-
+import AllTasks from "./pages/AllTasks.jsx";
+import CalendarPage from "./Calendar.js";
+import AddTask from "./pages/AddTasks.jsx";
 
 
 
@@ -36,8 +38,11 @@ export default function App(){
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DailyTasks />} />
-        <Route path="/daily" element={<Navigate to="/" replace />} />
+        <Route path="/all" element={<AllTasks />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/daily" element={<DailyTasks />} />
+        <Route path="/calendar/new" element={<AddTask />} />
+        {/* <Route path="/daily" element={<Navigate to="/daily" replace />} /> */}
         <Route path="/calendar" element={<Placeholder title="Calendar" />} />
         <Route path="/ai" element={<Placeholder title="AI Suggestions" />} />
         {/* <Route path="/profile" element={Wrap(<Placeholder title="Profile" />)} />

@@ -7,7 +7,7 @@ export default function BottomNav() {
 
   return (
     <nav className="bottom-nav" aria-label="Bottom navigation">
-      <NavLink to="/" end className={cls}>
+      <NavLink to="/daily" end className={cls}>
         Daily Tasks
       </NavLink>
       <NavLink to="/calendar" className={cls}>
