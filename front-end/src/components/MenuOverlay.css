@@ -1,0 +1,48 @@
+.menu-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.menu-panel {
+  width: calc(100% - 48px);
+  max-width: 340px;
+  background: #fff;
+  border: 3px solid #111;
+  border-radius: 14px;
+  padding: 20px 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease-out;
+}
+
+.menu-links {
+  display: grid;
+  gap: 14px;
+  text-align: center;
+}
+
+.menu-link {
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.menu-link:hover {
+  color: #444;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
