@@ -31,6 +31,7 @@ import Settings from "./Settings.js";
 import AllTasks from "./pages/AllTasks.jsx";
 import CalendarPage from "./Calendar.js";
 import AddTask from "./pages/AddTasks.jsx";
+import Profile from "./profilePage.js"
 
 
 
@@ -45,8 +46,8 @@ export default function App(){
         {/* <Route path="/daily" element={<Navigate to="/daily" replace />} /> */}
         <Route path="/calendar" element={<Placeholder title="Calendar" />} />
         <Route path="/ai" element={<Placeholder title="AI Suggestions" />} />
-        {/* <Route path="/profile" element={Wrap(<Placeholder title="Profile" />)} />
-        <Route path="/all" element={Wrap(<Placeholder title="All Tasks" />)} />
+        <Route path="/profilePage" element={<Profile />} />
+        {/* <Route path="/all" element={Wrap(<Placeholder title="All Tasks" />)} />
         <Route path="/account" element={Wrap(<Placeholder title="Account" />)} /> */}
         <Route path="/settings" element={<Settings />} />
         <Route path="/tasks/:id/edit" element={<Placeholder title="Edit Task (stub)" />} />
