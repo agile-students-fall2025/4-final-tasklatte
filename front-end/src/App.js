@@ -26,11 +26,12 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DailyTasks from "./pages/DailyTasks.jsx";
-import Placeholder from "./pages/EditTask.jsx";
+import Placeholder from "./pages/Placeholder.jsx";
 import Settings from "./Settings.js";
 import AllTasks from "./pages/AllTasks.jsx";
 import CalendarPage from "./Calendar.js";
 import AddTask from "./pages/AddTasks.jsx";
+import EditTask from "./pages/EditTask.jsx";
 import Profile from "./profilePage.js"
 
 
@@ -50,7 +51,7 @@ export default function App(){
         {/* <Route path="/all" element={Wrap(<Placeholder title="All Tasks" />)} />
         <Route path="/account" element={Wrap(<Placeholder title="Account" />)} /> */}
         <Route path="/settings" element={<Settings />} />
-        <Route path="/tasks/:id/edit" element={<Placeholder title="Edit Task (stub)" />} />
+        <Route path="/tasks/:id/edit" element={<EditTask title="Edit Task (stub)" />} />
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
     </BrowserRouter>
