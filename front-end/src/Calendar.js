@@ -6,6 +6,7 @@ import "./Calendar.css";
 import HeaderBar from "./components/HeaderBar.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import MenuOverlay from "./components/MenuOverlay.jsx";
+import AddTask from "./pages/AddTasks.jsx";
 
 export default function CalendarPage() {
   const [date, setDate] = useState(new Date());
@@ -34,7 +35,10 @@ export default function CalendarPage() {
         />
       </div>
 
-      <button className="add-task-button">Add Task</button>
+      {/* <button className="add-task-button">Add Task</button> */}
+      <button className="add-task-button" onClick={() => navigate("/calendar/new")}>
+        AddTask
+      </button>
       <BottomNav />
       {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
     </div>
