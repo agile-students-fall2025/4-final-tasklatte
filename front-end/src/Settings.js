@@ -29,7 +29,9 @@ const Settings = () => {
             </label>
             <label>
                 <input name="myInput" defaultValue="School"/>
-                <button class="edit-button" type="button">Edit</button>
+                <button className="edit-button" onClick={() => navigate("/settings/school")}>
+                    Edit
+                </button>            
             </label>
             <label>
                 <input name="myInput" defaultValue="Time-zone"/>

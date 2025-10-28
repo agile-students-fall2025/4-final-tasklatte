@@ -35,6 +35,7 @@ import ChangeBio from "./ChangeBio.js";
 import Profile from "./profilePage.js";
 import EditTask from "./pages/EditTask.jsx";
 import ChangeMajor from './ChangeMajor.js';
+import ChangeSchool from './ChangeSchool.js';
 
 
 
@@ -56,6 +57,7 @@ export default function App(){
         <Route path="/tasks/:id/edit" element={<EditTask title="Edit Task (stub)" />} />
         <Route path='/settings/bio' element={<ChangeBio />} />
         <Route path='/settings/major' element={<ChangeMajor />} />
+        <Route path='/settings/school' element={<ChangeSchool />} />
         <Route path="/tasks/:id/edit" element={<Placeholder title="Edit Task (stub)" />} />
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
