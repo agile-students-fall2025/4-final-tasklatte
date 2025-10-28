@@ -3,7 +3,7 @@ import DailyTasks from "./pages/DailyTasks.jsx";
 import Placeholder from "./pages/Placeholder.jsx";
 import Settings from "./Settings.js";
 import AllTasks from "./pages/AllTasks.jsx";
-import CalendarPage from "./Calendar.js";
+import CalendarPage from "./Calendar.jsx";
 import AddTask from "./pages/AddTasks.jsx";
 import ChangeBio from "./ChangeBio.js";
 import Profile from "./profilePage.js";
