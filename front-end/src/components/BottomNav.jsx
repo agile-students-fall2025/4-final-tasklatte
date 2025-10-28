@@ -13,7 +13,7 @@ export default function BottomNav() {
       <NavLink to="/calendar" className={cls}>
         Calendar
       </NavLink>
-      <NavLink to="/ai" className={cls}>
+      <NavLink to="/AISuggestions" className={cls}>
         AI Suggestions
       </NavLink>
       <NavLink to="/profilePage" className={cls}>
