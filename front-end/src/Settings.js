@@ -23,7 +23,9 @@ const Settings = () => {
             </label>
             <label>
                 <input name="myInput" defaultValue="Major"/>
-                <button class="edit-button" type="button">Edit</button>
+                 <button className="edit-button" onClick={() => navigate("/settings/major")}>
+                    Edit
+                </button>
             </label>
             <label>
                 <input name="myInput" defaultValue="School"/>
