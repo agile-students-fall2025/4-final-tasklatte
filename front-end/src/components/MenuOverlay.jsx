@@ -6,7 +6,7 @@ export default function MenuOverlay({ onClose }) {
     <div className="menu-overlay" onClick={onClose}>
       <div
         className="menu-panel"
-        onClick={(e) => e.stopPropagation()} // 阻止冒泡
+        onClick={(e) => e.stopPropagation()}
       >
         <nav className="menu-links">
           <NavLink to="/" className="menu-link" onClick={onClose}>
