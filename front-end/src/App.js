@@ -36,6 +36,7 @@ import Profile from "./profilePage.js";
 import EditTask from "./pages/EditTask.jsx";
 import ChangeMajor from './ChangeMajor.js';
 import ChangeSchool from './ChangeSchool.js';
+import AiSuggestions from './AISuggestions.js';
 
 
 
@@ -49,7 +50,7 @@ export default function App(){
         <Route path="/calendar/new" element={<AddTask />} />
         {/* <Route path="/daily" element={<Navigate to="/daily" replace />} /> */}
         <Route path="/calendar" element={<Placeholder title="Calendar" />} />
-        <Route path="/ai" element={<Placeholder title="AI Suggestions" />} />
+        <Route path="/AISuggestions" element={<AiSuggestions/>} /> 
         <Route path="/profilePage" element={<Profile />} />
         {/* <Route path="/all" element={Wrap(<Placeholder title="All Tasks" />)} />
         <Route path="/account" element={Wrap(<Placeholder title="Account" />)} /> */}
