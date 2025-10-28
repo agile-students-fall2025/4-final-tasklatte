@@ -9,27 +9,29 @@ export default function ProfilePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const user = {
-    name: "Jane Doe",
-    grade: "Freshman",
-    major: "Computer Science",
-    university: "New York University",
-    avatar: "",
+  const [user,setUser] = useState({
+    name: "Lorem ipsum",
+    grade: "Lorem",
+    major: "Dolor sit amet",
+    university: "consectetur adipiscing",
+    avatar: "https://picsum.photos/id/237/200/300",
     stats: [
-      { label: "study streak", value: 0 },
-      { label: "longest focus", value: 0 },
-      { label: "coffees drank", value: 0 },
-      { label: "snack breaks", value: 0}
+      { label: "📚study streak", value: 0 },
+      { label: "🧘‍♀️longest focus", value: 0 },
+      { label: "☕coffees drank", value: 0 },
+      { label: "🍪snack breaks", value: 0}
     ],
-  };
+  });
+
+  const biography = { bio: "sed do eiusmod tempor incididunt"};
 
   const [goals, setGoals] = useState({
     shortTerm: [
-      { id: 1, title: "Finish HW by Tueday", details: "I have AiT, OOP, and Agile due" },
-      { id: 2, title: "Buy groceries", details: "Spend within a $50 budget" },
+      { id: 1, title: "Ut labore et dolore magna aliqua", details: "Ut enim ad minim veniam, quis nostrud" },
+      { id: 2, title: "Laboris nisi ut aliquip ex ea commodo consequa", details: "Duis aute irure dolor in reprehenderit in" },
     ],
     longTerm: [
-      { id: 3, title: "Graduate with 3.0", details: "Go to tutoring and maintain a B+ average" },
+      { id: 3, title: "Oluptate velit esse cillum dolore", details: "Eu fugiat nulla pariatur." },
     ],
   });
 
@@ -56,13 +58,29 @@ export default function ProfilePage() {
             <div className="profile-right">
                 <p className="pixel-font">Grade: {user.grade}</p>
                 <p className="pixel-font">Major: {user.major}</p>
-                <p className="pixel-font cafe-name">{user.university}</p>
+                <p className="pixel-font cafe-name">School: {user.university}</p>
             </div>
         </div>
 
+        <div className="bio-div stat-card pixel-border">
+          Bio:
+          <p>{biography.bio}</p>
+        </div>
+
         <div className="stats-grid">
-          {user.stats.map((s) => (
-            <div key={s.label} className="stat-card pixel-border">
+          {user.stats.map((s, index) => (
+            <div
+              key={s.label}
+              className="stat-card pixel-border"
+              onClick={() => {
+                if (s.label === "☕coffees drank") {
+                  const newStats = [...user.stats];
+                  newStats[index] = { ...s, value: s.value + 1 };
+                  setUser({ ...user, stats: newStats });
+                }
+              }}
+              style={{ cursor: s.label === "coffees drank" ? "pointer" : "default" }}
+            >
               <p className="pixel-font label">{s.label}</p>
               <p className="pixel-font value">{s.value}</p>
             </div>
