@@ -1,0 +1,195 @@
+.page {
+  background: #f4e7d3 url("") repeat;
+  background-size: 32px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Press Start 2P", monospace;
+  color: #4b2e05;
+}
+
+.profile-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center; 
+  justify-content: flex-start;
+  gap: 20px; 
+  padding: 20px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.pixel-font {
+  font-family: "Press Start 2P", monospace;
+  letter-spacing: 1px;
+}
+
+.pixel-frame {
+  background: #fdf4e3;
+  border: 4px solid #5a3c15;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 4px 4px 0 #b9895a;
+  text-align: center;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  border: 4px solid #5a3c15;
+  border-radius: 8px;
+}
+
+.cafe-name {
+  color: #9b6b3b;
+  margin-top: 0.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.stat-card {
+  background: #fff8ec;
+  border: 3px solid #5a3c15;
+  box-shadow: 3px 3px 0 #b9895a;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.stat-card .label {
+  font-size: 10px;
+  color: #8b5a2b;
+}
+
+.stat-card .value {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #4b2e05;
+}
+
+.pixel-button {
+  margin-top: 1rem;
+  background: #8b5a2b;
+  color: #fff8ec;
+  border: 3px solid #4b2e05;
+  padding: 0.6rem 1.2rem;
+  box-shadow: 3px 3px 0 #4b2e05;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.pixel-button:hover {
+  background: #a16b36;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #4b2e05;
+}
+
+.pixel-border {
+  image-rendering: pixelated;
+  border-radius: 8px;
+}
+
+.profile-main::-webkit-scrollbar {
+  width: 6px;
+}
+.profile-main::-webkit-scrollbar-thumb {
+  background-color: #c8a979;
+  border-radius: 4px;
+}
+
+
+.goals-section {
+  background: #fff5d6;
+  border: 4px solid #5a3c15;
+  box-shadow: 4px 4px 0 #b9895a;
+  padding: 1rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 4px;
+}
+
+.section-title {
+  font-size: 10px;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.goal-group {
+  margin-bottom: 1rem;
+}
+
+.goal-type {
+  font-size: 9px;
+  color: #5a3c15;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.goal-card {
+  background: #fdf4e3;
+  border: 3px solid #5a3c15;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 3px 3px 0 #b9895a;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.goal-card:hover {
+  transform: translateY(-2px);
+}
+
+.goal-title {
+  font-size: 8px;
+}
+
+.goal-details {
+  font-size: 7px;
+  color: #6a5636;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.goal-card.expanded {
+  background: #f9ebc4;
+}
+
