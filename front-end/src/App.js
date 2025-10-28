@@ -32,7 +32,8 @@ import AllTasks from "./pages/AllTasks.jsx";
 import CalendarPage from "./Calendar.js";
 import AddTask from "./pages/AddTasks.jsx";
 import EditTask from "./pages/EditTask.jsx";
-import Profile from "./profilePage.js"
+import ChangeBio from "./ChangeBio.js";
+import Profile from "./profilePage.js";
 
 
 
@@ -52,6 +53,8 @@ export default function App(){
         <Route path="/account" element={Wrap(<Placeholder title="Account" />)} /> */}
         <Route path="/settings" element={<Settings />} />
         <Route path="/tasks/:id/edit" element={<EditTask title="Edit Task (stub)" />} />
+        <Route path='/settings/bio' element={<ChangeBio />} />
+        <Route path="/tasks/:id/edit" element={<Placeholder title="Edit Task (stub)" />} />
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
     </BrowserRouter>

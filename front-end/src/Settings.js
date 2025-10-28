@@ -17,7 +17,9 @@ const Settings = () => {
             <h4>Profile:</h4>
             <label>
                 <input name="myInput" defaultValue="Bio"/>
-                <button class="edit-button" type="button">Edit</button>
+                 <button className="edit-button" onClick={() => navigate("/settings/bio")}>
+                    Edit
+                </button>
             </label>
             <label>
                 <input name="myInput" defaultValue="Major"/>
@@ -40,8 +42,10 @@ const Settings = () => {
             <button class="logout-button" type="button">Log Out</button>
             <button class="delete-button" type="button">Delete Account</button>
 
-            <BottomNav />
-            {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+            <div className="bottom-nav">
+                <BottomNav />
+                {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+            </div>
         </div>
     );
 };
