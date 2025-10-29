@@ -23,10 +23,8 @@ const ChangeSchool = () => {
                 <button class="save-button" type="button">Save</button>
             </div>
 
-            <div className = "bottom-nav">
-                <BottomNav />
-                {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
-            </div>
+            <BottomNav />
+            {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
 };
