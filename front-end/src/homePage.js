@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderBar from "./components/HeaderBar.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import MenuOverlay from "./components/MenuOverlay.jsx";
-import logo from "./pages/TasklatteLogo.png";
+import logo from "./logo.png";
 import "./homePage.css";
 
 export default function HomePage() {
@@ -15,7 +15,7 @@ export default function HomePage() {
         <HeaderBar
             title="Welcome"
             onHamburger={() => setMenuOpen(true)}
-            onLogo={() => navigate("/")}
+            onLogo={() => navigate("/home")}
         />
 
         <main className="home-content">
