@@ -11,6 +11,7 @@ import EditTask from "./pages/EditTask.jsx";
 import ChangeMajor from "./ChangeMajor.js";
 import ChangeSchool from "./ChangeSchool.js";
 import AiSuggestions from "./AISuggestions.js";
+import Home from "./homePage.js";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -42,6 +43,8 @@ export default function App() {
         <Route path="/settings/bio" element={<ChangeBio />} />
         <Route path="/settings/major" element={<ChangeMajor />} />
         <Route path="/settings/school" element={<ChangeSchool />} />
+
+        <Route path="/" element={<Home />} /> 
 
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
