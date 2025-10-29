@@ -15,7 +15,7 @@ export default function RegisterPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Name:", name, "Username:", username, "Password:", password);
-        navigate("/");
+        navigate("/dashboard");
     };
 
     return (

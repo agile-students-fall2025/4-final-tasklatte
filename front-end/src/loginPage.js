@@ -14,7 +14,7 @@ export default function LoginPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Username:", username, "Password:", password);
-        navigate("/");
+        navigate("/dashboard");
     };
 
     return (
