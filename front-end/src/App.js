@@ -13,6 +13,7 @@ import ChangeSchool from "./ChangeSchool.js";
 import AiSuggestions from "./AISuggestions.js";
 import Home from "./homePage.js";
 import ChangeTimezone from "./ChangeTimezone.js";
+import Login from "./loginPage.js";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/settings/time" element={<ChangeTimezone />} />
 
         <Route path="/" element={<Home />} /> 
+        <Route path="/login" element={<Login />} /> 
 
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>

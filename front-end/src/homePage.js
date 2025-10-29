@@ -15,7 +15,7 @@ export default function HomePage() {
         <HeaderBar
             title="Welcome"
             onHamburger={() => setMenuOpen(true)}
-            onLogo={() => navigate("/home")}
+            onLogo={() => navigate("/")}
         />
 
         <main className="home-content">
