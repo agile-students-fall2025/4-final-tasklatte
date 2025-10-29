@@ -5,14 +5,25 @@ import BottomNav from "./components/BottomNav.jsx";
 import { useState } from "react";
 import MenuOverlay from "./components/MenuOverlay.jsx";
 import { useNavigate } from "react-router-dom";
+import DeleteConfirmOverlay from "./components/DeleteConfirmOverlay.jsx";
 
 const Settings = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+
+    const handleDeleteAccount = () => {
+        console.log("Account deleted");
+        setConfirmOpen(false)
+        navigate("/")
+    };
     
     return(
         <div className = "Settings">
-            <HeaderBar title="Settings" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+            <HeaderBar 
+                title="Settings" 
+                onHamburger={() => setMenuOpen(true)} 
+                onLogo={() => navigate("/")} />
             <h1>Settings</h1>
             <h4>Profile:</h4>
             <label>
@@ -47,13 +58,29 @@ const Settings = () => {
             </label>
             
             <h4>Other:</h4>
-            <button class="logout-button" type="button">Log Out</button>
-            <button class="delete-button" type="button">Delete Account</button>
+            <div className="button-row">
+                <button className="action-button" type="button" onClick={() => navigate("/")}>
+                    Log Out
+                </button>
+                <button 
+                    className="action-button" 
+                    type="button" 
+                    onClick={() => setConfirmOpen(true)}>
+                    Delete Account
+                </button>
+            </div>
 
             <div className="bottom-nav">
-                <BottomNav />
-                {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+            <BottomNav /> 
             </div>
+        {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+        {confirmOpen && (
+            <DeleteConfirmOverlay
+                onClose={() => setConfirmOpen(false)}
+                onConfirm={handleDeleteAccount}
+            />
+        )}
+
         </div>
     );
 };
