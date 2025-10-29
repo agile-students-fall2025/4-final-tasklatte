@@ -21,6 +21,9 @@ const ChangeSchool = () => {
                     <input name="myInput" defaultValue="School"/>
                 </label>
                 <button class="save-button" type="button">Save</button>
+                <button className="back-button" onClick={() => navigate("/settings")}>
+                Back
+                </button>
             </div>
 
             <BottomNav />

@@ -21,6 +21,9 @@ const ChangeTimezone = () => {
                     <input name="myInput" defaultValue="Time-zone"/>
                 </label>
                 <button class="save-button" type="button">Save</button>
+                <button className="back-button" onClick={() => navigate("/settings")}>
+                 Back
+                </button>
             </div>
 
             <BottomNav />

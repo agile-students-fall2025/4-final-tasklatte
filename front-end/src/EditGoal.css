@@ -1,0 +1,62 @@
+.EditGoals {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.edit-goals-content {
+  width: calc(100% - 48px);
+  max-width: 340px;
+  background: #fff;
+  border: 3px solid #111;
+  border-radius: 14px;
+  padding: 20px 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease-out;
+}
+
+.save-button{
+    margin-top: 1rem;
+  background-color: #8b5a2b;
+  color: #fff8ec;
+  border: 3px solid #4b2e05;
+  padding: 0.6rem 1.2rem;
+  box-shadow: 3px 3px 0 #4b2e05;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 10px;
+  width: 50%;
+    margin-left: 100px;
+    border-radius: 10px;
+    font-family: "Press Start 2P", monospace;
+}
+.save-button:hover {
+    background: #a16b36;
+    box-shadow: 2px 2px 0 #4b2e05;
+    border-radius: 8px;
+}
+
+.delete-button{
+      margin-top: 1rem;
+  background-color: #8b5a2b;
+  color: #fff8ec;
+  border: 3px solid #4b2e05;
+  padding: 0.6rem 1.2rem;
+  box-shadow: 3px 3px 0 #4b2e05;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 10px;
+  width: 50%;
+    margin-left: 100px;
+    border-radius: 10px;
+    font-family: "Press Start 2P", monospace;
+}
+.delete-button:hover {
+    background: #a16b36;
+    box-shadow: 2px 2px 0 #4b2e05;
+    border-radius: 8px;
+}
