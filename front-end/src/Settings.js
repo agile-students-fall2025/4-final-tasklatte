@@ -41,7 +41,9 @@ const Settings = () => {
             </label>
             <label>
                 <input name="myInput" defaultValue="Goals"/>
-                <button class="edit-button" type="button">Edit</button>
+                <button className="edit-button" onClick={() => navigate("/settings/goals")}>
+                    Edit
+                </button>             
             </label>
             
             <h4>Other:</h4>
