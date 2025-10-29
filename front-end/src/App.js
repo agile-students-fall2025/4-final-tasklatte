@@ -13,6 +13,7 @@ import ChangeSchool from "./ChangeSchool.js";
 import AiSuggestions from "./AISuggestions.js";
 import Home from "./homePage.js";
 import ChangeTimezone from "./ChangeTimezone.js";
+import Goals from "./Goals.js";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/settings/major" element={<ChangeMajor />} />
         <Route path="/settings/school" element={<ChangeSchool />} />
         <Route path="/settings/time" element={<ChangeTimezone />} />
+        <Route path="/settings/goals" element={<Goals />} />
 
         <Route path="/" element={<Home />} /> 
 
