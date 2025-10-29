@@ -1,5 +1,5 @@
 import './Settings.css'
-import logo from './logo.svg'
+/*import logo from './logo.png'*/
 import HeaderBar from "./components/HeaderBar.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import { useState } from "react";
@@ -35,7 +35,9 @@ const Settings = () => {
             </label>
             <label>
                 <input name="myInput" defaultValue="Time-zone"/>
-                <button class="edit-button" type="button">Edit</button>
+                <button className="edit-button" onClick={() => navigate("/settings/time")}>
+                    Edit
+                </button>            
             </label>
             <label>
                 <input name="myInput" defaultValue="Goals"/>

@@ -3,7 +3,7 @@ import DailyTasks from "./pages/DailyTasks.jsx";
 import Placeholder from "./pages/Placeholder.jsx";
 import Settings from "./Settings.js";
 import AllTasks from "./pages/AllTasks.jsx";
-import CalendarPage from "./Calendar.js";
+import CalendarPage from "./Calendar.jsx";
 import AddTask from "./pages/AddTasks.jsx";
 import ChangeBio from "./ChangeBio.js";
 import Profile from "./profilePage.js";
@@ -12,6 +12,7 @@ import ChangeMajor from "./ChangeMajor.js";
 import ChangeSchool from "./ChangeSchool.js";
 import AiSuggestions from "./AISuggestions.js";
 import Home from "./homePage.js";
+import ChangeTimezone from "./ChangeTimezone.js";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/settings/bio" element={<ChangeBio />} />
         <Route path="/settings/major" element={<ChangeMajor />} />
         <Route path="/settings/school" element={<ChangeSchool />} />
+        <Route path="/settings/time" element={<ChangeTimezone />} />
 
         <Route path="/" element={<Home />} /> 
 

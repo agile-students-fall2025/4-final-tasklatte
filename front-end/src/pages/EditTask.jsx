@@ -14,10 +14,10 @@ export default function EditTask({ tasks = [], setTasks }) {
   const existingTask = tasks.find((t) => t.id === id);
 
   const [form, setForm] = useState({
-    title: existingTask?.title || "",
-    details: existingTask?.details || "",
-    course: existingTask?.course || "",
-    due: existingTask?.due || "",
+    title: existingTask?.title || "Sample Task",
+    details: existingTask?.details || "This is a sample.",
+    course: existingTask?.course || "Course 1",
+    due: existingTask?.due || "05/11/2025, 14:35",
     priority: existingTask?.priority || "Medium",
   });
 
@@ -31,28 +31,28 @@ export default function EditTask({ tasks = [], setTasks }) {
   const update = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const onSave = (e) => {
-    e.preventDefault();
+  // const onSave = (e) => {
+  //   // e.preventDefault();
 
-    const updated = tasks.map((t) =>
-      t.id === id ? { ...t, ...form } : t
-    );
-    setTasks(updated);
+  //   // const updated = tasks.map((t) =>
+  //   //   t.id === id ? { ...t, ...form } : t
+  //   // );
+  //   // setTasks(updated);
 
-    console.log("UPDATED TASK:", form);
-    navigate("/calendar");
-  };
+  //   console.log("UPDATED TASK:", form);
+  //   navigate(-1);
+  // };
 
   return (
-    <div className="addtask-container">
+    <div className="edittask-container">
       <HeaderBar
         title="Edit Task"
         onHamburger={() => setMenuOpen(true)}
         onLogo={() => {}}
       />
 
-      <main className="addtask-main">
-        <form className="sheet" onSubmit={onSave}>
+      <main className="edittask-main">
+        <form className="sheet" >
           <label className="label" htmlFor="title">Title</label>
           <input
             id="title"
@@ -107,7 +107,7 @@ export default function EditTask({ tasks = [], setTasks }) {
             <button type="button" className="btn ghost" onClick={() => navigate(-1)}>
               Cancel
             </button>
-            <button type="submit" className="btn solid">Save</button>
+            <button type="button" className="btn solid" onClick = {() => navigate(-1)} >Save</button>
           </div>
         </form>
       </main>

@@ -1,5 +1,5 @@
 import './ChangeBio.css'
-import logo from './logo.svg'
+/*import logo from './logo.png'*/
 import HeaderBar from "./components/HeaderBar.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import { useState } from "react";
@@ -23,10 +23,8 @@ const ChangeBio = () => {
                 <button class="save-button" type="button">Save</button>
             </div>
 
-            <div className = "bottom-nav">
-                <BottomNav />
-                {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
-            </div>
+            <BottomNav />
+            {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
 };

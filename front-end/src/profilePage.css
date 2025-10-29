@@ -78,9 +78,20 @@
   margin-top: 0.5rem;
 }
 
+.bio-div {
+  background: #fff8ec;
+  border: 3px solid #5a3c15;
+  box-shadow: 3px 3px 0 #b9895a;
+  padding: 0.75rem;
+  width: 90%;
+  max-width: 500px; /* match goals-section */
+  border-radius: 4px;
+  text-align: left;
+}
+
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
   gap: 1rem;
   width: 100%;
   max-width: 400px;
@@ -90,7 +101,6 @@
   background: #fff8ec;
   border: 3px solid #5a3c15;
   box-shadow: 3px 3px 0 #b9895a;
-  padding: 0.75rem;
   text-align: center;
 }
 
@@ -145,6 +155,7 @@
   width: 90%;
   max-width: 500px;
   border-radius: 4px;
+  margin-bottom: 2.5em;
 }
 
 .section-title {
@@ -191,4 +202,21 @@
 
 .goal-card.expanded {
   background: #f9ebc4;
+}
+
+.coffee-button {
+  font-size: 12px;
+  padding: 0.4rem 0.8rem;
+  background: #c08b5a;
+  border: 3px solid #4b2e05;
+  color: #fff8ec;
+  box-shadow: 3px 3px 0 #4b2e05;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.coffee-button:hover {
+  background: #e3a86f;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #4b2e05;
 }

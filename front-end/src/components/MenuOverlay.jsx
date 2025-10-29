@@ -15,7 +15,7 @@ export default function MenuOverlay({ onClose }) {
           <NavLink to="/all" className="menu-link" onClick={onClose}>
             All Tasks
           </NavLink>
-          <NavLink to="/account" className="menu-link" onClick={onClose}>
+          <NavLink to="/profilePage" className="menu-link" onClick={onClose}>
             Account
           </NavLink>
           <NavLink to="/settings" className="menu-link" onClick={onClose}>
