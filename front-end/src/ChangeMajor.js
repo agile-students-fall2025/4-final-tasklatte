@@ -1,5 +1,5 @@
 import './ChangeMajor.css'
-import logo from './logo.svg'
+/*import logo from './logo.png'*/
 import HeaderBar from "./components/HeaderBar.jsx";
 import BottomNav from "./components/BottomNav.jsx";
 import { useState } from "react";
