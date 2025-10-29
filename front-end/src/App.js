@@ -16,6 +16,7 @@ import ChangeTimezone from "./ChangeTimezone.js";
 import Login from "./loginPage.js";
 import Goals from "./Goals.js";
 import Register from "./registerPage.js";
+import Dashboard from "./dashboardPage.js";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -53,12 +54,10 @@ export default function App() {
         <Route path="/" element={<Home />} /> 
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} /> 
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-
-
