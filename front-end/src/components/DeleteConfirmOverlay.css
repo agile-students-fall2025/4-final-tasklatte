@@ -1,0 +1,86 @@
+.delete-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: grid;
+    place-items: center;
+    z-index: 40; /* slightly above menu overlay */
+    animation: fadeIn 0.2s ease-out;
+}
+
+.delete-panel {
+    width: calc(100% - 48px);
+    max-width: 320px;
+    background: #fff8ec;
+    border: 3px solid #111;
+    border-radius: 14px;
+    padding: 24px 20px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.25s ease-out;
+    text-align: center;
+    font-family: "Press Start 2P", monospace;
+    color: #4b2e05;
+}
+
+.delete-panel h2 {
+    font-size: 14px;
+    margin-bottom: 1rem;
+}
+
+.delete-panel p {
+    font-size: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.delete-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.cancel-button {
+    background: #8b5a2b;
+    color: #fff8ec;
+    border: 3px solid #4b2e05;
+    box-shadow: 3px 3px 0 #4b2e05;
+    padding: 0.6rem 1.2rem;
+    font-size: 9px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cancel-button:hover {
+    background: #a16b36;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #4b2e05;
+}
+
+
+.confirm-button {
+    background: #c0392b;
+    color: #fff8ec;
+    border: 3px solid #4b2e05;
+    box-shadow: 3px 3px 0 #4b2e05;
+    padding: 0.6rem 1.2rem;
+    font-size: 9px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.confirm-button:hover {
+    background: #e74c3c;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 #4b2e05;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
