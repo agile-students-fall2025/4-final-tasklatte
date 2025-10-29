@@ -9,8 +9,8 @@ export default function MenuOverlay({ onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <nav className="menu-links">
-          <NavLink to="/" className="menu-link" onClick={onClose}>
-            Home
+          <NavLink to="/dashboard" className="menu-link" onClick={onClose}>
+            Dashboard
           </NavLink>
           <NavLink to="/all" className="menu-link" onClick={onClose}>
             All Tasks
