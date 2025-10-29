@@ -1,11 +1,16 @@
 .page {
+  width: 402px;
+  height: 830px;
+  margin: 0 auto;
   background: #f4e7d3;
+  color: #4b2e05;
+  font-family: "Press Start 2P", monospace;
+  border-radius: 24px;
+  border: 1px solid #1f1f1f;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  font-family: "Press Start 2P", monospace;
-  color: #4b2e05;
+  position: relative;
 }
 
 .suggestions-main {

@@ -6,125 +6,115 @@ import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AllTasks.css";
 
 export default function AllTasks() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const tasks = useMemo(
+  const allTasks = useMemo(
     () => [
-      { id: "t1", title: "Task 1", course: "DMA",       note: "Read ch2",   due: "2025-10-29", priority: 1 },
-      { id: "t2", title: "Task 2", course: "OOP",       note: "HW 3",       due: "2025-10-30", priority: 4 },
-      { id: "t3", title: "Task 3", course: "Parallel",  note: "Lab",        due: "2025-11-02", priority: 1 },
-      { id: "t4", title: "Task 4", course: "Robotics",  note: "FK coding",  due: "2025-11-05", priority: 3 },
-      { id: "t5", title: "Alpha Read", course: "DMA",   note: "Outline",    due: "2025-11-02", priority: 2 },
-      { id: "t6", title: "Beta Lab",   course: "Robotics", note:"Grasping", due: "2025-11-01", priority: 2 },
+      { id: "t1", title: "Finish Report", note: "Add charts & polish intro", course: "CS 101", due: "2025-10-30 23:59", priority: 2 },
+      { id: "t2", title: "Read Paper", note: "RAG evaluation section", course: "AI Lab", due: "2025-10-29 18:00", priority: 3 },
+      { id: "t3", title: "Team Sync", note: "Prepare slides (5 pages)", course: "Proj", due: "2025-10-31 10:00", priority: 1 },
+      { id: "t4", title: "Quiz Prep", note: "Ch.4–6 quick review", course: "DMA", due: "2025-10-28 21:00", priority: 4 },
     ],
     []
   );
 
-  const [q, setQ] = useState("");                
-  const [course, setCourse] = useState("any"); 
-  const [date, setDate] = useState("");
-  const [prio, setPrio] = useState("any");
+  const [query, setQuery] = useState("");
+  const [prio, setPrio] = useState("all");
+  const [course, setCourse] = useState("");
+  const [due, setDue] = useState("");
 
-  const courseOptions = useMemo(() => {
-    const s = new Set(tasks.map(t => t.course));
-    return ["any", ...Array.from(s).sort()];
-  }, [tasks]);
+  const clearFilters = () => {
+    setQuery("");
+    setPrio("all");
+    setCourse("");
+    setDue("");
+  };
 
-  const ymd = (d) => new Date(d).toISOString().slice(0, 10);
-
-  const filtered = useMemo(() => {
-    return tasks.filter(t => {
-      if (q.trim()) {
-        const text = `${t.title} ${t.note}`.toLowerCase();
-        if (!text.includes(q.trim().toLowerCase())) return false;
-      }
-      if (course !== "any" && t.course !== course) return false;
-      if (prio !== "any" && String(t.priority) !== prio) return false;
-      if (date) {
-        if (ymd(t.due) !== date) return false;
-      }
-      return true;
-    });
-  }, [tasks, q, course, prio, date]);
+  const filtered = allTasks.filter((t) => {
+    if (query && !(`${t.title} ${t.note}`.toLowerCase().includes(query.toLowerCase()))) return false;
+    if (prio !== "all" && Number(prio) !== t.priority) return false;
+    if (course && !t.course.toLowerCase().includes(course.toLowerCase())) return false;
+    if (due && !t.due.startsWith(due)) return false;
+    return true;
+  });
 
   const openEdit = (id) => navigate(`/tasks/${id}/edit`);
 
-  const clearFilters = () => {
-    setQ(""); setCourse("any"); setDate(""); setPrio("any");
-  };
-
   return (
-    <div className="page">
-      <HeaderBar title="All Tasks" onHamburger={() => setMenuOpen(true)} />
+    <div className="allpixel-page">
+      <HeaderBar
+        title="All Tasks"
+        onHamburger={() => setMenuOpen(true)}
+        onLogo={() => {}}
+      />
 
-
-      <div className="filters">
-        <div className="row">
+      <section className="allpixel-filters">
+        <div className="allpixel-row">
           <input
-            className="input"
-            type="text"
-            placeholder="Search title / note..."
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            className="allpixel-input"
+            placeholder="Search…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
+          <select
+            className="allpixel-select"
+            value={prio}
+            onChange={(e) => setPrio(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+            <option value="4">Critical</option>
+          </select>
+          <button className="allpixel-btn-clear" onClick={clearFilters}>
+            Clear
+          </button>
+          <span className="allpixel-result-count">{filtered.length} results</span>
         </div>
 
-        <div className="row two-cols">
-          <select className="select" value={course} onChange={e => setCourse(e.target.value)}>
-            {courseOptions.map(c => (
-              <option key={c} value={c}>
-                {c === "any" ? "All courses" : c}
-              </option>
-            ))}
-          </select>
-
-          <select className="select" value={prio} onChange={e => setPrio(e.target.value)}>
-            <option value="any">Any priority</option>
-            <option value="1">P1</option>
-            <option value="2">P2</option>
-            <option value="3">P3</option>
-            <option value="4">P4</option>
-          </select>
-        </div>
-
-        <div className="row">
+        <div className="allpixel-two-cols" style={{ marginTop: 10 }}>
           <input
-            className="input"
+            className="allpixel-input"
+            placeholder="Course (e.g., CS 101)"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+          />
+          <input
+            className="allpixel-input"
             type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            aria-label="Due date"
-            title="Filter by due date"
+            value={due}
+            onChange={(e) => setDue(e.target.value)}
           />
-          <button className="btn-clear" onClick={clearFilters}>Clear filters</button>
-          <div className="result-count">{filtered.length} result{filtered.length !== 1 ? "s" : ""}</div>
         </div>
-      </div>
+      </section>
 
+      <main className="allpixel-scroll">
+        {filtered.length === 0 && <div className="allpixel-empty">No tasks found.</div>}
 
-      <main className="scroll">
-        {filtered.length === 0 ? (
-          <div className="empty">No tasks match current filters.</div>
-        ) : (
-          filtered.map((t) => (
-            <button key={t.id} className="task-card" onClick={() => openEdit(t.id)}>
-              <div className="left">
-                <div className="title-row">
-                  <span className="title">{t.title}</span>
-                  <span className={`pill pill-prio-${t.priority}`}>P{t.priority}</span>
-                </div>
-                <div className="meta">
-                  <span className="course">{t.course}</span>
-                  <span className="dot" />
-                  <span className="due">{new Date(t.due).toLocaleDateString()}</span>
-                </div>
-                <div className="note">{t.note}</div>
+        {filtered.map((t) => (
+          <button key={t.id} className="allpixel-card" onClick={() => openEdit(t.id)}>
+            <div className="allpixel-left">
+              <div className="allpixel-title-row">
+                <span className="allpixel-title">{t.title}</span>
+                <span className={`allpixel-pill allpixel-pill-${t.priority}`}>
+                  {t.priority === 4 ? "Critical" : t.priority === 3 ? "High" : t.priority === 2 ? "Medium" : "Low"}
+                </span>
               </div>
-              <div className="square" aria-hidden />
-            </button>
-          ))
-        )}
+
+              <div className="allpixel-meta">
+                <span>{t.course}</span>
+                <span className="allpixel-dot" />
+                <span>Due {t.due}</span>
+              </div>
+
+              <div className="allpixel-note">{t.note}</div>
+            </div>
+
+            <div className="allpixel-square" aria-hidden />
+          </button>
+        ))}
       </main>
 
       <BottomNav />
