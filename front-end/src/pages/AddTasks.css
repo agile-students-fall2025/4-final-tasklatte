@@ -10,12 +10,11 @@
   border: 1px solid #222;
   overflow: hidden;
 
-  /* pixel vibe */
   font-family: "Press Start 2P", monospace;
   color: #4b2e05;
 }
 
-/* keep HeaderBar as-is; just ensure it spans full width on this page */
+
 .addtask-container > .header-bar {
   width: 100%;
   border-top-left-radius: 24px;
@@ -28,7 +27,7 @@
   transform: translateX(-50%);
 }
 
-/* === Scroll area === */
+
 .addtask-main {
   width: 100%;
   flex: 1;
@@ -36,13 +35,11 @@
   display: grid;
   place-items: start center;
   overflow-y: auto;
-  padding-bottom: 88px; /* leave room for bottom nav */
+  padding-bottom: 88px;
 }
-
-/* === Pixel card (like suggestion-card) === */
 .addtask-sheet {
   width: 100%;
-  max-width: 500px;                    /* matches AI page max */
+  max-width: 500px;
   background: #fff8ec;
   border: 4px solid #5a3c15;
   padding: 1rem;
@@ -53,7 +50,7 @@
   gap: 0.9rem;
 }
 
-/* reset within the sheet to avoid collision with global styles */
+
 .addtask-sheet, .addtask-sheet * {
   box-sizing: border-box;
   font: inherit;
@@ -61,14 +58,14 @@
   margin: 0;
 }
 
-/* === Labels === */
+
 .addtask-label {
   font-size: 10px;
   color: #5a3c15;
   text-transform: uppercase;
 }
 
-/* === Inputs / Textareas (pixel-frame) === */
+
 .addtask-input,
 .addtask-textarea,
 select.addtask-input {
@@ -96,7 +93,6 @@ select.addtask-input:focus {
   box-shadow: 3px 3px 0 #b9895a inset, 0 0 0 2px rgba(90,60,21,0.12);
 }
 
-/* sizes */
 .addtask-input,
 select.addtask-input { height: 42px; }
 
@@ -106,7 +102,7 @@ select.addtask-input { height: 42px; }
   line-height: 1.35;
 }
 
-/* === Button row === */
+
 .addtask-actions {
   display: flex;
   justify-content: flex-end;
@@ -114,7 +110,7 @@ select.addtask-input { height: 42px; }
   margin-top: 0.2rem;
 }
 
-/* === Pixel buttons (match .pixel-button) === */
+
 .addtask-btn {
   background: #8b5a2b;
   color: #fff8ec;
@@ -133,7 +129,7 @@ select.addtask-input { height: 42px; }
   box-shadow: 4px 4px 0 #4b2e05;
 }
 
-/* ghost variant for Cancel */
+
 .addtask-btn.ghost {
   background: #e4c9a4;
   color: #4b2e05;
@@ -145,7 +141,7 @@ select.addtask-input { height: 42px; }
   box-shadow: 4px 4px 0 #b9895a;
 }
 
-/* small screens (short height) */
+
 @media (max-height: 760px) {
   .addtask-container { height: 760px; }
   .addtask-main { padding-bottom: 80px; }
