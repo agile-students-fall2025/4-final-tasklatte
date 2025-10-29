@@ -1,4 +1,4 @@
-.page {
+.login-page {
     background: #f4e7d3;
     background-size: 32px 32px;
     display: flex;
@@ -9,17 +9,9 @@
     color: #4b2e05;
 }
 
-.top-bar {
-    width: 100%;
-    height: 40px;
-    background-color: #e1ef4c;
-    border-bottom: 4px solid #5a3c15;
-    box-shadow: 0 3px 0 #b9895a;
-}
-
-.home-content {
+.login-content {
     flex: 1;
-    margin-top: 40px;
+    margin-top: 10rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -27,14 +19,34 @@
     gap: 3rem;
 }
   
-.logo {
-    width: 300px;
-    height: auto;
-    cursor: pointer;
-    background: none;
-    border: none;
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+  
+.login-input {
+    width: 200px;
+    height: 40px;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #4b2e05;
+    text-align: center;
+    font-family: "Press Start 2P", monospace;
+    background: #fff8ec;
+    font-size: 15px;
 }
 
+.login-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+  
 .pixel-button {
     margin-top: 1rem;
     background: #8b5a2b;
@@ -51,10 +63,4 @@
     background: #a16b36;
     transform: translate(-1px, -1px);
     box-shadow: 4px 4px 0 #4b2e05;
-}
-  
-.button-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
 }

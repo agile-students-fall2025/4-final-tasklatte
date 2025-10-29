@@ -13,6 +13,7 @@ import ChangeSchool from "./ChangeSchool.js";
 import AiSuggestions from "./AISuggestions.js";
 import Home from "./homePage.js";
 import ChangeTimezone from "./ChangeTimezone.js";
+import Login from "./loginPage.js";
 import Goals from "./Goals.js";
 
 const fmtLocalDate = (d) => {
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="/settings/goals" element={<Goals />} />
 
         <Route path="/" element={<Home />} /> 
+        <Route path="/login" element={<Login />} /> 
 
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
