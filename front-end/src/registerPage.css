@@ -5,6 +5,9 @@
   height: 100vh;
 }
 
+.register-page .hamburger {
+  display: none;
+}
 
 .register-content {
   flex: 1;

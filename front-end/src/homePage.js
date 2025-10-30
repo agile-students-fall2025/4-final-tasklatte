@@ -12,11 +12,11 @@ export default function HomePage() {
 
     return (
         <div className="page home-page">
-        <HeaderBar
+        {/* <HeaderBar
             title="Welcome"
             onHamburger={() => setMenuOpen(true)}
             onLogo={() => navigate("/")}
-        />
+        /> */}
 
         <main className="home-content">
             <h1>TaskLatte</h1>
@@ -30,7 +30,7 @@ export default function HomePage() {
                 Log In
             </button>
             <button
-                className="pixel-button"
+                className="pixel-button" id="registerbtn"
                 onClick={() => navigate("/register")}
             >
                 Register
@@ -38,7 +38,7 @@ export default function HomePage() {
             </div>
         </main>
 
-        <BottomNav />
+        {/* <BottomNav /> */}
         {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );

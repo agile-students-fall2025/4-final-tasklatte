@@ -59,7 +59,7 @@ export default function LoginPage() {
             </form>
         </main>
 
-        <BottomNav />
+        {/* <BottomNav /> */}
         {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
