@@ -1,6 +1,6 @@
 .addtask-container {
   width: 402px;
-  height: 830px;
+  height: 100vh;
   background: #f4e7d3;
   display: flex;
   flex-direction: column;
@@ -143,7 +143,7 @@ select.addtask-input { height: 42px; }
 
 
 @media (max-height: 760px) {
-  .addtask-container { height: 760px; }
+  /* .addtask-container { height: 760px; } */
   .addtask-main { padding-bottom: 80px; }
   .addtask-sheet { max-width: 460px; }
 }

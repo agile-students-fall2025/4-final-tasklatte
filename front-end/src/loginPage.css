@@ -9,6 +9,10 @@
     color: #4b2e05;
 }
 
+.login-page .hamburger {
+  display: none;
+}
+
 .login-content {
     flex: 1;
     margin-top: 10rem;

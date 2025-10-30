@@ -68,7 +68,6 @@ export default function RegisterPage() {
             </form>
         </main>
 
-        <BottomNav />
         {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
