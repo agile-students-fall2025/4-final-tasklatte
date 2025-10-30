@@ -70,9 +70,8 @@ const Settings = () => {
                 </button>
             </div>
 
-            <div className="bottom-nav">
-            <BottomNav /> 
-            </div>
+        <BottomNav /> 
+        
         {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         {confirmOpen && (
             <DeleteConfirmOverlay
