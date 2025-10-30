@@ -13,7 +13,7 @@ body {
 
 .dailypixel-page {
   width: 402px;
-  height: 830px;
+  height: 100vh;
   background: #f4e7d3;
   display: flex;
   flex-direction: column;
