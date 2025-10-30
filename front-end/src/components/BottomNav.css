@@ -1,11 +1,12 @@
 .bottom-nav {
   height: 64px;
-  background: #b9b9b9;
+  background: #c8a979;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   align-items: center;
   justify-items: center;
   border-top: 1px solid #d9d9d9;
+  border: 1
 }
 
 .bottom-nav-item {

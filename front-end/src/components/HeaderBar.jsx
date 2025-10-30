@@ -1,5 +1,6 @@
 // src/components/HeaderBar.jsx
 import "./HeaderBar.css";
+import logo from '../logo.png';
 
 export default function HeaderBar({ title = "Page Title", onHamburger, onLogo }) {
   return (
@@ -8,7 +9,7 @@ export default function HeaderBar({ title = "Page Title", onHamburger, onLogo })
         <span /><span /><span />
       </button>
       <h1 className="header-title">{title}</h1>
-      <button className="header-logo" onClick={onLogo} aria-label="Logo">Logo</button>
+      <img src={logo} alt="Logo" className="logo" />
     </header>
   );
 }

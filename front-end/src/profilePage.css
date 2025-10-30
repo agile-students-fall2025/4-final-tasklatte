@@ -138,9 +138,10 @@
   border-radius: 8px;
 }
 
-.profile-main::-webkit-scrollbar {
+/* .profile-main::-webkit-scrollbar {
   width: 6px;
-}
+} */
+ 
 .profile-main::-webkit-scrollbar-thumb {
   background-color: #c8a979;
   border-radius: 4px;
