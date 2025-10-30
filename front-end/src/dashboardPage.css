@@ -10,6 +10,7 @@
   
 .dashboard-content {
     flex: 1;
+    overflow-y: auto;
     padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
@@ -52,6 +53,10 @@
     text-align: center;
     padding: 1.5rem;
     width: 80%;
+}
+
+.analytics-card{
+    margin-bottom: 4rem;
 }
 
 .motivation-card p {
