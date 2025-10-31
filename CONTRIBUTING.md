@@ -36,15 +36,15 @@ cd 4-final-tasklatte
 Branch naming conventions:
 
 ```text
-feature/<short-description>     # for new features
-fix/<short-description>         # for bug fixes
-docs/<short-description>        # for documentation updates
+user-story/<story_number>/task/<task_number>/<short-description> # for a task for a user story
+spike/<spike_number>/<short-description> # for a spike 
+doc/<task_number>/<short-description> # for a documentation change
 ```
 
 Example:
 
 ```bash
-git checkout -b feature/add-login-page
+git checkout -b user-story/1/task/3/add-login-page
 ```
 
 ### 3. Commit Changes
@@ -52,15 +52,16 @@ git checkout -b feature/add-login-page
 Follow **Conventional Commits** format for clarity:
 
 ```text
-feat: add login form validation
-fix: correct null pointer in user model
-docs: update setup instructions
+Add login form validation
+Correct null pointer in user model
+Create calendar page
+Update setup instructions
 ```
 
 ### 4. Push and Open a Pull Request
 
 ```bash
-git push origin feature/add-login-page
+git push origin user-story/1/task/3/add-login-page
 ```
 
 Then, go to GitHub → open a Pull Request into `main`.

@@ -17,6 +17,10 @@ Sprint 0
 | **Mandy Mao** | [@manrongm](https://github.com/manrongm) | 
 | **Yasmine Ksiyer** | [@yasminek27](https://github.com/yasminek27) | 
 
+Sprint 1
+**Susan Thao (Product Owner)** 
+**Mandy Mao (Scrum Master)**
+
 ---
 
 ## Project Overview
@@ -71,14 +75,14 @@ Then **TaskLatte** is the perfect companion to help you study smarter, not harde
 
 ---
 
-## Build Instructions
+## Build Instructions (for frontend)
 
 > *(These will be updated as the project reaches later stages of development.)*
 
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/agile-students-fall2025/4-final-tasklatte
-cd 4-final-tasklatte
+cd 4-final-tasklatte/front-end
 ```
 
 ### 2. Install dependencies
