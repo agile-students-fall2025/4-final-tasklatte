@@ -1,6 +1,6 @@
 .Goals{
     width:402px; 
-    height:100vh; 
+    min-height:100vh; 
     display:flex; 
     position:relative;
     border-radius:24px; 
@@ -9,9 +9,16 @@
     background-size: 32px 32px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     font-family: "Press Start 2P", monospace;
     color: #4b2e05;
+}
+
+.goal-content{
+  flex: 1;             
+  padding: 1rem;
+  overflow-y: auto;   
 }
 
 .Goals h1 {
@@ -95,7 +102,8 @@
 }
 
 .back-button{
-margin-top: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
   background-color: #8b5a2b;
   color: #fff8ec;
   border: 3px solid #4b2e05;
@@ -105,9 +113,9 @@ margin-top: 1rem;
   cursor: pointer;
   font-size: 10px;
   width: 50%;
-    margin-left: 100px;
-    border-radius: 10px;
-    font-family: "Press Start 2P", monospace;
+  margin-left: 100px;
+  border-radius: 10px;
+  font-family: "Press Start 2P", monospace;
 }
 
 .back-button:hover{

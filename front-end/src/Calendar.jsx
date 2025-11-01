@@ -37,7 +37,7 @@ export default function CalendarPage() {
 
       {/* <button className="add-task-button">Add Task</button> */}
       <button className="add-task-button" onClick={() => navigate("/calendar/new")}>
-        AddTask
+        Add Task
       </button>
       <BottomNav />
       {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
