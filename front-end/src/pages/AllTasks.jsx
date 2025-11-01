@@ -14,7 +14,7 @@ export default function AllTasks() {
       { id: "t1", title: "Finish Report", note: "Add charts & polish intro", course: "CS 101", due: "2025-10-30 23:59", priority: 2 },
       { id: "t2", title: "Read Paper", note: "RAG evaluation section", course: "AI Lab", due: "2025-10-29 18:00", priority: 3 },
       { id: "t3", title: "Team Sync", note: "Prepare slides (5 pages)", course: "Proj", due: "2025-10-31 10:00", priority: 1 },
-      { id: "t4", title: "Quiz Prep", note: "Ch.4–6 quick review", course: "DMA", due: "2025-10-28 21:00", priority: 4 },
+      { id: "t4", title: "Quiz Prep", note: "Ch.4–6 quick review", course: "DMA", due: "2025-10-28 21:00", priority: 3 },
     ],
     []
   );
@@ -66,7 +66,6 @@ export default function AllTasks() {
             <option value="1">Low</option>
             <option value="2">Medium</option>
             <option value="3">High</option>
-            <option value="4">Critical</option>
           </select>
           <button className="allpixel-btn-clear" onClick={clearFilters}>
             Clear
@@ -99,7 +98,7 @@ export default function AllTasks() {
               <div className="allpixel-title-row">
                 <span className="allpixel-title">{t.title}</span>
                 <span className={`allpixel-pill allpixel-pill-${t.priority}`}>
-                  {t.priority === 4 ? "Critical" : t.priority === 3 ? "High" : t.priority === 2 ? "Medium" : "Low"}
+                  {t.priority === 3 ? "High" : t.priority === 2 ? "Medium" : "Low"}
                 </span>
               </div>
 
