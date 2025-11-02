@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderBar from "./components/HeaderBar.jsx";
-import BottomNav from "./components/BottomNav.jsx";
-import MenuOverlay from "./components/MenuOverlay.jsx";
-import logo from "./logo.png";
+import HeaderBar from "../components/HeaderBar.jsx";
+import BottomNav from "../components/BottomNav.jsx";
+import MenuOverlay from "../components/MenuOverlay.jsx";
+import logo from "../components/logo.png";
 import "./homePage.css";
 
 export default function HomePage() {

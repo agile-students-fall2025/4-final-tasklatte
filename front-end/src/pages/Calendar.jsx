@@ -3,10 +3,10 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; 
 import { useNavigate } from "react-router-dom";
 import "./Calendar.css"; 
-import HeaderBar from "./components/HeaderBar.jsx";
-import BottomNav from "./components/BottomNav.jsx";
-import MenuOverlay from "./components/MenuOverlay.jsx";
-import AddTask from "./pages/AddTasks.jsx";
+import HeaderBar from "../components/HeaderBar.jsx";
+import BottomNav from "../components/BottomNav.jsx";
+import MenuOverlay from "../components/MenuOverlay.jsx";
+import AddTask from "./AddTasks.jsx";
 
 export default function CalendarPage() {
   const [date, setDate] = useState(new Date());

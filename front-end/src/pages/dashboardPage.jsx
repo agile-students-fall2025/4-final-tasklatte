@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderBar from "./components/HeaderBar.jsx";
-import BottomNav from "./components/BottomNav.jsx";
-import MenuOverlay from "./components/MenuOverlay.jsx";
+import HeaderBar from "../components/HeaderBar.jsx";
+import BottomNav from "../components/BottomNav.jsx";
+import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./dashboardPage.css";
 
 export default function DashboardPage() {

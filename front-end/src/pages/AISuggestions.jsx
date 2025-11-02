@@ -1,7 +1,7 @@
 import { useState } from "react";
-import HeaderBar from "./components/HeaderBar.jsx";
-import BottomNav from "./components/BottomNav.jsx";
-import MenuOverlay from "./components/MenuOverlay.jsx";
+import HeaderBar from "../components/HeaderBar.jsx";
+import BottomNav from "../components/BottomNav.jsx";
+import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AISuggestions.css";
 
 // --- Helper functions ---

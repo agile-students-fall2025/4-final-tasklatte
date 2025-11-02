@@ -1,6 +1,6 @@
 // src/components/HeaderBar.jsx
 import "./HeaderBar.css";
-import logo from '../logo.png';
+import logo from './logo.png';
 
 export default function HeaderBar({ title = "Page Title", onHamburger, onLogo }) {
   return (

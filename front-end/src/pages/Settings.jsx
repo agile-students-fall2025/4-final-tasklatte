@@ -1,11 +1,11 @@
 import './Settings.css'
 /*import logo from './logo.png'*/
-import HeaderBar from "./components/HeaderBar.jsx";
-import BottomNav from "./components/BottomNav.jsx";
+import HeaderBar from "../components/HeaderBar.jsx";
+import BottomNav from "../components/BottomNav.jsx";
 import { useState } from "react";
-import MenuOverlay from "./components/MenuOverlay.jsx";
+import MenuOverlay from "../components/MenuOverlay.jsx";
 import { useNavigate } from "react-router-dom";
-import DeleteConfirmOverlay from "./components/DeleteConfirmOverlay.jsx";
+import DeleteConfirmOverlay from "../components/DeleteConfirmOverlay.jsx";
 
 const Settings = () => {
     const navigate = useNavigate();
