@@ -21,6 +21,10 @@ Sprint 1
 **Susan Thao (Product Owner)** 
 **Mandy Mao (Scrum Master)**
 
+Sprint 2
+**Valeria Chang (Product Owner)** 
+**Yasmine Ksiyer (Scrum Master)**
+
 ---
 
 ## Project Overview
@@ -75,22 +79,23 @@ Then **TaskLatte** is the perfect companion to help you study smarter, not harde
 
 ---
 
-## Build Instructions (for frontend)
+## Build Instructions
 
 > *(These will be updated as the project reaches later stages of development.)*
 
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/agile-students-fall2025/4-final-tasklatte
-cd 4-final-tasklatte/front-end
+cd 4-final-tasklatte/front-end # to start frontend
+cd 4-final-tasklatte/back-end # to start backend
 ```
 
-### 2. Install dependencies
+### 2. Install dependencies (for both folders)
 ```bash
 npm install
 ```
 
-### 3. Run locally
+### 3. Run locally (for both folders)
 ```bash
 npm start
 ```
