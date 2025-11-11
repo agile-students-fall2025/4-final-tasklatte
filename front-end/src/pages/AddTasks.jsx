@@ -5,91 +5,128 @@ import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AddTasks.css";
 
-export default function AddTask() {
+export default function AddTasks() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const [form, setForm] = useState({
-    title: "",
-    details: "",
-    course: "",
-    due: "",
-    priority: "Medium",
-  });
+  const [title, setTitle] = useState("");
+  const [details, setDetails] = useState("");
+  const [course, setCourse] = useState("");
+  const [date, setDate] = useState("");
+  const [priority, setPriority] = useState("Medium");
 
-  const update = (key) => (e) =>
-    setForm((f) => ({ ...f, [key]: e.target.value }));
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-  const onSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    console.log("NEW TASK:", form);
-    navigate("/calendar");
+    setError("");
+    setSaving(true);
+
+    if (!title || !course || !date) {
+      setError("Please fill in title, course, and date.");
+      setSaving(false);
+      return;
+    }
+
+    try {
+      const formattedDate = date.includes("T") ? date : `${date}:00`;
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          details,
+          course,
+          date: formattedDate,
+          priority,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save task");
+      const result = await response.json();
+
+      console.log("✅ Task added:", result.task);
+      setSuccess(true);
+      setSaving(false);
+
+      setTimeout(() => navigate("/all"), 1200);
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong while saving.");
+      setSaving(false);
+    }
   };
+
+  const handleCancel = () => navigate("/calendar");
 
   return (
     <div className="addtask-container">
-      <HeaderBar title="Add Task" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+      <HeaderBar title="Add Task" onHamburger={() => setMenuOpen(true)} />
 
       <main className="addtask-main">
-        <form className="addtask-sheet" onSubmit={onSave}>
-            <label className="addtask-label" htmlFor="title">Title</label>
-            <input
-                id="title"
-                className="addtask-input"
-                placeholder="e.g., Project Milestone"
-                value={form.title}
-                onChange={update("title")}
-                required
-            />
+        <form className="addtask-sheet" onSubmit={handleSave}>
+          <label className="addtask-label">TITLE</label>
+          <input
+            className="addtask-input"
+            placeholder="e.g., Project Milestone"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-            <label className="addtask-label" htmlFor="details">Details</label>
-            <textarea
-                id="details"
-                className="addtask-textarea"
-                placeholder="Notes / subtasks / links…"
-                rows={3}
-                value={form.details}
-                onChange={update("details")}
-            />
+          <label className="addtask-label">DETAILS</label>
+          <textarea
+            className="addtask-textarea"
+            placeholder="Notes / subtasks / links…"
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+          />
 
-            <label className="addtask-label" htmlFor="course">Course</label>
-            <input
-                id="course"
-                className="addtask-input"
-                placeholder="e.g., CS 101"
-                value={form.course}
-                onChange={update("course")}
-            />
+          <label className="addtask-label">COURSE</label>
+          <input
+            className="addtask-input"
+            placeholder="e.g., CS 101"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+          />
 
-            <label className="addtask-label" htmlFor="due">Date</label>
-            <input
-                id="due"
-                type="datetime-local"
-                className="addtask-input"
-                value={form.due}
-                onChange={update("due")}
-            />
+          <label className="addtask-label">DATE</label>
+          <input
+            className="addtask-input"
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
 
-            <label className="addtask-label" htmlFor="priority">Priority</label>
-            <select
-                id="priority"
-                className="addtask-input"
-                value={form.priority}
-                onChange={update("priority")}
+          <label className="addtask-label">PRIORITY</label>
+          <select
+            className="addtask-input"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+
+          {error && <div className="addtask-error">{error}</div>}
+          {success && <div className="addtask-success">✅ Task saved successfully!</div>}
+
+          <div className="addtask-actions">
+            <button
+              type="button"
+              className="addtask-btn ghost"
+              onClick={handleCancel}
+              disabled={saving}
             >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-            </select>
-
-            <div className="addtask-actions">
-                <button type="button" className="addtask-btn ghost" onClick={() => navigate(-1)}>
-                Cancel
-                </button>
-                <button type="submit" className="addtask-btn solid">Save</button>
-            </div>
+              Cancel
+            </button>
+            <button type="submit" className="addtask-btn" disabled={saving}>
+              {saving ? "Saving..." : "Save"}
+            </button>
+          </div>
         </form>
-
       </main>
 
       <BottomNav />
