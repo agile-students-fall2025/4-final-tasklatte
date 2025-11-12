@@ -5,6 +5,7 @@ const path = require("path");
 const session = require("express-session");
 
 const tasksRouter = require("./routes/tasks");
+const settingsRouter = require("./routes/settings");
 const registerRouter = require("./routes/register");
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use("/api/tasks", tasksRouter);
+app.use("/api/settings", settingsRouter);
 app.use("/api/register", registerRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
