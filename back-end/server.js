@@ -8,6 +8,7 @@ const tasksRouter = require("./routes/tasks");
 const settingsRouter = require("./routes/settings");
 const registerRouter = require("./routes/register");
 const loginRouter = require("./routes/login");
+const dashboardRouter = require("./routes/dashboard");
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/tasks", tasksRouter);
 app.use("/api/settings", settingsRouter);
 app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
 app.get("*", (req, res) => {
