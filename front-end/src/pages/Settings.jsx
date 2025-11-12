@@ -35,7 +35,7 @@ const Settings = () => {
             <h4>Profile:</h4>
             {['bio','major','school','timezone', 'goals'].map(option => (
                 <label key={option}>
-                    <input name={option} value={profileSettings[option]} readOnly/>
+                    <input name={option} value={profileSettings[option] || "Mock Data"} readOnly/>
                     <button className="edit-button" onClick={() => navigate(`/settings/${option}`)}>
                         Edit
                     </button>
