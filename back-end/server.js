@@ -7,6 +7,10 @@ const session = require("express-session");
 const tasksRouter = require("./routes/tasks");
 const settingsRouter = require("./routes/settings");
 const registerRouter = require("./routes/register");
+<<<<<<< HEAD
+=======
+const loginRouter = require("./routes/login");
+>>>>>>> 18974b8dceedc48219727ecb75251211d8d13358
 
 dotenv.config();
 const app = express();
@@ -26,6 +30,10 @@ app.use(
 app.use("/api/tasks", tasksRouter);
 app.use("/api/settings", settingsRouter);
 app.use("/api/register", registerRouter);
+<<<<<<< HEAD
+=======
+app.use("/api/login", loginRouter);
+>>>>>>> 18974b8dceedc48219727ecb75251211d8d13358
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
 app.get("*", (req, res) => {

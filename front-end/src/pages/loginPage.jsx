@@ -11,10 +11,27 @@ export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Username:", username, "Password:", password);
-        navigate("/dashboard");
+
+        try {
+            const res = await fetch("http://localhost:5001/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await res.json();
+            console.log("Response from backend:", data);
+
+            if (res.ok) {
+                navigate("/dashboard");
+            } else {
+                alert(data.error || "Login failed");
+            }
+        } catch (err) {
+            console.error("Error logging in:", err);
+        }
+
     };
 
     return (
