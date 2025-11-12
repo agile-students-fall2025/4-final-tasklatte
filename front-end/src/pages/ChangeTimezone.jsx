@@ -12,13 +12,13 @@ const ChangeTimezone = () => {
     const [timezone, setTimezone] = useState("");
     
     useEffect(() => {
-        fetch("/api/settings/timezone").then(res => res.json()).then(data => setTimezone(data.timezone))
+        fetch("http://localhost:5001/api/settings/timezone").then(res => res.json()).then(data => setTimezone(data.timezone))
     }, [])
 
     const handleSave = async () => {
-        await fetch("/api/settings/timezone", {
+        await fetch("http://localhost:5001/api/settings/timezone", {
             method: "PUT",
-            headers: {"Content-Type": "applications/json"},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : timezone})
         });
         navigate("/settings")

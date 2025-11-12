@@ -10,15 +10,15 @@ const ChangeBio = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [bio, setBio] = useState("");
-    
+
     useEffect(() => {
-        fetch("/api/settings/bio").then(res => res.json()).then(data => setBio(data.bio))
+        fetch("http://localhost:5001/api/settings/bio").then(res => res.json()).then(data => setBio(data.bio))
     }, [])
 
     const handleSave = async () => {
-        await fetch("/api/settings/bio", {
+        await fetch("http://localhost:5001/api/settings/bio", {
             method: "PUT",
-            headers: {"Content-Type": "applications/json"},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : bio})
         });
         navigate("/settings")

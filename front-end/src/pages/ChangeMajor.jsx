@@ -12,13 +12,13 @@ const ChangeMajor = () => {
     const [major, setMajor] = useState("");
     
     useEffect(() => {
-        fetch("/api/settings/major").then(res => res.json()).then(data => setMajor(data.major))
+        fetch("http://localhost:5001/api/settings/major").then(res => res.json()).then(data => setMajor(data.major))
     }, [])
 
     const handleSave = async () => {
-        await fetch("/api/settings/major", {
+        await fetch("http://localhost:5001/api/settings/major", {
             method: "PUT",
-            headers: {"Content-Type": "applications/json"},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : major})
         });
         navigate("/settings")

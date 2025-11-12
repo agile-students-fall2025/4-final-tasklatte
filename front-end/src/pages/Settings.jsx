@@ -4,7 +4,7 @@ import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useEffect, useState } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DeleteConfirmOverlay from "../components/DeleteConfirmOverlay.jsx";
 
 const Settings = () => {
@@ -12,10 +12,11 @@ const Settings = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [profileSettings, setProfile] = useState({});
+    const location = useLocation();
 
     useEffect(() => {
-        fetch('/api/settings').then(res => res.json()).then(data => setProfile(data))
-    }, [])
+        fetch('http://localhost:5001/api/settings').then(res => res.json()).then(data => setProfile(data))
+    }, [location.pathname])
 
     const handleDeleteAccount = async() => {
         await fetch("/api/settings/account", {method: "DELETE"})
