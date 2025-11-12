@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
@@ -30,25 +30,43 @@ function isAvailable(startTime, durationMin, busySlots) {
   return !busySlots.some(([bs, be]) => start < be && end > bs);
 }
 
-// --- Smart Scheduler ---
+// Round up to nearest 5 minutes
+function roundToFiveMinutes(minute) {
+  return Math.ceil(minute / 5) * 5;
+}
+
+// Random duration helper
+function randomDuration(min = 30, max = 120) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Generate smart suggestions
 function generateSmartSuggestions(tasks, busySlots) {
   const suggestions = [];
 
   tasks.forEach((task) => {
-    // Find earliest available slot
-    for (let m = 8 * 60; m <= 24 * 60 - task.duration; m += 15) {
+    // Random starting minute, snapped to 5
+    let m = 8 * 60 + Math.floor(Math.random() * (12 * 60 - task.duration));
+    m = roundToFiveMinutes(m);
+    let found = false;
+
+    // Try up to 48 slots (12 hours / 15 min increments)
+    for (let i = 0; i < 48; i++) {
       const startTime = minutesToTime(m);
       if (isAvailable(startTime, task.duration, busySlots)) {
         const endTime = addTime(startTime, task.duration);
         suggestions.push({ ...task, start: startTime, end: endTime, accepted: null });
-        // Mark this slot as now busy
         busySlots.push([timeToMinutes(startTime), timeToMinutes(endTime)]);
+        found = true;
         break;
       }
+
+      m += 15;
+      m = roundToFiveMinutes(m); // snap after increment
+      if (m > 24 * 60 - task.duration) m = 8 * 60;
     }
 
-    // Fallback if no slot available
-    if (!suggestions.find((t) => t.id === task.id)) {
+    if (!found) {
       suggestions.push({ ...task, start: "TBD", end: "TBD", accepted: null });
     }
   });
@@ -56,43 +74,70 @@ function generateSmartSuggestions(tasks, busySlots) {
   return suggestions;
 }
 
+// --- Component ---
 export default function AiSuggestions() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
-  // User calendar busy slots
   const initialBusySlots = [
     [timeToMinutes("12:00"), timeToMinutes("17:00")], // Classes
     [timeToMinutes("00:00"), timeToMinutes("08:00")], // Sleep
     [timeToMinutes("18:00"), timeToMinutes("19:00")], // Dinner
   ];
 
-  const initialTasks = [
-    { id: 1, task: "Study Math", duration: 90 },
-    { id: 2, task: "Write Essay", duration: 120 },
-    { id: 3, task: "Go to Gym", duration: 60 },
-    { id: 4, task: "Read Book", duration: 45 },
-  ];
+  // Fetch daily tasks
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
 
-  const [suggestions, setSuggestions] = useState(
-    generateSmartSuggestions(initialTasks, [...initialBusySlots])
-  );
+    fetch(`/api/ai/daily/${today}`)
+      .then((res) => res.json())
+      .then((dailyTasks) => {
+        const tasksToSchedule = dailyTasks.map((t) => ({
+          id: t.id,
+          task: t.task,
+          duration: t.duration || randomDuration(30, 120),
+        }));
 
+        const smart = generateSmartSuggestions(tasksToSchedule, [...initialBusySlots]);
+        setSuggestions(smart);
+      })
+      .catch(console.error);
+  }, []);
+
+  // Accept / decline tasks
   const handleDecision = (id, decision) => {
     setSuggestions((prev) =>
       prev.map((t) => (t.id === id ? { ...t, accepted: decision } : t))
     );
   };
 
+  // Regenerate with shuffled order, random durations, and snapped start times
   const handleRegenerate = () => {
-    // Shuffle tasks
-    const shuffled = [...initialTasks].sort(() => Math.random() - 0.5);
+    if (!suggestions || suggestions.length === 0) return;
 
-    // Reset busy slots for this regeneration
-    const newSuggestions = generateSmartSuggestions(shuffled, [...initialBusySlots]);
-    setSuggestions(newSuggestions);
+    const acceptedTasks = suggestions.filter((t) => t.accepted === true);
+
+    const unacceptedTasks = suggestions
+      .filter((t) => t.accepted !== true)
+      .map((t) => ({
+        ...t,
+        start: undefined,
+        end: undefined,
+        duration: randomDuration(30, 120),
+      }))
+      .sort(() => Math.random() - 0.5);
+
+    const busySlots = [
+      ...initialBusySlots,
+      ...acceptedTasks.map((t) => [timeToMinutes(t.start), timeToMinutes(t.end)]),
+    ];
+
+    const newUnaccepted = generateSmartSuggestions(unacceptedTasks, busySlots);
+
+    setSuggestions([...acceptedTasks, ...newUnaccepted]);
   };
 
-  // Calculate total estimated time
+  // Total time
   const totalTime = suggestions.reduce(
     (acc, t) => {
       acc.m += t.duration;
@@ -106,12 +151,13 @@ export default function AiSuggestions() {
   return (
     <div className="page">
       <HeaderBar title="AI Suggestions" onHamburger={() => setMenuOpen(true)} />
-        {/* <button></button> */}
 
       <main className="suggestions-main">
         <div className="blurb pixel-font">
           <p>Here’s the best order to complete your tasks today</p>
-          <p>You’ll need {totalTime.h}h {totalTime.m}m</p>
+          <p>
+            You’ll need {totalTime.h}h {totalTime.m}m
+          </p>
         </div>
 
         <div className="suggestions-list">
@@ -151,8 +197,6 @@ export default function AiSuggestions() {
         <button className="pixel-button regenerate" onClick={handleRegenerate}>
           Regenerate
         </button>
-
-
       </main>
 
       <BottomNav />
