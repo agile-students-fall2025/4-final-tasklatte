@@ -12,10 +12,27 @@ export default function RegisterPage() {
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Name:", name, "Username:", username, "Password:", password);
-        navigate("/dashboard");
+
+        try {
+            const res = await fetch("http://localhost:5001/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, name, password }),
+            });
+            const data = await res.json();
+            console.log("Response from backend:", data);
+
+            if (res.ok) {
+                navigate("/dashboard");
+            } else {
+                alert(data.error || "Registration failed");
+            }
+        } catch (err) {
+            console.error("Error registering user:", err);
+        }
+
     };
 
     return (
