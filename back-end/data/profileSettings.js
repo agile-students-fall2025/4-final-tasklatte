@@ -1,5 +1,5 @@
 const profileSettings = {
-        "bio": "Sample Bio",
+        bio: "Sample Bio",
         major:"Computer Science",
         school: "NYU",
         timezone: "EST",

@@ -12,13 +12,13 @@ const ChangeSchool = () => {
     const [school, setSchool] = useState("");
     
     useEffect(() => {
-        fetch("/api/settings/school").then(res => res.json()).then(data => setSchool(data.school))
+        fetch("http://localhost:5001/api/settings/school").then(res => res.json()).then(data => setSchool(data.school))
     }, [])
 
     const handleSave = async () => {
-        await fetch("/api/settings/school", {
+        await fetch("http://localhost:5001/api/settings/school", {
             method: "PUT",
-            headers: {"Content-Type": "applications/json"},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : school})
         });
         navigate("/settings")

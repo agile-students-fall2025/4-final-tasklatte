@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 let profileSettings = require('../data/profileSettings');
 
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
     res.json(profileSettings);
 })
 
-router.get('/:option', (req, res) => {
+router.get("/:option", (req, res) => {
     const option = req.params.option;
     if(profileSettings[option] !== undefined){
         res.json({ [option]: profileSettings[option] })
@@ -15,7 +15,7 @@ router.get('/:option', (req, res) => {
     }
 });
 
-router.put('/:option', (req, res) => {
+router.put("/:option", (req, res) => {
     const option = req.params.option;
     const value = req.body.value;
     if(profileSettings[option] !== undefined){
@@ -26,7 +26,7 @@ router.put('/:option', (req, res) => {
     }
 });
 
-router.delete('/account', (req,res) => {
+router.delete("/account", (req,res) => {
     profileSettings = {}
     res.json({success : true, message: 'Account deleted'})
 })
