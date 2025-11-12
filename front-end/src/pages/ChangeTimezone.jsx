@@ -2,14 +2,28 @@ import './ChangeTimezone.css';
 /*import logo from './logo.png'*/
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import { useNavigate } from "react-router-dom";
 
 const ChangeTimezone = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [timezone, setTimezone] = useState("");
     
+    useEffect(() => {
+        fetch("/api/settings/timezone").then(res => res.json()).then(data => setTimezone(data.timezone))
+    }, [])
+
+    const handleSave = async () => {
+        await fetch("/api/settings/timezone", {
+            method: "PUT",
+            headers: {"Content-Type": "applications/json"},
+            body: JSON.stringify({value : timezone})
+        });
+        navigate("/settings")
+    }
+
     return(
         <div className = "ChangeTimezone">
             <HeaderBar title="Change TimeZone" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
@@ -18,9 +32,9 @@ const ChangeTimezone = () => {
                 <h1>Settings</h1>
                 <h4>Time-zone:</h4>
                 <label>
-                    <input name="myInput" defaultValue="Time-zone"/>
+                    <input name="timezone" value={timezone} onChange={e => setTimezone(e.target.value)}/>
                 </label>
-                <button class="save-button" type="button">Save</button>
+                <button class="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
                  Back
                 </button>

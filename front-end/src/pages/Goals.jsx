@@ -12,8 +12,8 @@ const Goals = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [editingGoal, setEditingGoal] = useState(null);
     const [goals, setGoals] = useState([
-        {id: 1, title: "Goal 1", descritpion: "XXX"},
-        {id: 2, title: "Goal 2", descritpion: "XXX"}
+        {id: 1, title: "Goal 1", description: "XXX"},
+        {id: 2, title: "Goal 2", description: "XXX"}
     ]);
     const handleSave = (updatedGoal) => {
         setGoals(goals.map(g => g.id === editingGoal.id ? {...g, ...updatedGoal} : g));
@@ -33,7 +33,7 @@ const Goals = () => {
                 <h1>Goals</h1>
                 {goals.map(goal => ( 
                 <label key={goal.id}>
-                    <input name="myInput" defaultValue={goal.title}/>
+                    <input name="myInput" defaultValue={goal.title} readOnly/>
                      <button className="edit-button" onClick={() => setEditingGoal(goal)}>
                     Edit
                     </button> 
