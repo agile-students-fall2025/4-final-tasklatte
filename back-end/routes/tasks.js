@@ -32,13 +32,15 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { title, details, course, date, priority } = req.body;
+  // Accept either `date` or `due` from the frontend and allow all fields
+  const { title = "", details = "", course = "", date, due, priority = "Medium" } = req.body;
+  const finalDate = date || due || "";
   const newTask = {
     id: "t" + (tasks.length + 1),
     title,
     details,
     course,
-    date,
+    date: finalDate,
     priority,
   };
   tasks.push(newTask);
@@ -50,7 +52,15 @@ router.put("/:id", (req, res) => {
   const taskIndex = tasks.findIndex((t) => t.id === id);
   if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
 
-  tasks[taskIndex] = { ...tasks[taskIndex], ...req.body };
+  // Map frontend `due` -> internal `date`, and prevent id overwrite
+  const updates = { ...req.body };
+  if (updates.due) {
+    updates.date = updates.due;
+    delete updates.due;
+  }
+  delete updates.id;
+
+  tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
   res.json({ success: true, task: tasks[taskIndex] });
 });
 
