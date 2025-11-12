@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
+let profileSettings = require('../data/profileSettings');
+
+router.get('/', (req, res) => {
+    res.json(profileSettings);
+})
 
 router.get('/:option', (req, res) => {
     const option = req.params.option;
     if(profileSettings[option] !== undefined){
-        res.join({ [option]: profileSettings[option] })
+        res.json({ [option]: profileSettings[option] })
     }else{
         res.status(404).json({error : 'Field not found'})
     }

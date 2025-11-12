@@ -2,14 +2,28 @@ import './ChangeSchool.css'
 /*import logo from './logo.png'*/
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import { useNavigate } from "react-router-dom";
 
 const ChangeSchool = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [school, setSchool] = useState("");
     
+    useEffect(() => {
+        fetch("/api/settings/school").then(res => res.json()).then(data => setSchool(data.school))
+    }, [])
+
+    const handleSave = async () => {
+        await fetch("/api/settings/school", {
+            method: "PUT",
+            headers: {"Content-Type": "applications/json"},
+            body: JSON.stringify({value : school})
+        });
+        navigate("/settings")
+    }
+
     return(
         <div className = "ChangeSchool">
             <HeaderBar title="Change School" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
@@ -18,9 +32,9 @@ const ChangeSchool = () => {
                 <h1>Settings</h1>
                 <h4>School:</h4>
                 <label>
-                    <input name="myInput" defaultValue="School"/>
+                    <input name="school" value={school} onChange={e => setSchool(e.target.value)}/>
                 </label>
-                <button class="save-button" type="button">Save</button>
+                <button class="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
                 Back
                 </button>
