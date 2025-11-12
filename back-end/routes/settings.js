@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-let profileSettings = require('./profileSettings');
+let profileSettings = require('../data/profileSettings');
 
 router.get('/', (req, res) => {
     res.json(profileSettings);
