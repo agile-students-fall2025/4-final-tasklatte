@@ -10,26 +10,74 @@ export default function EditTask({ tasks = [], setTasks }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Find task to edit
-  const existingTask = tasks.find((t) => t.id === id);
-
   const [form, setForm] = useState({
-    title: existingTask?.title || "Sample Task",
-    details: existingTask?.details || "This is a sample.",
-    course: existingTask?.course || "Course 1",
-    due: existingTask?.due || "05/11/2025, 14:35",
-    priority: existingTask?.priority || "Medium",
+    title: "",
+    details: "",
+    course: "",
+    due: "",
+    priority: "Medium",
   });
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   if (!existingTask) {
-  //     // Redirect if task doesn't exist
-  //     navigate("/calendar");
-  //   }
-  // }, [existingTask, navigate]);
+  useEffect(() => {
+    // Fetch the task from backend to pre-fill the form
+    if (!id) return;
+    setLoading(true);
+    fetch(`/api/tasks/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Task not found");
+        return res.json();
+      })
+      .then((task) => {
+        setForm({
+          title: task.title || "",
+          details: task.details || "",
+          course: task.course || "",
+          // task.date is expected to be an ISO-like string "YYYY-MM-DDTHH:MM"
+          due: task.date || "",
+          priority: task.priority || "Medium",
+        });
+      })
+      .catch(() => {
+        // If task not found, navigate back to calendar
+        navigate("/calendar");
+      })
+      .finally(() => setLoading(false));
+  }, [id, navigate]);
 
   const update = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const onSave = async () => {
+    // Prepare payload: send `date` (not `due`) to the backend
+    const payload = {
+      title: form.title,
+      details: form.details,
+      course: form.course,
+      date: form.due,
+      priority: form.priority,
+    };
+
+    try {
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      const json = await res.json();
+
+      // Update local tasks state if setter provided
+      if (setTasks) {
+        setTasks((prev) => prev.map((t) => (t.id === id ? json.task : t)));
+      }
+
+      navigate(-1);
+    } catch (err) {
+      console.error(err);
+      // Optionally show an error state; for now, stay on page
+    }
+  };
 
   // const onSave = (e) => {
   //   // e.preventDefault();
@@ -107,7 +155,14 @@ export default function EditTask({ tasks = [], setTasks }) {
             <button type="button" className="btn ghost" onClick={() => navigate(-1)}>
               Cancel
             </button>
-            <button type="button" className="btn solid" onClick = {() => navigate(-1)} >Save</button>
+            <button
+              type="button"
+              className="btn solid"
+              onClick={onSave}
+              disabled={loading}
+            >
+              {loading ? "Loading…" : "Save"}
+            </button>
           </div>
         </form>
       </main>
