@@ -1,0 +1,35 @@
+const express = require("express");
+const router = express.Router();
+let { users } = require("../data/user");
+
+router.get("/", (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+
+  const user = users.find(u => u.id === userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.json({
+    name: user.name,
+    username: user.username,
+    grade: user.grade || "",
+    major: user.major || "",
+    university: user.university || "",
+    bio: user.bio || "",
+    avatar: user.avatar || "https://picsum.photos/id/237/200/300",
+    goals: user.goals || { shortTerm: [], longTerm: [] },
+    stats: user.stats || [
+      { label: "📚study streak", value: 0 },
+      { label: "🧘‍♀️longest focus", value: 0 },
+      { label: "☕coffees drank", value: 0 },
+      { label: "🍪snack breaks", value: 0 },
+    ],
+  });
+});
+
+module.exports = router;

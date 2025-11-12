@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
@@ -8,38 +8,60 @@ import "./profilePage.css";
 export default function ProfilePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-
-  const [user,setUser] = useState({
-    name: "Lorem ipsum",
-    grade: "Lorem",
-    major: "Dolor sit amet",
-    university: "consectetur adipiscing",
+  const [user, setUser] = useState({
+    name: "",
+    grade: "",
+    major: "",
+    university: "",
     avatar: "https://picsum.photos/id/237/200/300",
     stats: [
       { label: "📚study streak", value: 0 },
       { label: "🧘‍♀️longest focus", value: 0 },
       { label: "☕coffees drank", value: 0 },
-      { label: "🍪snack breaks", value: 0}
+      { label: "🍪snack breaks", value: 0 },
     ],
   });
 
-  const biography = { bio: "sed do eiusmod tempor incididunt"};
-
-  const [goals, setGoals] = useState({
-    shortTerm: [
-      { id: 1, title: "Ut labore et dolore magna aliqua", details: "Ut enim ad minim veniam, quis nostrud" },
-      { id: 2, title: "Laboris nisi ut aliquip ex ea commodo consequa", details: "Duis aute irure dolor in reprehenderit in" },
-    ],
-    longTerm: [
-      { id: 3, title: "Oluptate velit esse cillum dolore", details: "Eu fugiat nulla pariatur." },
-    ],
-  });
-
+  const [biography, setBiography] = useState({ bio: "" });
+  const [goals, setGoals] = useState({ shortTerm: [], longTerm: [] });
   const [expandedGoal, setExpandedGoal] = useState(null);
 
   const toggleGoal = (id) => {
     setExpandedGoal((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/profile", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", 
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.error(data.error);
+          return;
+        }
+
+        setUser({
+          name: data.user || { username: "", name: "" },
+          grade: data.grade || "",
+          major: data.major || "",
+          university: data.university || "",
+          avatar: data.avatar || "https://picsum.photos/id/237/200/300",
+          stats: data.stats || user.stats,
+        });
+        setBiography({ bio: data.bio || "" });
+        setGoals(data.goals || { shortTerm: [], longTerm: [] });
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <div className="page">
@@ -51,15 +73,15 @@ export default function ProfilePage() {
 
       <main className="profile-main">
         <div className="profile-card pixel-frame">
-            <div className="profile-left">
-                <img src={user.avatar} alt="Avatar" className="avatar pixel-border" />
-                <h2 className="pixel-font">{user.name}</h2>
-            </div>
-            <div className="profile-right">
-                <p className="pixel-font">Grade: {user.grade}</p>
-                <p className="pixel-font">Major: {user.major}</p>
-                <p className="pixel-font cafe-name">School: {user.university}</p>
-            </div>
+          <div className="profile-left">
+            <img src={user.avatar} alt="Avatar" className="avatar pixel-border" />
+            <h2 className="pixel-font">{user.name || "User"}</h2>
+          </div>
+          <div className="profile-right">
+            <p className="pixel-font">Grade: {user.grade}</p>
+            <p className="pixel-font">Major: {user.major}</p>
+            <p className="pixel-font cafe-name">School: {user.university}</p>
+          </div>
         </div>
 
         <div className="bio-div stat-card pixel-border">
@@ -79,7 +101,7 @@ export default function ProfilePage() {
                   setUser({ ...user, stats: newStats });
                 }
               }}
-              style={{ cursor: s.label === "coffees drank" ? "pointer" : "default" }}
+              style={{ cursor: s.label === "☕coffees drank" ? "pointer" : "default" }}
             >
               <p className="pixel-font label">{s.label}</p>
               <p className="pixel-font value">{s.value}</p>
@@ -99,9 +121,7 @@ export default function ProfilePage() {
                 onClick={() => toggleGoal(g.id)}
               >
                 <p className="pixel-font goal-title">{g.title}</p>
-                {expandedGoal === g.id && (
-                  <p className="pixel-font goal-details">{g.details}</p>
-                )}
+                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.details}</p>}
               </div>
             ))}
           </div>
@@ -115,9 +135,7 @@ export default function ProfilePage() {
                 onClick={() => toggleGoal(g.id)}
               >
                 <p className="pixel-font goal-title">{g.title}</p>
-                {expandedGoal === g.id && (
-                  <p className="pixel-font goal-details">{g.details}</p>
-                )}
+                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.details}</p>}
               </div>
             ))}
           </div>
