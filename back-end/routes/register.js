@@ -1,7 +1,7 @@
 const express = require ("express");
 const bcrypt = require ("bcrypt");
 const router = express.Router();
-let users = require("../data/user");
+let { users } = require("../data/user");
 
 router.post("/", async (req, res) => {
     const { username, name, password } = req.body;
