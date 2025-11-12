@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 const tasksRouter = require("./routes/tasks");
+const settingsRouter = require("./routes/settings");
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/tasks", tasksRouter);
+app.use("/api/settings", settingsRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
 app.get("*", (req, res) => {
