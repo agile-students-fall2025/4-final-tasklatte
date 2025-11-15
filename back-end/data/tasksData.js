@@ -6,6 +6,7 @@ const tasks = [
     course: "CS 101",
     date: "2025-10-30T23:59",
     priority: "Medium",
+    completed: false,
   },
   {
     id: "t2",
@@ -14,6 +15,7 @@ const tasks = [
     course: "AI Lab",
     date: "2025-10-29T18:00",
     priority: "High",
+    completed: false,
   },
   {
     id: "t3",
@@ -22,6 +24,7 @@ const tasks = [
     course: "Proj",
     date: "2025-10-31T10:00",
     priority: "Low",
+    completed: false,
   },
   {
     id: "t4",
@@ -30,6 +33,7 @@ const tasks = [
     course: "DMA",
     date: "2025-10-28T21:00",
     priority: "Critical",
+    completed: false,
   },
 ];
 

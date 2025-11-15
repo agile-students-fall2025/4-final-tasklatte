@@ -16,6 +16,7 @@ export default function EditTask({ tasks = [], setTasks }) {
     course: "",
     due: "",
     priority: "Medium",
+    completed: false,
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +37,7 @@ export default function EditTask({ tasks = [], setTasks }) {
           // task.date is expected to be an ISO-like string "YYYY-MM-DDTHH:MM"
           due: task.date || "",
           priority: task.priority || "Medium",
+          completed: Boolean(task.completed),
         });
       })
       .catch(() => {
@@ -56,6 +58,7 @@ export default function EditTask({ tasks = [], setTasks }) {
       course: form.course,
       date: form.due,
       priority: form.priority,
+      completed: Boolean(form.completed),
     };
 
     try {
@@ -150,6 +153,17 @@ export default function EditTask({ tasks = [], setTasks }) {
             <option>Medium</option>
             <option>Low</option>
           </select>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label className="label" htmlFor="completed">Completed</label>
+            <input
+              id="completed"
+              className="task-checkbox"
+              type="checkbox"
+              checked={Boolean(form.completed)}
+              onChange={(e) => setForm((f) => ({ ...f, completed: e.target.checked }))}
+            />
+          </div>
 
           <div className="actions">
             <button type="button" className="btn ghost" onClick={() => navigate(-1)}>
