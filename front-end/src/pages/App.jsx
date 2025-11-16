@@ -48,7 +48,7 @@ export default function App() {
         <Route path="/settings/bio" element={<ChangeBio />} />
         <Route path="/settings/major" element={<ChangeMajor />} />
         <Route path="/settings/school" element={<ChangeSchool />} />
-        <Route path="/settings/time" element={<ChangeTimezone />} />
+        <Route path="/settings/timezone" element={<ChangeTimezone />} />
         <Route path="/settings/goals" element={<Goals />} />
 
         <Route path="/" element={<Home />} /> 

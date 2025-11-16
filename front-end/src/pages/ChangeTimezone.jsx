@@ -28,13 +28,13 @@ const ChangeTimezone = () => {
         <div className = "ChangeTimezone">
             <HeaderBar title="Change TimeZone" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
 
-            <div className = "school-content">
+            <div className = "timezone-content">
                 <h1>Settings</h1>
                 <h4>Time-zone:</h4>
                 <label>
                     <input name="timezone" value={timezone} onChange={e => setTimezone(e.target.value)}/>
                 </label>
-                <button class="save-button" onClick={handleSave}>Save</button>
+                <button className="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
                  Back
                 </button>

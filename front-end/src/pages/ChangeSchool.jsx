@@ -34,7 +34,7 @@ const ChangeSchool = () => {
                 <label>
                     <input name="school" value={school} onChange={e => setSchool(e.target.value)}/>
                 </label>
-                <button class="save-button" onClick={handleSave}>Save</button>
+                <button className="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
                 Back
                 </button>
