@@ -34,7 +34,7 @@ const ChangeMajor = () => {
                 <label>
                     <input name="major" value={major} onChange={e => setMajor(e.target.value)}/>
                 </label>
-                <button class="save-button" onClick={handleSave}>Save</button>
+                <button className="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
                 Back
                 </button>

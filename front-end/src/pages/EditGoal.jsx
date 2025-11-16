@@ -22,7 +22,7 @@ const EditGoal = ({goal, onClose, onSave, onDelete}) => {
                     Delete
                     </button>
 
-                    <button className="save-button" onClick={() => onSave({title, description})}>
+                    <button className="save-button" onClick={() => onSave({id: goal.id, title, description})}>
                     Save
                     </button>
                 </div> 
