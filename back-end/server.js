@@ -39,6 +39,11 @@ app.get("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+
+// Only start listening when this file is run directly.
+// This avoids EADDRINUSE when tests require the app.
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+}
 
 module.exports = app;
