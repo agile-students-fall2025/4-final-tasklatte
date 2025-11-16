@@ -3,7 +3,10 @@ const profileSettings = {
         major:"Computer Science",
         school: "NYU",
         timezone: "EST",
-        goals: "Complete an app"
+        goals: [
+        { id: 1, title: "Goal 1", description: "Finish my site" },
+        { id: 2, title: "Goal 2", description: "Learn Express" }
+        ]
 };
 
 module.exports = profileSettings;
