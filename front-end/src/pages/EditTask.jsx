@@ -21,6 +21,7 @@ export default function EditTask({ tasks = [], setTasks }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Fetch the task from backend to pre-fill the form
     if (!id) return;
     setLoading(true);
     fetch(`/api/tasks/${id}`)
@@ -180,11 +181,29 @@ export default function EditTask({ tasks = [], setTasks }) {
           </div>
 
           {/* Action buttons */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label className="label" htmlFor="completed">Completed</label>
+            <input
+              id="completed"
+              className="task-checkbox"
+              type="checkbox"
+              checked={Boolean(form.completed)}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, completed: e.target.checked }))
+              }
+            />
+          </div>
+
+          {/* Action buttons */}
           <div className="actions">
             <button
+             
               type="button"
+             
               className="btn ghost"
+             
               onClick={() => navigate(-1)}
+            
             >
               Cancel
             </button>
@@ -195,6 +214,20 @@ export default function EditTask({ tasks = [], setTasks }) {
               disabled={loading}
             >
               {loading ? "Loading…" : "Save"}
+            </button>
+          </div>
+
+          <div
+            className="actions"
+            style={{ justifyContent: "flex-start", marginTop: "0.5rem" }}
+          >
+            <button
+              type="button"
+              className="btn danger"
+              onClick={onDelete}
+              disabled={loading}
+            >
+              Delete Task
             </button>
           </div>
 

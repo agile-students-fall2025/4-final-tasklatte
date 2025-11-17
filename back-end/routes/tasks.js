@@ -15,17 +15,7 @@ router.get("/", (req, res) => {
   }
   if (course) result = result.filter((t) => t.course.toLowerCase().includes(course.toLowerCase()));
   if (priority) result = result.filter((t) => t.priority === priority);
-  if (date) result = result.filter((t) => t.date && t.date.startsWith(date));
-
-<<<<<<< HEAD
-  // support filtering by completion status: ?completed=true or ?completed=false
-=======
->>>>>>> dfbc325b907f140511cf9cb9f246fb93f36e0a15
-  if (typeof req.query.completed !== "undefined") {
-    const completedQuery = req.query.completed;
-    const wantCompleted = completedQuery === "true" || completedQuery === "1";
-    result = result.filter((t) => Boolean(t.completed) === wantCompleted);
-  }
+  if (date) result = result.filter((t) => t.date.startsWith(date));
 
   res.json(result);
 });
@@ -42,16 +32,8 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  // Accept either `date` or `due` from the frontend and allow all fields including completed
-  const {
-    title = "",
-    details = "",
-    course = "",
-    date,
-    due,
-    priority = "Medium",
-    completed = false,
-  } = req.body;
+  // Accept either `date` or `due` from the frontend and allow all fields
+  const { title = "", details = "", course = "", date, due, priority = "Medium" } = req.body;
   const finalDate = date || due || "";
   const newTask = {
     id: "t" + (tasks.length + 1),
@@ -75,19 +57,6 @@ router.put("/:id", (req, res) => {
   if (updates.due) {
     updates.date = updates.due;
     delete updates.due;
-  }
-<<<<<<< HEAD
-  // Ensure completed is boolean if provided
-  if (typeof updates.completed !== "undefined") {
-    // If string values are sent ("true"/"false"), interpret them correctly.
-=======
-  if (typeof updates.completed !== "undefined") {
->>>>>>> dfbc325b907f140511cf9cb9f246fb93f36e0a15
-    if (typeof updates.completed === "string") {
-      updates.completed = updates.completed === "true" || updates.completed === "1";
-    } else {
-      updates.completed = Boolean(updates.completed);
-    }
   }
   delete updates.id;
 
