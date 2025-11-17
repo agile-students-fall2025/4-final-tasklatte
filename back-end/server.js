@@ -10,6 +10,7 @@ const registerRouter = require("./routes/register");
 const loginRouter = require("./routes/login");
 const dashboardRouter = require("./routes/dashboard");
 const profileRouter = require("./routes/profile")
+const aiRouter = require("./routes/ai");
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/register", registerRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/ai", aiRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
 app.get("*", (req, res) => {
@@ -40,8 +42,6 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-// Only start listening when this file is run directly.
-// This avoids EADDRINUSE when tests require the app.
 if (require.main === module) {
   app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
 }

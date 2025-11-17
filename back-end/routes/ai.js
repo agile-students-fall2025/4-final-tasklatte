@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 let tasks = require("../data/tasksData");
 
+// GET /api/tasks with optional query filters
 router.get("/", (req, res) => {
   const { q, course, priority, date } = req.query;
   let result = [...tasks];
-  console.log(result)
+
   if (q) {
     result = result.filter(
       (t) =>
@@ -13,7 +14,10 @@ router.get("/", (req, res) => {
         t.details.toLowerCase().includes(q.toLowerCase())
     );
   }
-  if (course) result = result.filter((t) => t.course.toLowerCase().includes(course.toLowerCase()));
+  if (course)
+    result = result.filter((t) =>
+      t.course.toLowerCase().includes(course.toLowerCase())
+    );
   if (priority) result = result.filter((t) => t.priority === priority);
   if (date) result = result.filter((t) => t.date && t.date.startsWith(date));
 
@@ -26,17 +30,29 @@ router.get("/", (req, res) => {
   res.json(result);
 });
 
+// GET /api/ai/daily/:date
 router.get("/daily/:date", (req, res) => {
   const { date } = req.params;
-  const dailyTasks = tasks.filter((t) => t.date.startsWith(date));
+
+  // filter tasks for this date and map duration correctly
+  const dailyTasks = tasks
+    .filter((t) => t.date && t.date.startsWith(date))
+    .map((t) => ({
+      id: t.id,
+      task: t.title,
+      duration: typeof t.duration === "number" ? t.duration : 60,
+    }));
+
   res.json(dailyTasks);
 });
 
+// GET /api/tasks/:id
 router.get("/:id", (req, res) => {
   const task = tasks.find((t) => t.id === req.params.id);
   task ? res.json(task) : res.status(404).json({ error: "Task not found" });
 });
 
+// POST /api/tasks
 router.post("/", (req, res) => {
   const {
     title = "",
@@ -48,6 +64,10 @@ router.post("/", (req, res) => {
     completed = false,
     duration,
   } = req.body;
+
+  console.log("📝 POST /api/tasks - req.body:", req.body);
+  console.log("📝 Extracted duration:", duration, "Type:", typeof duration);
+
   const finalDate = date || due || "";
   const newTask = {
     id: "t" + (tasks.length + 1),
@@ -59,10 +79,13 @@ router.post("/", (req, res) => {
     completed: Boolean(completed),
     ...(typeof duration !== 'undefined' && { duration }),
   };
+
+  console.log("📝 New task created:", newTask);
   tasks.push(newTask);
   res.status(201).json({ success: true, task: newTask });
 });
 
+// PUT /api/tasks/:id
 router.put("/:id", (req, res) => {
   const { id } = req.params;
   const taskIndex = tasks.findIndex((t) => t.id === id);
@@ -86,6 +109,7 @@ router.put("/:id", (req, res) => {
   res.json({ success: true, task: tasks[taskIndex] });
 });
 
+// DELETE /api/tasks/:id
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
   const index = tasks.findIndex((t) => t.id === id);
@@ -97,6 +121,5 @@ router.delete("/:id", (req, res) => {
   console.log("🗑️ Deleted task:", deletedTask);
   res.json({ success: true, deleted: deletedTask });
 });
-
 
 module.exports = router;
