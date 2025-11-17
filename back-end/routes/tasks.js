@@ -46,6 +46,7 @@ router.post("/", (req, res) => {
     due,
     priority = "Medium",
     completed = false,
+    duration,
   } = req.body;
   const finalDate = date || due || "";
   const newTask = {
@@ -56,6 +57,7 @@ router.post("/", (req, res) => {
     date: finalDate,
     priority,
     completed: Boolean(completed),
+    ...(typeof duration !== 'undefined' && { duration }),
   };
   tasks.push(newTask);
   res.status(201).json({ success: true, task: newTask });
