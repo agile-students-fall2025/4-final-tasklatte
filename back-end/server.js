@@ -9,7 +9,7 @@ const settingsRouter = require("./routes/settings");
 const registerRouter = require("./routes/register");
 const loginRouter = require("./routes/login");
 const dashboardRouter = require("./routes/dashboard");
-const profileRouter = require("./routes/profile")
+const profileRouter = require("./routes/profile");
 const aiRouter = require("./routes/ai");
 
 dotenv.config();
@@ -36,14 +36,16 @@ app.use("/api/profile", profileRouter);
 app.use("/api/ai", aiRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "../front-end/build", "index.html"));
 });
 
 const PORT = process.env.PORT || 5001;
 
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+  app.listen(PORT, () =>
+    console.log(`✅ Server running on http://localhost:${PORT}`)
+  );
 }
 
 module.exports = app;
