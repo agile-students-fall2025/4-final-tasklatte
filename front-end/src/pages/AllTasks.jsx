@@ -14,7 +14,10 @@ export default function AllTasks() {
   useEffect(() => {
     fetch("/api/tasks")
       .then((res) => res.json())
-      .then((data) => setTasks(data))
+      .then((data) =>
+        // normalize completed to boolean in case backend returns strings/undefined
+        setTasks(data.map((t) => ({ ...t, completed: Boolean(t.completed) })))
+      )
       .catch(console.error);
   }, []);
 
@@ -22,12 +25,14 @@ export default function AllTasks() {
   const [prio, setPrio] = useState("all");
   const [course, setCourse] = useState("");
   const [due, setDue] = useState("");
+  const [status, setStatus] = useState("all");
 
   const clearFilters = () => {
     setQuery("");
     setPrio("all");
     setCourse("");
     setDue("");
+    setStatus("all");
   };
 
   const filtered = tasks.filter((t) => {
@@ -35,6 +40,11 @@ export default function AllTasks() {
     if (prio !== "all" && prio.toLowerCase() !== t.priority.toLowerCase()) return false;
     if (course && !t.course.toLowerCase().includes(course.toLowerCase())) return false;
     if (due && !t.date.startsWith(due)) return false;
+    if (status !== "all") {
+      const isCompleted = Boolean(t.completed);
+      if (status === "completed" && !isCompleted) return false;
+      if (status === "incomplete" && isCompleted) return false;
+    }
     return true;
   });
 
@@ -61,6 +71,16 @@ export default function AllTasks() {
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
+          </select>
+          <select
+            className="allpixel-select"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            style={{ marginLeft: 8 }}
+          >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="incomplete">Incomplete</option>
           </select>
           <button className="allpixel-btn-clear" onClick={clearFilters}>
             Clear
@@ -89,24 +109,50 @@ export default function AllTasks() {
 
         {filtered.map((t) => (
           <button key={t.id} className="allpixel-card" onClick={() => openEdit(t.id)}>
-            <div className="allpixel-left">
-              <div className="allpixel-title-row">
-                <span className="allpixel-title">{t.title}</span>
-                <span className={`allpixel-pill allpixel-pill-${t.priority.toLowerCase()}`}>
-                  {t.priority}
-                </span>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div className="allpixel-left">
+                <div className="allpixel-title-row">
+                  <span className="allpixel-title">{t.title}</span>
+                  <span className={`allpixel-pill allpixel-pill-${t.priority.toLowerCase()}`}>
+                    {t.priority}
+                  </span>
+                </div>
 
-              <div className="allpixel-meta">
-                <span>{t.course}</span>
-                <span className="allpixel-dot" />
-                <span>Due {t.date.replace("T", " ")}</span>
-              </div>
+                <div className="allpixel-meta">
+                  <span>{t.course}</span>
+                  <span className="allpixel-dot" />
+                  <span>Due {t.date.replace("T", " ")}</span>
+                </div>
 
-              <div className="allpixel-note">{t.details}</div>
+                <div className="allpixel-note">{t.details}</div>
+              </div>
             </div>
 
-            <div className="allpixel-square" aria-hidden />
+            <div className="allpixel-square" aria-hidden>
+              <input
+                className="task-checkbox"
+                type="checkbox"
+                checked={Boolean(t.completed)}
+                onChange={async (e) => {
+                  e.stopPropagation();
+                  const newVal = e.target.checked;
+                  try {
+                    const res = await fetch(`/api/tasks/${t.id}`, {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ completed: newVal }),
+                    });
+                    if (!res.ok) throw new Error("Failed to toggle");
+                    const json = await res.json();
+                    const updated = { ...json.task, completed: Boolean(json.task?.completed) };
+                    setTasks((prev) => prev.map((it) => (it.id === t.id ? updated : it)));
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
           </button>
         ))}
       </main>

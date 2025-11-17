@@ -10,9 +10,10 @@ const ChangeSchool = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [school, setSchool] = useState("");
+    const [grade, setGrade] = useState("");
     
     useEffect(() => {
-        fetch("http://localhost:5001/api/settings/school").then(res => res.json()).then(data => setSchool(data.school))
+        fetch("http://localhost:5001/api/settings").then(res => res.json()).then(data => {setSchool(data.school || ""); setGrade(data.grade || "");})
     }, [])
 
     const handleSave = async () => {
@@ -20,6 +21,11 @@ const ChangeSchool = () => {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : school})
+        });
+        await fetch("http://localhost:5001/api/settings/grade", {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({value : grade})
         });
         navigate("/settings")
     }
@@ -33,6 +39,10 @@ const ChangeSchool = () => {
                 <h4>School:</h4>
                 <label>
                     <input name="school" value={school} onChange={e => setSchool(e.target.value)}/>
+                </label>
+                <h4>Grade:</h4>
+                <label>
+                    <input name="grade" value={grade} onChange={e => setGrade(e.target.value)}/>
                 </label>
                 <button className="save-button" onClick={handleSave}>Save</button>
                 <button className="back-button" onClick={() => navigate("/settings")}>
