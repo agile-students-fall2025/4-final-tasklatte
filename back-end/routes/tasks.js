@@ -17,7 +17,6 @@ router.get("/", (req, res) => {
   if (priority) result = result.filter((t) => t.priority === priority);
   if (date) result = result.filter((t) => t.date && t.date.startsWith(date));
 
-  // support filtering by completion status: ?completed=true or ?completed=false
   if (typeof req.query.completed !== "undefined") {
     const completedQuery = req.query.completed;
     const wantCompleted = completedQuery === "true" || completedQuery === "1";
@@ -39,7 +38,6 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  // Accept either `date` or `due` from the frontend and allow all fields including completed
   const {
     title = "",
     details = "",
@@ -68,15 +66,12 @@ router.put("/:id", (req, res) => {
   const taskIndex = tasks.findIndex((t) => t.id === id);
   if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
 
-  // Map frontend `due` -> internal `date`, and prevent id overwrite
   const updates = { ...req.body };
   if (updates.due) {
     updates.date = updates.due;
     delete updates.due;
   }
-  // Ensure completed is boolean if provided
   if (typeof updates.completed !== "undefined") {
-    // If string values are sent ("true"/"false"), interpret them correctly.
     if (typeof updates.completed === "string") {
       updates.completed = updates.completed === "true" || updates.completed === "1";
     } else {
@@ -88,5 +83,18 @@ router.put("/:id", (req, res) => {
   tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
   res.json({ success: true, task: tasks[taskIndex] });
 });
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  const index = tasks.findIndex((t) => t.id === id);
+  if (index === -1) {
+    return res.status(404).json({ success: false, error: "Task not found" });
+  }
+
+  const deletedTask = tasks.splice(index, 1)[0];
+  console.log("🗑️ Deleted task:", deletedTask);
+  res.json({ success: true, deleted: deletedTask });
+});
+
 
 module.exports = router;
