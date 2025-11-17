@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
   }
 
   res.json({
-    name: user.name,
+    name: user.name ,
     username: user.username,
     grade: user.grade || "",
     major: user.major || "",
