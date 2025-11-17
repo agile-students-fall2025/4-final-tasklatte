@@ -21,7 +21,6 @@ export default function EditTask({ tasks = [], setTasks }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the task from backend to pre-fill the form
     if (!id) return;
     setLoading(true);
     fetch(`/api/tasks/${id}`)
@@ -34,14 +33,12 @@ export default function EditTask({ tasks = [], setTasks }) {
           title: task.title || "",
           details: task.details || "",
           course: task.course || "",
-          // task.date is expected to be an ISO-like string "YYYY-MM-DDTHH:MM"
           due: task.date || "",
           priority: task.priority || "Medium",
           completed: Boolean(task.completed),
         });
       })
       .catch(() => {
-        // If task not found, navigate back to calendar
         navigate("/calendar");
       })
       .finally(() => setLoading(false));
@@ -51,7 +48,6 @@ export default function EditTask({ tasks = [], setTasks }) {
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const onSave = async () => {
-    // Prepare payload: send `date` (not `due`) to the backend
     const payload = {
       title: form.title,
       details: form.details,
@@ -70,7 +66,6 @@ export default function EditTask({ tasks = [], setTasks }) {
       if (!res.ok) throw new Error("Failed to save");
       const json = await res.json();
 
-      // Update local tasks state if setter provided
       if (setTasks) {
         setTasks((prev) => prev.map((t) => (t.id === id ? json.task : t)));
       }
@@ -78,21 +73,27 @@ export default function EditTask({ tasks = [], setTasks }) {
       navigate(-1);
     } catch (err) {
       console.error(err);
-      // Optionally show an error state; for now, stay on page
     }
   };
 
-  // const onSave = (e) => {
-  //   // e.preventDefault();
+  const onDelete = async () => {
+  try {
+    setLoading(true);
+    const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Failed to delete task");
 
-  //   // const updated = tasks.map((t) =>
-  //   //   t.id === id ? { ...t, ...form } : t
-  //   // );
-  //   // setTasks(updated);
+    if (setTasks) {
+      setTasks((prev) => prev.filter((t) => t.id !== id));
+    }
+    navigate(-1);
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong while deleting the task.");
+  } finally {
+    setLoading(false);
+  }
+};
 
-  //   console.log("UPDATED TASK:", form);
-  //   navigate(-1);
-  // };
 
   return (
     <div className="edittask-container">
@@ -103,7 +104,7 @@ export default function EditTask({ tasks = [], setTasks }) {
       />
 
       <main className="edittask-main">
-        <form className="sheet" >
+        <form className="sheet">
           <label className="label" htmlFor="title">Title</label>
           <input
             id="title"
@@ -165,8 +166,26 @@ export default function EditTask({ tasks = [], setTasks }) {
             />
           </div>
 
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label className="label" htmlFor="completed">Completed</label>
+            <input
+              id="completed"
+              className="task-checkbox"
+              type="checkbox"
+              checked={Boolean(form.completed)}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, completed: e.target.checked }))
+              }
+            />
+          </div>
+
+          {/* Action buttons */}
           <div className="actions">
-            <button type="button" className="btn ghost" onClick={() => navigate(-1)}>
+            <button
+              type="button"
+              className="btn ghost"
+              onClick={() => navigate(-1)}
+            >
               Cancel
             </button>
             <button
@@ -176,6 +195,20 @@ export default function EditTask({ tasks = [], setTasks }) {
               disabled={loading}
             >
               {loading ? "Loading…" : "Save"}
+            </button>
+          </div>
+
+          <div
+            className="actions"
+            style={{ justifyContent: "flex-start", marginTop: "0.5rem" }}
+          >
+            <button
+              type="button"
+              className="btn danger"
+              onClick={onDelete}
+              disabled={loading}
+            >
+              Delete Task
             </button>
           </div>
         </form>
