@@ -1,4 +1,5 @@
 const profileSettings = {
+        name: "Sample User",
         bio: "Sample Bio",
         major:"Computer Science",
         school: "NYU",
