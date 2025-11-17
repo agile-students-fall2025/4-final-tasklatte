@@ -58,6 +58,7 @@ router.delete("/account", (req,res) => {
         bio: "",
         major: "",
         school: "",
+        grade: "",
         timezone: "",
         goals: []
     };
