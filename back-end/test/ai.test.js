@@ -12,7 +12,7 @@ describe("AI Daily Tasks API Tests", () => {
   const initialSnapshot = JSON.parse(JSON.stringify(tasksData));
 
   beforeEach(() => {
-\    tasksData.length = 0;
+   tasksData.length = 0;
     initialSnapshot.forEach((t) =>
       tasksData.push(JSON.parse(JSON.stringify(t)))
     );
