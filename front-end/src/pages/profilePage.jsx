@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
@@ -7,9 +6,9 @@ import "./profilePage.css";
 
 export default function ProfilePage() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
+
   const [user, setUser] = useState({
-    name: "",
+    name: "User",
     grade: "",
     major: "",
     university: "",
@@ -36,25 +35,31 @@ export default function ProfilePage() {
         const res = await fetch("http://localhost:5001/api/profile", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          credentials: "include", 
         });
         const data = await res.json();
 
-        if (!res.ok) {
-          console.error(data.error);
-          return;
-        }
-
+        // Map backend keys to frontend state
         setUser({
-          name: data.user || { username: "", name: "" },
+          name: "User", // profileSettings has no name
           grade: data.grade || "",
           major: data.major || "",
-          university: data.university || "",
-          avatar: data.avatar || "https://picsum.photos/id/237/200/300",
-          stats: data.stats || user.stats,
+          university: data.school || "",
+          avatar: "https://picsum.photos/id/237/200/300", // placeholder
+          stats: [
+            { label: "📚study streak", value: 0 },
+            { label: "🧘‍♀️longest focus", value: 0 },
+            { label: "☕coffees drank", value: 0 },
+            { label: "🍪snack breaks", value: 0 },
+          ],
         });
+
         setBiography({ bio: data.bio || "" });
-        setGoals(data.goals || { shortTerm: [], longTerm: [] });
+
+        const allGoals = data.goals || [];
+        setGoals({
+          shortTerm: allGoals.slice(0, Math.ceil(allGoals.length / 2)),
+          longTerm: allGoals.slice(Math.ceil(allGoals.length / 2)),
+        });
       } catch (err) {
         console.error("Error fetching profile:", err);
       }
@@ -65,17 +70,14 @@ export default function ProfilePage() {
 
   return (
     <div className="page">
-      <HeaderBar
-        title="Profile Page"
-        onHamburger={() => setMenuOpen(true)}
-        onLogo={() => navigate("/")}
-      />
+      <HeaderBar title="Profile Page" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
 
       <main className="profile-main">
+        {/* Profile Card */}
         <div className="profile-card pixel-frame">
           <div className="profile-left">
             <img src={user.avatar} alt="Avatar" className="avatar pixel-border" />
-            <h2 className="pixel-font">{user.name || "User"}</h2>
+            <h2 className="pixel-font">{user.name}</h2>
           </div>
           <div className="profile-right">
             <p className="pixel-font">Grade: {user.grade}</p>
@@ -84,11 +86,13 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* Bio */}
         <div className="bio-div stat-card pixel-border">
-          Bio:
+          <p className="pixel-font">Bio:</p>
           <p>{biography.bio}</p>
         </div>
 
+        {/* Stats */}
         <div className="stats-grid">
           {user.stats.map((s, index) => (
             <div
@@ -109,6 +113,7 @@ export default function ProfilePage() {
           ))}
         </div>
 
+        {/* Goals */}
         <div className="goals-section">
           <h3 className="pixel-font section-title">Goals</h3>
 
@@ -121,7 +126,7 @@ export default function ProfilePage() {
                 onClick={() => toggleGoal(g.id)}
               >
                 <p className="pixel-font goal-title">{g.title}</p>
-                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.details}</p>}
+                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.description}</p>}
               </div>
             ))}
           </div>
@@ -135,7 +140,7 @@ export default function ProfilePage() {
                 onClick={() => toggleGoal(g.id)}
               >
                 <p className="pixel-font goal-title">{g.title}</p>
-                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.details}</p>}
+                {expandedGoal === g.id && <p className="pixel-font goal-details">{g.description}</p>}
               </div>
             ))}
           </div>
