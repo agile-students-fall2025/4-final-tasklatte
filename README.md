@@ -25,6 +25,10 @@ Sprint 2
 **Valeria Chang (Product Owner)** 
 **Yasmine Ksiyer (Scrum Master)**
 
+Sprint 3
+**Yasmine Ksiyer (Product Owner)** 
+**Susan Thao (Scrum Master)**
+
 ---
 
 ## Project Overview
