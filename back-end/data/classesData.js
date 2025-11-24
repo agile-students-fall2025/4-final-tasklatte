@@ -3,7 +3,7 @@ const classes = [
     id: "c1",
     title: "CS 101 - Intro to CS",
     location: "Room 201",
-    instructor: "Prof. Smith",
+    instructor: "Prof. X",
     days: [1, 3, 5], // Mon, Wed, Fri (0=Sun, 1=Mon, ..., 6=Sat)
     startTime: "09:00", // HH:mm
     endTime: "10:20", // HH:mm
