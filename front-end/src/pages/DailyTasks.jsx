@@ -12,6 +12,7 @@ export default function DailyTasks() {
   const { date } = useParams();
 
   const [tasks, setTasks] = useState([]);
+  const [items, setItems] = useState([]); // merged tasks + classes
 
   useEffect(() => {
     const today = new Date();
@@ -21,12 +22,24 @@ export default function DailyTasks() {
 
     const queryDate = date || local;
 
-    fetch(`/api/tasks/daily/${queryDate}`)
-      .then((res) => res.json())
-      .then((data) =>
-        // normalize completed to boolean
-        setTasks(data.map((t) => ({ ...t, completed: Boolean(t.completed) })))
-      )
+    Promise.all([
+      fetch(`/api/tasks/daily/${queryDate}`).then((res) => res.json()),
+      fetch(`/api/classes/daily/${queryDate}`).then((res) => res.json()),
+    ])
+      .then(([tasksData, classesData]) => {
+        const normalizedTasks = tasksData.map((t) => ({
+          ...t,
+          completed: Boolean(t.completed),
+        }));
+        const merged = [...normalizedTasks, ...classesData];
+        merged.sort((a, b) => {
+          const aTime = a.date || a.start;
+          const bTime = b.date || b.start;
+          return aTime.localeCompare(bTime);
+        });
+        setTasks(normalizedTasks);
+        setItems(merged);
+      })
       .catch(console.error);
   }, [date]);
 
@@ -44,56 +57,99 @@ export default function DailyTasks() {
       />
 
       <main className="dailypixel-main">
-        {tasks.length === 0 && (
+        {items.length === 0 && (
           <div className="allpixel-empty">
-            {date ? `No tasks for ${date}.` : "No tasks for today."}
+            {date ? `No classes or tasks for ${date}.` : "No classes or tasks for today."}
           </div>
         )}
 
-        {tasks.map((t) => (
-          <button key={t.id} className="allpixel-card" onClick={() => openEdit(t.id)}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div className="allpixel-left">
-                <div className="allpixel-title-row">
-                  <span className="allpixel-title">{t.title}</span>
-                  <span className={`allpixel-pill allpixel-pill-${t.priority.toLowerCase()}`}>
-                    {pillText(t.priority)}
-                  </span>
+        {items.map((item) => {
+          const isClass = item.source === "class";
+          const itemId = isClass ? item.occurrenceId : item.id;
+
+          return (
+            <button
+              key={itemId}
+              className={`allpixel-card ${isClass ? "allpixel-card-class" : ""}`}
+              onClick={() => {
+                if (!isClass) openEdit(item.id);
+                else navigate(`/classes/${item.classId}/edit`);
+              }}
+              style={isClass ? { borderLeftColor: item.color, cursor: "pointer" } : {}}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div className="allpixel-left">
+                  <div className="allpixel-title-row">
+                    <span className="allpixel-title">{item.title}</span>
+                    {!isClass && (
+                      <span className={`allpixel-pill allpixel-pill-${item.priority.toLowerCase()}`}>
+                        {pillText(item.priority)}
+                      </span>
+                    )}
+                    {isClass && <span className="allpixel-pill allpixel-pill-class">Class</span>}
+                  </div>
+                  <div className="allpixel-meta">
+                    {!isClass && (
+                      <>
+                        <span>{item.course}</span>
+                        <span className="allpixel-dot" />
+                      </>
+                    )}
+                    {isClass && (
+                      <>
+                        <span>{item.location}</span>
+                        <span className="allpixel-dot" />
+                      </>
+                    )}
+                    <span>
+                      {isClass
+                        ? `${item.start.split("T")[1]} - ${item.end.split("T")[1]}`
+                        : `Due ${item.date.replace("T", " ")}`}
+                    </span>
+                  </div>
+                  <div className="allpixel-note">
+                    {!isClass ? item.details : item.instructor || item.notes || ""}
+                  </div>
                 </div>
-                <div className="allpixel-meta">
-                  <span>{t.course}</span>
-                  <span className="allpixel-dot" />
-                  <span>Due {t.date.replace("T", " ")}</span>
-                </div>
-                <div className="allpixel-note">{t.details}</div>
               </div>
-            </div>
-            <div className="allpixel-square" aria-hidden>
-              <input
-                className="task-checkbox"
-                type="checkbox"
-                checked={Boolean(t.completed)}
-                onChange={async (e) => {
-                  e.stopPropagation();
-                  const newVal = e.target.checked;
-                  try {
-                    const res = await fetch(`/api/tasks/${t.id}`, {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ completed: newVal }),
-                    });
-                    if (!res.ok) throw new Error("Failed to toggle");
-                    const json = await res.json();
-                    setTasks((prev) => prev.map((it) => (it.id === t.id ? json.task : it)));
-                  } catch (err) {
-                    console.error(err);
-                  }
-                }}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
-          </button>
-        ))}
+              {!isClass && (
+                <div className="allpixel-square" aria-hidden>
+                  <input
+                    className="task-checkbox"
+                    type="checkbox"
+                    checked={Boolean(item.completed)}
+                    onChange={async (e) => {
+                      e.stopPropagation();
+                      const newVal = e.target.checked;
+                      try {
+                        const res = await fetch(`/api/tasks/${item.id}`, {
+                          method: "PUT",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ completed: newVal }),
+                        });
+                        if (!res.ok) throw new Error("Failed to toggle");
+                        const json = await res.json();
+                        const updated = {
+                          ...json.task,
+                          completed: Boolean(json.task?.completed),
+                        };
+                        setTasks((prev) =>
+                          prev.map((t) => (t.id === item.id ? updated : t))
+                        );
+                        setItems((prev) =>
+                          prev.map((it) => (it.id === item.id ? updated : it))
+                        );
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+              )}
+            </button>
+          );
+        })}
       </main>
 
       <BottomNav />

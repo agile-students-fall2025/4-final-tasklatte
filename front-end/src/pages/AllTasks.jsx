@@ -10,14 +10,30 @@ export default function AllTasks() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [tasks, setTasks] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [items, setItems] = useState([]); // merged
 
   useEffect(() => {
-    fetch("/api/tasks")
-      .then((res) => res.json())
-      .then((data) =>
-        // normalize completed to boolean in case backend returns strings/undefined
-        setTasks(data.map((t) => ({ ...t, completed: Boolean(t.completed) })))
-      )
+    Promise.all([
+      fetch("/api/tasks").then((res) => res.json()),
+      fetch("/api/classes").then((res) => res.json()),
+    ])
+      .then(([tasksData, classesData]) => {
+        const normalizedTasks = tasksData.map((t) => ({
+          ...t,
+          completed: Boolean(t.completed),
+        }));
+        setTasks(normalizedTasks);
+        setClasses(classesData);
+        // Merge and sort
+        const merged = [...normalizedTasks, ...classesData];
+        merged.sort((a, b) => {
+          const aTime = a.date || a.startTime;
+          const bTime = b.date || b.startTime;
+          return aTime.localeCompare(bTime);
+        });
+        setItems(merged);
+      })
       .catch(console.error);
   }, []);
 
@@ -45,6 +61,13 @@ export default function AllTasks() {
       if (status === "completed" && !isCompleted) return false;
       if (status === "incomplete" && isCompleted) return false;
     }
+    return true;
+  });
+
+  // Filter classes separately if needed (basic text search and course)
+  const filteredClasses = classes.filter((c) => {
+    if (query && !(`${c.title} ${c.notes}`.toLowerCase().includes(query.toLowerCase()))) return false;
+    if (course && !c.title.toLowerCase().includes(course.toLowerCase())) return false;
     return true;
   });
 
@@ -105,7 +128,9 @@ export default function AllTasks() {
       </section>
 
       <main className="allpixel-scroll">
-        {filtered.length === 0 && <div className="allpixel-empty">No tasks found.</div>}
+        {filtered.length === 0 && filteredClasses.length === 0 && (
+          <div className="allpixel-empty">No tasks or classes found.</div>
+        )}
 
         {filtered.map((t) => (
           <button key={t.id} className="allpixel-card" onClick={() => openEdit(t.id)}>
@@ -152,6 +177,36 @@ export default function AllTasks() {
                 }}
                 onClick={(e) => e.stopPropagation()}
               />
+            </div>
+          </button>
+        ))}
+
+        {filteredClasses.map((c) => (
+          <button
+            key={c.id}
+            className="allpixel-card allpixel-card-class"
+            style={{ borderLeftColor: c.color, cursor: "pointer" }}
+            onClick={() => navigate(`/classes/${c.id}/edit`)}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div className="allpixel-left">
+                <div className="allpixel-title-row">
+                  <span className="allpixel-title">{c.title}</span>
+                  <span className="allpixel-pill allpixel-pill-class">Class</span>
+                </div>
+
+                <div className="allpixel-meta">
+                  <span>{c.location}</span>
+                  <span className="allpixel-dot" />
+                  <span>
+                    {c.days.map((d) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d]).join(", ")}
+                  </span>
+                </div>
+
+                <div className="allpixel-note">
+                  {c.instructor && `Instructor: ${c.instructor}`} {c.notes && `• ${c.notes}`}
+                </div>
+              </div>
             </div>
           </button>
         ))}

@@ -5,6 +5,8 @@ import Settings from "./Settings.jsx";
 import AllTasks from "./AllTasks.jsx";
 import CalendarPage from "./Calendar.jsx";
 import AddTask from "./AddTasks.jsx";
+import AddClass from "./AddClass.jsx";
+import EditClass from "./EditClass.jsx";
 import ChangeBio from "./ChangeBio.jsx";
 import Profile from "./profilePage.jsx";
 import EditTask from "./EditTask.jsx";
@@ -36,9 +38,11 @@ export default function App() {
         <Route path="/all" element={<AllTasks />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/calendar/new" element={<AddTask />} />
+        <Route path="/calendar/add-class" element={<AddClass />} />
 
         <Route path="/daily" element={<TodayRedirect />} />
         <Route path="/daily-tasks/:date" element={<DailyTasks />} />
+        <Route path="/classes/:id/edit" element={<EditClass />} />
 
         <Route path="/tasks/:id/edit" element={<EditTask title="Edit Task" />} />
 
