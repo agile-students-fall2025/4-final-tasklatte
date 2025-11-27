@@ -102,6 +102,57 @@ select.addtask-input { height: 42px; }
   line-height: 1.35;
 }
 
+/* Day-of-week buttons reused by AddClass/EditClass */
+.addclass-days {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.addclass-day {
+  flex: 1;
+  min-width: 45px;
+  padding: 8px;
+  background: #f0f0f0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.addclass-day:hover {
+  background: #e8e8e8;
+}
+
+.addclass-day.active {
+  background: #8b5e3c;
+  color: white;
+  border-color: #6b4423;
+}
+
+
+.addtask-error {
+  background: #f8d7da;
+  border: 2px solid #c0392b;
+  color: #6a1b1b;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.addtask-success {
+  background: #d4edda;
+  border: 2px solid #28a745;
+  color: #155724;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+}
 
 .addtask-actions {
   display: flex;

@@ -227,3 +227,25 @@
   .allpixel-title { font-size: 10px; }
   .allpixel-note  { font-size: 8px; }
 }
+
+/* Class card styling */
+.allpixel-card-class {
+  border-left-width: 8px;
+  border-left-style: solid;
+}
+
+.allpixel-pill-class {
+  background: #f5f5f5;
+  border-color: #5a3c15;
+  color: #8b5e3c;
+}
+
+.allpixel-card-class:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 #b9895a;
+}
+
+.allpixel-card-class:active {
+  transform: translate(0,0);
+  box-shadow: 3px 3px 0 #b9895a;
+}
