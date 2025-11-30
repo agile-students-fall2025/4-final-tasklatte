@@ -78,8 +78,8 @@ export default function RegisterPage() {
                 >
                 Go Back
                 </button>
-                <button type="submit" className="pixel-button">
-                Confirm
+                <button type="button" className="pixel-button" onClick={() => navigate('/account' , {state: {name}})}>
+                Next
                 </button>
             </div>
             </form>

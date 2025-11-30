@@ -19,6 +19,7 @@ import Login from "./loginPage.jsx";
 import Goals from "./Goals.jsx";
 import Register from "./registerPage.jsx";
 import Dashboard from "./dashboardPage.jsx";
+import Account from "./Account.jsx";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -59,6 +60,8 @@ export default function App() {
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} /> 
         <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/account" element={<Account />} /> 
 
         <Route path="*" element={<Placeholder title="Not Found" />} />
       </Routes>
