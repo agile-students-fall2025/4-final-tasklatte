@@ -2,6 +2,7 @@ const express = require ("express");
 const bcrypt = require ("bcrypt");
 const router = express.Router();
 let { users } = require("../data/user");
+const { grade } = require("../data/profileSettings");
 
 router.post("/", async (req, res) => {
     const { username, name, password } = req.body;
@@ -21,6 +22,12 @@ router.post("/", async (req, res) => {
         username,
         name,
         password: hashed,
+        bio: "",
+        major: "",
+        school: "",
+        grade: "",
+        timezone: "",
+        goals: []
     };
     users.push(newUser);
 

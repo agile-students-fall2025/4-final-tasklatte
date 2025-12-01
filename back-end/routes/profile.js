@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
     return res.status(401).json({ error: "Not logged in" });
   }
 
-  const user = users.find(u => u.id === userId);
+  const user = users.find(u => u.id === parseInt(userId));
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
@@ -19,10 +19,11 @@ router.get("/", (req, res) => {
     username: user.username,
     grade: user.grade || "",
     major: user.major || "",
-    university: user.university || "",
+    school: user.school || "",
     bio: user.bio || "",
+    timezone: user.timezone || "",
     avatar: user.avatar || "https://picsum.photos/id/237/200/300",
-    goals: user.goals || { shortTerm: [], longTerm: [] },
+    goals: user.goals || [],
     stats:
       user.stats ||
       [
