@@ -1,5 +1,4 @@
-import './ChangeBio.css'
-/*import logo from './logo.png'*/
+import './ChangeBio.css';
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useState, useEffect } from "react";
@@ -8,45 +7,44 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const ChangeBio = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { userId: stateUserId } = location.state || {};
+    const userId = stateUserId || localStorage.getItem("userId");
+
     const [menuOpen, setMenuOpen] = useState(false);
     const [bio, setBio] = useState("");
-    const location = useLocation();
-    const{userId} = location.state  || {};
 
     useEffect(() => {
-        fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`).then(res => res.json()).then(data => setBio(data.bio))
-    }, [])
+        if (!userId) return navigate("/login");
+        fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`)
+            .then(res => res.json())
+            .then(data => setBio(data.bio || ""))
+            .catch(err => console.error(err));
+    }, [userId, navigate]);
 
     const handleSave = async () => {
         await fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({value : bio})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value: bio }),
         });
-        navigate("/settings")
-    }
+        navigate("/settings", { state: { userId } });
+    };
 
-
-    return(
-        <div className = "ChangeBio">
+    return (
+        <div className="ChangeBio">
             <HeaderBar title="Change Bio" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
-
-            <div className = "bio-content">
+            <div className="bio-content">
                 <h1>Settings</h1>
                 <h4>Bio:</h4>
-                <label>
-                    <input name="bio" value={bio} onChange={e => setBio(e.target.value)}/>
-                </label>
+                <input value={bio} onChange={e => setBio(e.target.value)} />
                 <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings")}>
-                Back
-                </button>
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
             </div>
-
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
 };
 
-export default ChangeBio
+export default ChangeBio;

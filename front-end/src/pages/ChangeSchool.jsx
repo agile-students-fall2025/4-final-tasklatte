@@ -1,5 +1,4 @@
-import './ChangeSchool.css'
-/*import logo from './logo.png'*/
+import './ChangeSchool.css';
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useState, useEffect } from "react";
@@ -8,54 +7,44 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const ChangeSchool = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { userId: stateUserId } = location.state || {};
+    const userId = stateUserId || localStorage.getItem("userId");
+
     const [menuOpen, setMenuOpen] = useState(false);
     const [school, setSchool] = useState("");
-    const [grade, setGrade] = useState("");
-    const location = useLocation();
-    const{userId} = location.state  || {};
 
     useEffect(() => {
-        fetch(`http://localhost:5001/api/settings?userId=${userId}`).then(res => res.json()).then(data => {setSchool(data.school || ""); setGrade(data.grade || "");})
-    }, [])
+        if (!userId) return navigate("/login");
+        fetch(`http://localhost:5001/api/settings/school?userId=${userId}`)
+            .then(res => res.json())
+            .then(data => setSchool(data.school || ""))
+            .catch(err => console.error(err));
+    }, [userId, navigate]);
 
     const handleSave = async () => {
         await fetch(`http://localhost:5001/api/settings/school?userId=${userId}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({value : school})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ value: school }),
         });
-        await fetch(`http://localhost:5001/api/settings/grade?userId=${userId}`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({value : grade})
-        });
-        navigate("/settings", {state:{userId}})
-    }
+        navigate("/settings", { state: { userId } });
+    };
 
-    return(
-        <div className = "ChangeSchool">
+    return (
+        <div className="ChangeSchool">
             <HeaderBar title="Change School" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
-
-            <div className = "school-content">
+            <div className="school-content">
                 <h1>Settings</h1>
                 <h4>School:</h4>
-                <label>
-                    <input name="school" value={school} onChange={e => setSchool(e.target.value)}/>
-                </label>
-                <h4>Grade:</h4>
-                <label>
-                    <input name="grade" value={grade} onChange={e => setGrade(e.target.value)}/>
-                </label>
+                <input value={school} onChange={e => setSchool(e.target.value)} />
                 <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings")}>
-                Back
-                </button>
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
             </div>
-
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
 };
 
-export default ChangeSchool
+export default ChangeSchool;
