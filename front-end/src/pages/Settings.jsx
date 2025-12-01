@@ -11,15 +11,17 @@ const Settings = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [profileSettings, setProfile] = useState({});
+    const [profile, setProfile] = useState({});
     const location = useLocation();
+    const {userId: stateUserId} = location.state || {};
+    const userId = stateUserId || localStorage.getItem("userId");
 
     useEffect(() => {
-        fetch('http://localhost:5001/api/settings').then(res => res.json()).then(data => setProfile(data))
+        fetch(`http://localhost:5001/api/settings?userId=${userId}`).then(res => res.json()).then(data => setProfile(data))
     }, [location.pathname])
 
     const handleDeleteAccount = async() => {
-        await fetch("http://localhost:5001/api/settings/account", {method: "DELETE"})
+        await fetch(`http://localhost:5001/api/settings/account?userId=${userId}`, {method: "DELETE"})
         setConfirmOpen(false)
         navigate("/")
     };
@@ -39,15 +41,15 @@ const Settings = () => {
                         name = {option}
                         value = {
                             option === 'goals' 
-                            ? (profileSettings.goals || [])
+                            ? (profile.goals || [])
                                 .map(goal => goal.title)
                                 .join(', ')
-                            : (profileSettings[option] || "")
+                            : (profile[option] || "")
                         }
                         readOnly
                     />
         
-                    <button className="edit-button" onClick={() => navigate(`/settings/${option}`)}>
+                    <button className="edit-button" onClick={() => navigate(`/settings/${option}`, {state : {userId: profile.id}})}>
                         Edit
                     </button>
                 </label>

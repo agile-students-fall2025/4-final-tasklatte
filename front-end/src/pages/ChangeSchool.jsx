@@ -4,30 +4,32 @@ import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useState, useEffect } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ChangeSchool = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [school, setSchool] = useState("");
     const [grade, setGrade] = useState("");
-    
+    const location = useLocation();
+    const{userId} = location.state  || {};
+
     useEffect(() => {
-        fetch("http://localhost:5001/api/settings").then(res => res.json()).then(data => {setSchool(data.school || ""); setGrade(data.grade || "");})
+        fetch(`http://localhost:5001/api/settings?userId=${userId}`).then(res => res.json()).then(data => {setSchool(data.school || ""); setGrade(data.grade || "");})
     }, [])
 
     const handleSave = async () => {
-        await fetch("http://localhost:5001/api/settings/school", {
+        await fetch(`http://localhost:5001/api/settings/school?userId=${userId}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : school})
         });
-        await fetch("http://localhost:5001/api/settings/grade", {
+        await fetch(`http://localhost:5001/api/settings/grade?userId=${userId}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : grade})
         });
-        navigate("/settings")
+        navigate("/settings", {state:{userId}})
     }
 
     return(
