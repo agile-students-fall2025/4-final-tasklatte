@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
     users.push(newUser);
 
     req.session.userId = newUser.id;
-    res.status(200).json({message: "User Registered", user: {username, name}});
+    res.status(200).json({message: "User Registered", user: {id:newUser.id, username, name}});
 });
 
 module.exports = router;

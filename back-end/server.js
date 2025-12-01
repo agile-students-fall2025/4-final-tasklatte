@@ -13,6 +13,8 @@ const loginRouter = require("./routes/login");
 const dashboardRouter = require("./routes/dashboard");
 const profileRouter = require("./routes/profile");
 const aiRouter = require("./routes/ai");
+const accountRouter = require("./routes/account");
+
 
 dotenv.config();
 const app = express();
@@ -53,6 +55,7 @@ app.use("/api/login", loginRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/ai", aiRouter);
+app.use("/api/account", accountRouter);
 
 app.use(express.static(path.join(__dirname, "../front-end/build")));
 app.get(/^\/(?!api).*/, (req, res) => {
