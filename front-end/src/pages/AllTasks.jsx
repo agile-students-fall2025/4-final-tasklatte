@@ -133,7 +133,7 @@ export default function AllTasks() {
         )}
 
         {filtered.map((t) => (
-          <button key={t.id} className="allpixel-card" onClick={() => openEdit(t.id)}>
+          <button key={t._id} className="allpixel-card" onClick={() => openEdit(t._id)}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div className="allpixel-left">
                 <div className="allpixel-title-row">
@@ -162,7 +162,7 @@ export default function AllTasks() {
                   e.stopPropagation();
                   const newVal = e.target.checked;
                   try {
-                    const res = await fetch(`/api/tasks/${t.id}`, {
+                    const res = await fetch(`/api/tasks/${t._id}`, {
                       method: "PUT",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ completed: newVal }),
@@ -170,7 +170,7 @@ export default function AllTasks() {
                     if (!res.ok) throw new Error("Failed to toggle");
                     const json = await res.json();
                     const updated = { ...json.task, completed: Boolean(json.task?.completed) };
-                    setTasks((prev) => prev.map((it) => (it.id === t.id ? updated : it)));
+                    setTasks((prev) => prev.map((it) => (it._id === t._id ? updated : it)));
                   } catch (err) {
                     console.error(err);
                   }

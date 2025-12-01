@@ -65,14 +65,14 @@ export default function DailyTasks() {
 
         {items.map((item) => {
           const isClass = item.source === "class";
-          const itemId = isClass ? item.occurrenceId : item.id;
+          const itemId = isClass ? item.occurrenceId : item._id;
 
           return (
             <button
               key={itemId}
               className={`allpixel-card ${isClass ? "allpixel-card-class" : ""}`}
               onClick={() => {
-                if (!isClass) openEdit(item.id);
+                if (!isClass) openEdit(item._id);
                 else navigate(`/classes/${item.classId}/edit`);
               }}
               style={isClass ? { borderLeftColor: item.color, cursor: "pointer" } : {}}
