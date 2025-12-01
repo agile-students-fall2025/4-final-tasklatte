@@ -1,38 +1,32 @@
-const express = require ("express");
-const bcrypt = require ("bcrypt");
+// routes/register.js
+const express = require("express");
+const bcrypt = require("bcrypt");
 const router = express.Router();
-let { users } = require("../data/user");
-const { grade } = require("../data/profileSettings");
+const User = require("../models/User");
 
 router.post("/", async (req, res) => {
     const { username, name, password } = req.body;
 
     if (!username || !name || !password) {
-        return res.status(400).json({error: "All fields are required"});
+        return res.status(400).json({ error: "All fields are required" });
     }
 
-    const doesExist = users.find(u => u.name === name);
-    if (doesExist) {
-        return res.status(400).json({error: "Name already registered"});
+    try {
+        const existingUser = await User.findOne({ username });
+        if (existingUser) return res.status(400).json({ error: "Username already taken" });
+
+        const hashed = await bcrypt.hash(password, 10);
+        const newUser = new User({ username, name, password: hashed });
+        await newUser.save();
+
+        res.status(200).json({
+            message: "User registered",
+            user: { id: newUser._id, username: newUser.username, name: newUser.name }
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
     }
-
-    const hashed = await bcrypt.hash(password, 10);
-    const newUser = {
-        id: users.length + 1,
-        username,
-        name,
-        password: hashed,
-        bio: "",
-        major: "",
-        school: "",
-        grade: "",
-        timezone: "",
-        goals: []
-    };
-    users.push(newUser);
-
-    req.session.userId = newUser.id;
-    res.status(200).json({message: "User Registered", user: {id:newUser.id, username, name}});
 });
 
 module.exports = router;

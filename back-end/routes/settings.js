@@ -1,106 +1,204 @@
 const express = require("express");
 const router = express.Router();
-let { users } = require('../data/user');
+const User = require("../models/User");
 
-function getUser(req){
-  const userId = req.query.userId || (req.session && req.session.userId);
+// -------------------------
+// Goals CRUD (must be first)
+// -------------------------
 
-  if (!userId) {
-    return null;
+// Get all goals for a user
+router.get("/goals", async (req, res) => {
+    const { userId } = req.query;
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+        res.json(user.goals || []);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// Add a new goal
+router.post("/goals", async (req, res) => {
+  const { userId } = req.query;
+  const { title, description } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const newGoal = { title: title || "New Goal", description: description || "Describe your goal..." };
+    user.goals.push(newGoal);
+    await user.save();
+
+    res.json(user.goals[user.goals.length - 1]); // return goal with _id
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
+});
 
-  return users.find(u => u.id === parseInt(userId));
+// Update goal
+router.put("/goals/:goalId", async (req, res) => {
+  const { userId } = req.query;
+  const { goalId } = req.params;
+  const { title, description } = req.body;
 
-}
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-router.get("/", (req, res) => {
-    const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    res.json(user);
-})
+    const goal = user.goals.id(goalId);
+    if (!goal) return res.status(404).json({ error: "Goal not found" });
 
-router.get("/goals", (req, res) => {
-    const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    res.json(user.goals || []);
-})
+    goal.title = title;
+    goal.description = description;
 
-router.post("/goals", (req, res) => {
-     const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    const newGoal = {id: Date.now(), ...req.body}
-    user.goals = user.goals || []
-    user.goals.push(newGoal)
-    res.json(newGoal);
-})
+    await user.save();
+    res.json(goal);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
-router.put("/goals/:id", (req, res) => {
-     const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    const id = parseInt(req.params.id)
-    const idx = user.goals.findIndex(g => g.id === id)
-    if(idx !== -1){
-        user.goals[idx] = {...user.goals[idx], ...req.body}
-        res.json(user.goals[idx])
-    }else{
-        res.status(404).json({error : 'Goal not found'})
-    }
-})
+// Delete goal
+router.delete("/goals/:goalId", async (req, res) => {
+  const { userId } = req.query;
+  const { goalId } = req.params;
 
-router.delete("/goals/:id", (req, res) => {
-     const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    const id = parseInt(req.params.id)
-    user.goals = user.goals.filter(g => g.id !== id)
-    res.json({success: true})
-})
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-router.get("/:option", (req, res) => {
-     const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    const option = req.params.option;
-    if(user[option] !== undefined){
-        res.json({ [option]: user[option] })
-    }else{
-        res.status(404).json({error : 'Field not found'})
+    const goal = user.goals.id(goalId);
+    if (!goal) return res.status(404).json({ error: "Goal not found" });
+
+    goal.remove();
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
+
+// Update a goal
+router.put("/goals/:goalId", async (req, res) => {
+    const { userId } = req.query;
+    const { goalId } = req.params;
+    const { title, description } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const goal = user.goals.find(g => g.id === goalId);
+        if (!goal) return res.status(404).json({ error: "Goal not found" });
+
+        goal.title = title;
+        goal.description = description;
+        await user.save();
+        res.json(goal);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-router.put("/:option", (req, res) => {
-     const user = getUser(req);
-    if(!user){
-        return res.status(404).json({error: "User not found"});
-    }
-    const option = req.params.option;
-    const value = req.body.value;
-    if(user[option] !== undefined){
-        user[option] = value
-        res.json({success : true, [option] : value})
-    }else{
-        res.status(404).json({error : 'Field not found'})
+// Delete a goal
+router.delete("/goals/:goalId", async (req, res) => {
+    const { userId } = req.query;
+    const { goalId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        user.goals = user.goals.filter(g => g.id !== goalId);
+        await user.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-router.delete("/account", (req,res) => {
-    const userId = req.query.userId || (req.session && req.session.userId);
-    const idx = user.findIndex(u => u.id === parseInt(userId))
-    if(idx !== -1){
-        return res.status(404).json({error: "User not found"});
+// -------------------------
+// Delete account
+// -------------------------
+router.delete("/account", async (req, res) => {
+    const { userId } = req.query;
+    try {
+        await User.findByIdAndDelete(userId);
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
     }
-    users.splice(idx, 1)
-    res.json({success : true, message: 'Account deleted'})
-})
+});
+
+// -------------------------
+// Get all settings for a user
+// -------------------------
+router.get("/", async (req, res) => {
+    const { userId } = req.query;
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.json({
+            id: user._id,
+            bio: user.bio || "",
+            major: user.major || "",
+            school: user.school || "",
+            grade: user.grade || "",
+            timezone: user.timezone || "America/Los_Angeles",
+            goals: user.goals || [],
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// -------------------------
+// Dynamic GET / PUT for profile fields (catch-all, LAST)
+// -------------------------
+router.get("/:field", async (req, res) => {
+    const { userId } = req.query;
+    const { field } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (!(field in user)) return res.status(400).json({ error: "Invalid field" });
+
+        res.json({ [field]: user[field] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+router.put("/:field", async (req, res) => {
+    const { userId } = req.query;
+    const { field } = req.params;
+    const { value } = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate(userId, { [field]: value }, { new: true });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.json({ [field]: user[field] });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 module.exports = router;

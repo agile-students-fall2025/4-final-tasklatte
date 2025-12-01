@@ -1,38 +1,30 @@
 const express = require("express");
 const router = express.Router();
-let { users } = require("../data/user");
+const User = require("../models/User"); // MongoDB User model
 
-router.get("/", (req, res) => {
-  const userId = req.query.userId || (req.session && req.session.userId);
+router.get("/", async (req, res) => {
+  try {
+    const { userId } = req.query;
+    if (!userId) return res.status(400).json({ error: "Missing userId" });
 
-  if (!userId) {
-    return res.status(401).json({ error: "Not logged in" });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.json({
+      id: user._id,
+      name: user.name,
+      username: user.username,
+      bio: user.bio || "",
+      major: user.major || "",
+      school: user.school || "",
+      grade: user.grade || "",
+      timezone: user.timezone || "America/Los_Angeles",
+      goals: user.goals || [],
+    });
+  } catch (err) {
+    console.error("Profile error:", err);
+    res.status(500).json({ error: "Server error" });
   }
-
-  const user = users.find(u => u.id === parseInt(userId));
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  res.json({
-    name: user.name,
-    username: user.username,
-    grade: user.grade || "",
-    major: user.major || "",
-    school: user.school || "",
-    bio: user.bio || "",
-    timezone: user.timezone || "",
-    avatar: user.avatar || "https://picsum.photos/id/237/200/300",
-    goals: user.goals || [],
-    stats:
-      user.stats ||
-      [
-        { label: "📚study streak", value: 0 },
-        { label: "🧘‍♀️longest focus", value: 0 },
-        { label: "☕coffees drank", value: 0 },
-        { label: "🍪snack breaks", value: 0 },
-      ],
-  });
 });
 
 module.exports = router;
