@@ -12,29 +12,31 @@ const Goals = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [editingGoal, setEditingGoal] = useState(null);
     const [goals, setGoals] = useState([]);
+    const userId = localStorage.getItem("userId")
 
     useEffect(() => {
-        fetch("http://localhost:5001/api/settings/goals").then(res => res.json()).then(data => setGoals(Array.isArray(data) ? data : [])).catch(err => console.error("Error getting goals:", err))
-    }, [])
+        fetch(`http://localhost:5001/api/settings/goals?userId=${userId}`).then(res => res.json()).then(data => setGoals(Array.isArray(data) ? data : [])).catch(err => console.error("Error getting goals:", err))
+    }, [userId, navigate])
 
     const handleSave = async (updatedGoal) => {
-        await fetch(`http://localhost:5001/api/settings/goals/${updatedGoal.id}`, {
+        const res = await fetch(`http://localhost:5001/api/settings/goals/${updatedGoal.id}?userId=${userId}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(updatedGoal)
         });
-        setGoals(goals.map(g => g.id === updatedGoal.id ? updatedGoal : g));    
+        const savedGoal = await res.json();
+        setGoals(goals.map(g => g.id === savedGoal.id ? savedGoal : g));    
         setEditingGoal(null);
     }
     const handleDelete = async (id) => {
-        await fetch(`http://localhost:5001/api/settings/goals/${id}`, {
+        await fetch(`http://localhost:5001/api/settings/goals/${id}?userId=${userId}`, {
             method: "DELETE",
         });
         setGoals(goals.filter(g => g.id !== id));
         setEditingGoal(null);
     }
     const handleAdd = async () => {
-        const res = await fetch("http://localhost:5001/api/settings/goals", {
+        const res = await fetch(`http://localhost:5001/api/settings/goals?userId=${userId}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({title: "", description:""})
