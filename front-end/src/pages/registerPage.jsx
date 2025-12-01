@@ -25,7 +25,8 @@ export default function RegisterPage() {
             console.log("Response from backend:", data);
 
             if (res.ok) {
-                navigate("/dashboard");
+                localStorage.setItem("userId", data.user.id);
+                navigate("/account", {state: {userId: data.user.id, name:data.user.name}});
             } else {
                 alert(data.error || "Registration failed");
             }
@@ -78,7 +79,7 @@ export default function RegisterPage() {
                 >
                 Go Back
                 </button>
-                <button type="button" className="pixel-button" onClick={() => navigate('/account' , {state: {name}})}>
+                <button type="submit" className="pixel-button" onClick={() => navigate('/account' , {state: {name}})}>
                 Next
                 </button>
             </div>

@@ -4,19 +4,21 @@ import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useState, useEffect } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ChangeMajor = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [major, setMajor] = useState("");
+     const location = useLocation();
+    const{userId} = location.state  || {};
     
     useEffect(() => {
-        fetch("http://localhost:5001/api/settings/major").then(res => res.json()).then(data => setMajor(data.major))
+        fetch(`http://localhost:5001/api/settings/major?userId=${userId}`).then(res => res.json()).then(data => setMajor(data.major))
     }, [])
 
     const handleSave = async () => {
-        await fetch("http://localhost:5001/api/settings/major", {
+        await fetch(`http://localhost:5001/api/settings/major?userId=${userId}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : major})

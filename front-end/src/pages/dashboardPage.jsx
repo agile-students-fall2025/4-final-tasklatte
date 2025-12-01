@@ -13,7 +13,7 @@ export default function DashboardPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userId = 1;
+        const userId = localStorage.getItem("userId");
         fetch(`http://localhost:5001/api/dashboard/${userId}`)
         .then(res => {
             if (!res.ok) {

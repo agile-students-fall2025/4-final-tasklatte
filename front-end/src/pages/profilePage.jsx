@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
@@ -9,23 +9,29 @@ export default function ProfilePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [profile, setProfile] = useState({
+    id: null,
+    name: "",
+    username: "",
     bio: "",
     major: "",
     school: "",
     grade: "",
     timezone: "",
-    goals: []
+    goals: [],
   });
   const [expandedGoal, setExpandedGoal] = useState(null);
 
   const toggleGoal = (id) => {
     setExpandedGoal((prev) => (prev === id ? null : id));
   };
+  const location = useLocation();
+  const {userId: stateUserId} = location.state || {};
+  const userId = stateUserId || localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/settings");
+        const res = await fetch(`http://localhost:5001/api/profile?userId=${userId}`);
         const data = await res.json();
         console.log("Fetched profile data:", data); // 👀 Debugging tip
         if (!res.ok) {

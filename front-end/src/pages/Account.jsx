@@ -14,25 +14,39 @@ export default function Account() {
     const [grade, setGrade] = useState("");
     const [timezone, setTimezone] = useState("");
     const location = useLocation();
-    const {name} = location.state || {};
+    const {userId, name} = location.state || {};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const res = await fetch("http://localhost:5001/api/account", {
-                method: "POST",
+            await fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`, {
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, bio, major, school, grade, timezone }),
+                body: JSON.stringify({value: bio }),
             });
-            const data = await res.json();
-            console.log("Response from backend:", data);
-
-            if (res.ok) {
-                navigate("/dashboard");
-            } else {
-                alert(data.error || "Registration failed");
-            }
+             await fetch(`http://localhost:5001/api/settings/major?userId=${userId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({value: major }),
+            });
+             await fetch(`http://localhost:5001/api/settings/school?userId=${userId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({value: school }),
+            });
+             await fetch(`http://localhost:5001/api/settings/grade?userId=${userId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({value: grade }),
+            });
+             await fetch(`http://localhost:5001/api/settings/timezone?userId=${userId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({value: timezone }),
+            });
+        
+            navigate("/dashboard", {state: {userId}})
         } catch (err) {
             console.error("Error registering user:", err);
         }

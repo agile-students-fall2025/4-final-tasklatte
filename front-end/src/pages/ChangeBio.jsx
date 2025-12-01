@@ -4,19 +4,21 @@ import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { useState, useEffect } from "react";
 import MenuOverlay from "../components/MenuOverlay.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ChangeBio = () => {
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const [bio, setBio] = useState("");
+    const location = useLocation();
+    const{userId} = location.state  || {};
 
     useEffect(() => {
-        fetch("http://localhost:5001/api/settings/bio").then(res => res.json()).then(data => setBio(data.bio))
+        fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`).then(res => res.json()).then(data => setBio(data.bio))
     }, [])
 
     const handleSave = async () => {
-        await fetch("http://localhost:5001/api/settings/bio", {
+        await fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({value : bio})

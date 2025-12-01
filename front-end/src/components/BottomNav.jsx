@@ -16,7 +16,7 @@ export default function BottomNav() {
       <NavLink to="/AISuggestions" className={cls}>
         AI Suggestions
       </NavLink>
-      <NavLink to="/profilePage" className={cls}>
+      <NavLink to="/profilePage" state={{userID:localStorage.getItem("userId")}} className={cls}>
         Profile
       </NavLink>
     </nav>
