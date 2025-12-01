@@ -5,7 +5,7 @@ import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AddTasks.css";
 
-export default function AddTasks() {
+export default function AddTasks({ onTaskAdded }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -51,6 +51,10 @@ export default function AddTasks() {
       setSuccess(true);
       setSaving(false);
 
+      // Notify parent to refresh AI Suggestions
+      if (onTaskAdded) onTaskAdded();
+
+      // Optional: navigate to task list after 1.2s
       setTimeout(() => navigate("/all"), 1200);
     } catch (err) {
       console.error(err);
