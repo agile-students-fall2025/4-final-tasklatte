@@ -62,7 +62,7 @@ export default function ProfilePage() {
               alt="Avatar"
               className="avatar pixel-border"
             />
-            <h2 className="pixel-font">User</h2>
+            <h2 className="pixel-font">{profile.name}</h2>
           </div>
           <div className="profile-right">
             <p className="pixel-font">Grade: {profile.grade}</p>
