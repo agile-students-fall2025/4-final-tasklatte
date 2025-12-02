@@ -1,18 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
+const auth = require("../middleware/auth");
 
-// GET all tasks
-router.get("/", async (req, res) => {
+
+
+router.get("/", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { q, course, priority, date, completed } = req.query;
 
-    let filter = {};
+    let filter = { userId };
 
     if (q) {
       filter.$or = [
         { title: { $regex: q, $options: "i" } },
-        { details: { $regex: q, $options: "i" } },
+        { details: { $regex: q, $options: "i" } }
       ];
     }
 
@@ -31,9 +34,15 @@ router.get("/", async (req, res) => {
 });
 
 // GET daily tasks
-router.get("/daily/:date", async (req, res) => {
+router.get("/daily/:date", auth, async (req, res) => {
   try {
-    const tasks = await Task.find({ date: { $regex: `^${req.params.date}` } });
+    const userId = req.userId;
+
+    const tasks = await Task.find({
+      userId,
+      date: { $regex: `^${req.params.date}` }
+    });
+
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -41,9 +50,15 @@ router.get("/daily/:date", async (req, res) => {
 });
 
 // GET single task
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const userId = req.userId;
+
+    const task = await Task.findOne({
+      _id: req.params.id,
+      userId
+    });
+
     if (!task) return res.status(404).json({ error: "Task not found" });
     res.json(task);
   } catch (err) {
@@ -51,19 +66,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST create task
-router.post("/", async (req, res) => {
+// CREATE new task
+router.post("/", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { title, details, course, date, priority, completed, duration } = req.body;
 
     const task = await Task.create({
+      userId,
       title,
       details,
       course,
       date,
       priority,
       completed: Boolean(completed),
-      duration,
+      duration
     });
 
     res.status(201).json({ success: true, task });
@@ -72,19 +89,21 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PUT update task
-router.put("/:id", async (req, res) => {
+// UPDATE task
+router.put("/:id", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const updates = { ...req.body };
 
-    // convert to boolean
     if (typeof updates.completed !== "undefined") {
       updates.completed = Boolean(updates.completed);
     }
 
-    const task = await Task.findByIdAndUpdate(req.params.id, updates, {
-      new: true,
-    });
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, userId },
+      updates,
+      { new: true }
+    );
 
     if (!task) return res.status(404).json({ error: "Task not found" });
 
@@ -95,10 +114,17 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE task
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
-    const deleted = await Task.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ success: false, error: "Task not found" });
+    const userId = req.userId;
+
+    const deleted = await Task.findOneAndDelete({
+      _id: req.params.id,
+      userId
+    });
+
+    if (!deleted)
+      return res.status(404).json({ success: false, error: "Task not found" });
 
     res.json({ success: true, deleted });
   } catch (err) {

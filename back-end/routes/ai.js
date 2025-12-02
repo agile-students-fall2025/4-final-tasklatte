@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
 const Class = require("../models/Class");
-
+const auth = require("../middleware/auth");
 // ----------------------------
 // GET /api/ai/daily/:date
 // Fetch all tasks for a user on a specific date
 // ----------------------------
-router.get("/daily/:date", async (req, res) => {
+router.get("/daily/:date", auth, async (req, res) => {
   const { date } = req.params;
-  const { userId } = req.query;
-
+  // const { userId } = req.query;
+  const userId = req.user.userId;
   if (!userId) return res.status(400).json({ error: "Missing userId" });
 
   try {
@@ -33,13 +33,13 @@ router.get("/daily/:date", async (req, res) => {
 // PUT /api/ai/task/:id
 // Update task duration or other fields
 // ----------------------------
-router.put("/task/:id", async (req, res) => {
+router.put("/task/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { duration, title, details, date, course, priority, completed } = req.body;
 
   try {
     const task = await Task.findById(id);
-    if (!task) return res.status(404).json({ error: "Task not found" });
+    if (!task || task.userId.toString() !== req.user.userId) return res.status(404).json({ error: "Task not found" });
 
     if (duration !== undefined) task.duration = duration;
     if (title !== undefined) task.title = title;

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
-import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./registerPage.css";
 
@@ -25,7 +24,9 @@ export default function RegisterPage() {
             console.log("Response from backend:", data);
 
             if (res.ok) {
+                localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.user.id);
+                localStorage.setItem("name", data.user.name);
                 navigate("/account", {state: {userId: data.user.id, name:data.user.name}});
             } else {
                 alert(data.error || "Registration failed");

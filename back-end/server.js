@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
-const session = require("express-session");
+// const session = require("express-session");
 const mongoose = require("mongoose");
 
 const tasksRouter = require("./routes/tasks");
@@ -14,7 +14,7 @@ const dashboardRouter = require("./routes/dashboard");
 const profileRouter = require("./routes/profile");
 const aiRouter = require("./routes/ai");
 const accountRouter = require("./routes/account");
-
+const authMiddleware = require("./middleware/auth");
 
 dotenv.config();
 const app = express();
@@ -38,14 +38,18 @@ if (require.main === module) {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET || "your-secret-key",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false,
+//       sameSite: "lax"
+//     }
+//   })
+// );
 
 app.use("/api/tasks", tasksRouter);
 app.use("/api/classes", classesRouter);

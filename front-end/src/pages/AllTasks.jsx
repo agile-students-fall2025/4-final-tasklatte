@@ -15,7 +15,11 @@ export default function AllTasks() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/tasks").then((res) => res.json()),
+      fetch("/api/tasks", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }).then((res) => res.json()),
       fetch("/api/classes").then((res) => res.json()),
     ])
       .then(([tasksData, classesData]) => {
@@ -164,7 +168,10 @@ export default function AllTasks() {
                   try {
                     const res = await fetch(`/api/tasks/${t._id}`, {
                       method: "PUT",
-                      headers: { "Content-Type": "application/json" },
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                       },
                       body: JSON.stringify({ completed: newVal }),
                     });
                     if (!res.ok) throw new Error("Failed to toggle");
