@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const Task = require("../models/Task");
+const auth = require("../middleware/auth");
 
-router.get("/:userId", async (req, res) => {
-  const { userId } = req.params;
+router.get("/", auth, async (req, res) => {
+  const userId = req.userId;
 
   try {
     // Find the user in MongoDB

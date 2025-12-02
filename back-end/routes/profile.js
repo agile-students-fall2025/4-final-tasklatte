@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User"); // MongoDB User model
+const auth = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const { userId } = req.query;
+    const userId = req.userId;
     if (!userId) return res.status(400).json({ error: "Missing userId" });
 
     const user = await User.findById(userId);

@@ -13,7 +13,12 @@ export default function EditClass() {
   const [formData, setFormData] = useState(null);
 
   useEffect(() => {
-    fetch(`/api/classes/${id}`)
+    const token = localStorage.getItem("token");
+    fetch(`/api/classes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setFormData(data))
       .catch((err) => console.error(err));
@@ -39,7 +44,10 @@ export default function EditClass() {
     try {
       const res = await fetch(`/api/classes/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(formData),
       });
       if (!res.ok) throw new Error("Failed to update");
@@ -55,7 +63,12 @@ export default function EditClass() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this class?")) return;
     try {
-      const res = await fetch(`/api/classes/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/classes/${id}`, { 
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (!res.ok) throw new Error("Failed to delete");
       navigate("/calendar");
     } catch (err) {

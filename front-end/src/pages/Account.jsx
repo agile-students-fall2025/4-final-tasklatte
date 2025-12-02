@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
-import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./Account.css";
 
@@ -19,30 +18,51 @@ export default function Account() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Not authenticated. Please log in.");
+            return;
+        }
+
         try {
-            await fetch(`http://localhost:5001/api/settings/bio?userId=${userId}`, {
+            await fetch(`http://localhost:5001/api/settings/bio`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({value: bio }),
             });
-             await fetch(`http://localhost:5001/api/settings/major?userId=${userId}`, {
+             await fetch(`http://localhost:5001/api/settings/major`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({value: major }),
             });
-             await fetch(`http://localhost:5001/api/settings/school?userId=${userId}`, {
+             await fetch(`http://localhost:5001/api/settings/school`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({value: school }),
             });
-             await fetch(`http://localhost:5001/api/settings/grade?userId=${userId}`, {
+             await fetch(`http://localhost:5001/api/settings/grade`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({value: grade }),
             });
-             await fetch(`http://localhost:5001/api/settings/timezone?userId=${userId}`, {
+             await fetch(`http://localhost:5001/api/settings/timezone`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({value: timezone }),
             });
         

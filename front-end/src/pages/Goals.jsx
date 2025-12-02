@@ -15,13 +15,27 @@ const Goals = () => {
     const userId = localStorage.getItem("userId")
 
     useEffect(() => {
-        fetch(`http://localhost:5001/api/settings/goals?userId=${userId}`).then(res => res.json()).then(data => setGoals(Array.isArray(data) ? data : [])).catch(err => console.error("Error getting goals:", err))
-    }, [userId, navigate])
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+        fetch(`http://localhost:5001/api/settings/goals`, {
+            headers: {"Authorization": `Bearer ${token}`}
+        })
+            .then(res => res.json())
+            .then(data => setGoals(Array.isArray(data) ? data : []))
+            .catch(err => console.error("Error getting goals:", err))
+    }, [navigate])
 
     const handleSave = async (updatedGoal) => {
-        const res = await fetch(`http://localhost:5001/api/settings/goals/${updatedGoal.id}?userId=${userId}`, {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:5001/api/settings/goals/${updatedGoal.id}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify(updatedGoal)
         });
         const savedGoal = await res.json();
@@ -29,16 +43,22 @@ const Goals = () => {
         setEditingGoal(null);
     }
     const handleDelete = async (id) => {
-        await fetch(`http://localhost:5001/api/settings/goals/${id}?userId=${userId}`, {
+        const token = localStorage.getItem("token");
+        await fetch(`http://localhost:5001/api/settings/goals/${id}`, {
             method: "DELETE",
+            headers: {"Authorization": `Bearer ${token}`}
         });
         setGoals(goals.filter(g => g.id !== id));
         setEditingGoal(null);
     }
     const handleAdd = async () => {
-        const res = await fetch(`http://localhost:5001/api/settings/goals?userId=${userId}`, {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:5001/api/settings/goals`, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({title: "", description:""})
         });
         const newGoal = await res.json();

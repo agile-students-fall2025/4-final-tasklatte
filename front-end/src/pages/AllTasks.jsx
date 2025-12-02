@@ -11,32 +11,33 @@ export default function AllTasks() {
 
   const [tasks, setTasks] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [items, setItems] = useState([]); // merged
+  
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     Promise.all([
       fetch("/api/tasks", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
-      fetch("/api/classes").then((res) => res.json()),
+      fetch("/api/classes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
     ])
       .then(([tasksData, classesData]) => {
-        const normalizedTasks = tasksData.map((t) => ({
+        // Handle errors - if response is an error object, use empty array
+        const safeTasksData = Array.isArray(tasksData) ? tasksData : [];
+        const safeClassesData = Array.isArray(classesData) ? classesData : [];
+        
+        const normalizedTasks = safeTasksData.map((t) => ({
           ...t,
           completed: Boolean(t.completed),
         }));
         setTasks(normalizedTasks);
-        setClasses(classesData);
-        // Merge and sort
-        const merged = [...normalizedTasks, ...classesData];
-        merged.sort((a, b) => {
-          const aTime = a.date || a.startTime;
-          const bTime = b.date || b.startTime;
-          return aTime.localeCompare(bTime);
-        });
-        setItems(merged);
+        setClasses(safeClassesData);
       })
       .catch(console.error);
   }, []);
@@ -190,10 +191,10 @@ export default function AllTasks() {
 
         {filteredClasses.map((c) => (
           <button
-            key={c.id}
+            key={c._id}
             className="allpixel-card allpixel-card-class"
             style={{ borderLeftColor: c.color, cursor: "pointer" }}
-            onClick={() => navigate(`/classes/${c.id}/edit`)}
+            onClick={() => navigate(`/classes/${c._id}/edit`)}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div className="allpixel-left">

@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const auth = require("../middleware/auth");
 
 // -------------------------
 // Goals CRUD (must be first)
 // -------------------------
 
 // Get all goals for a user
-router.get("/goals", async (req, res) => {
-    const { userId } = req.query;
+router.get("/goals", auth, async (req, res) => {
+    const userId = req.userId;
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
@@ -20,8 +21,8 @@ router.get("/goals", async (req, res) => {
 });
 
 // Add a new goal
-router.post("/goals", async (req, res) => {
-  const { userId } = req.query;
+router.post("/goals", auth, async (req, res) => {
+  const userId = req.userId;
   const { title, description } = req.body;
 
   try {
@@ -40,8 +41,8 @@ router.post("/goals", async (req, res) => {
 });
 
 // Update goal
-router.put("/goals/:goalId", async (req, res) => {
-  const { userId } = req.query;
+router.put("/goals/:goalId", auth, async (req, res) => {
+  const userId = req.userId;
   const { goalId } = req.params;
   const { title, description } = req.body;
 
@@ -64,8 +65,8 @@ router.put("/goals/:goalId", async (req, res) => {
 });
 
 // Delete goal
-router.delete("/goals/:goalId", async (req, res) => {
-  const { userId } = req.query;
+router.delete("/goals/:goalId", auth, async (req, res) => {
+  const userId = req.userId;
   const { goalId } = req.params;
 
   try {
@@ -87,8 +88,8 @@ router.delete("/goals/:goalId", async (req, res) => {
 
 
 // Update a goal
-router.put("/goals/:goalId", async (req, res) => {
-    const { userId } = req.query;
+router.put("/goals/:goalId", auth, async (req, res) => {
+    const userId = req.userId;
     const { goalId } = req.params;
     const { title, description } = req.body;
 
@@ -110,8 +111,8 @@ router.put("/goals/:goalId", async (req, res) => {
 });
 
 // Delete a goal
-router.delete("/goals/:goalId", async (req, res) => {
-    const { userId } = req.query;
+router.delete("/goals/:goalId", auth, async (req, res) => {
+    const userId = req.userId;
     const { goalId } = req.params;
 
     try {
@@ -130,8 +131,8 @@ router.delete("/goals/:goalId", async (req, res) => {
 // -------------------------
 // Delete account
 // -------------------------
-router.delete("/account", async (req, res) => {
-    const { userId } = req.query;
+router.delete("/account", auth, async (req, res) => {
+    const userId = req.userId;
     try {
         await User.findByIdAndDelete(userId);
         res.json({ success: true });
@@ -144,8 +145,8 @@ router.delete("/account", async (req, res) => {
 // -------------------------
 // Get all settings for a user
 // -------------------------
-router.get("/", async (req, res) => {
-    const { userId } = req.query;
+router.get("/", auth, async (req, res) => {
+    const userId = req.userId;
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
@@ -168,8 +169,8 @@ router.get("/", async (req, res) => {
 // -------------------------
 // Dynamic GET / PUT for profile fields (catch-all, LAST)
 // -------------------------
-router.get("/:field", async (req, res) => {
-    const { userId } = req.query;
+router.get("/:field", auth, async (req, res) => {
+    const userId = req.userId;
     const { field } = req.params;
 
     try {
@@ -185,8 +186,8 @@ router.get("/:field", async (req, res) => {
     }
 });
 
-router.put("/:field", async (req, res) => {
-    const { userId } = req.query;
+router.put("/:field", auth, async (req, res) => {
+    const userId = req.userId;
     const { field } = req.params;
     const { value } = req.body;
 

@@ -13,8 +13,16 @@ export default function DashboardPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userId = localStorage.getItem("userId");
-        fetch(`http://localhost:5001/api/dashboard/${userId}`)
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+        fetch(`http://localhost:5001/api/dashboard`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
         .then(res => {
             if (!res.ok) {
                 throw new Error("Failed to fetch dashboard data");
@@ -29,7 +37,7 @@ export default function DashboardPage() {
         .catch(err => {
             console.error(err);
         });
-    }, []);
+    }, [navigate]);
 
     return (
         <div className="page dashboard-page">

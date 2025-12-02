@@ -16,16 +16,25 @@ const ChangeTimezone = () => {
 
     useEffect(() => {
         if (!userId) return navigate("/login");
-        fetch(`http://localhost:5001/api/settings/timezone?userId=${userId}`)
+        const token = localStorage.getItem("token");
+        if (!token) return navigate("/login");
+        
+        fetch(`http://localhost:5001/api/settings/timezone`, {
+            headers: {"Authorization": `Bearer ${token}`}
+        })
             .then(res => res.json())
             .then(data => setTimezone(data.timezone || "America/Los_Angeles"))
             .catch(err => console.error(err));
     }, [userId, navigate]);
 
     const handleSave = async () => {
-        await fetch(`http://localhost:5001/api/settings/timezone?userId=${userId}`, {
+        const token = localStorage.getItem("token");
+        await fetch(`http://localhost:5001/api/settings/timezone`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({ value: timezone }),
         });
         navigate("/settings", { state: { userId } });

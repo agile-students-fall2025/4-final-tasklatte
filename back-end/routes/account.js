@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const auth = require("../middleware/auth");
 
 // Update account info
-router.post("/", async (req, res) => {
-    const { userId } = req.session; // get logged-in user
+router.post("/", auth, async (req, res) => {
+    const userId = req.userId;
     const { bio, major, school, grade, timezone } = req.body;
 
     if (!userId) {
@@ -44,8 +45,8 @@ router.post("/", async (req, res) => {
 });
 
 // Delete account
-router.delete("/account", async (req, res) => {
-    const { userId } = req.session;
+router.delete("/account", auth, async (req, res) => {
+    const userId = req.userId;
     if (!userId) {
         return res.status(401).json({ error: "Not logged in" });
     }
