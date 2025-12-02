@@ -2,6 +2,7 @@ const express = require("express");
 const { validationResult, body } = require("express-validator");
 const router = express.Router();
 const Class = require("../models/Class");
+const auth = require("../middleware/auth");
 
 /**
  * Validation middleware for class data
@@ -152,9 +153,10 @@ function expandClassOccurrences(classList, startDate, endDate) {
  * GET /api/classes
  * Returns all class definitions (not expanded)
  */
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    const classes = await Class.find();
+    const userId = req.userId;
+    const classes = await Class.find({ userId });
     res.json(classes);
   } catch (error) {
     console.error(error);
@@ -167,10 +169,11 @@ router.get("/", async (req, res) => {
  * Returns expanded occurrences for a specific date
  * Date format: YYYY-MM-DD
  */
-router.get("/daily/:date", async (req, res) => {
+router.get("/daily/:date", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { date } = req.params;
-    const classes = await Class.find();
+    const classes = await Class.find({ userId });
     const occurrences = expandClassOccurrences(classes, date, date);
     res.json(occurrences);
   } catch (error) {
@@ -184,13 +187,14 @@ router.get("/daily/:date", async (req, res) => {
  * Returns expanded occurrences for a date range
  * Query params: start=YYYY-MM-DD, end=YYYY-MM-DD
  */
-router.get("/range", async (req, res) => {
+router.get("/range", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { start, end } = req.query;
     if (!start || !end) {
       return res.status(400).json({ error: "Missing start or end date" });
     }
-    const classes = await Class.find();
+    const classes = await Class.find({ userId });
     const occurrences = expandClassOccurrences(classes, start, end);
     res.json(occurrences);
   } catch (error) {
@@ -203,9 +207,13 @@ router.get("/range", async (req, res) => {
  * GET /api/classes/:id
  * Returns a single class definition
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
-    const cls = await Class.findById(req.params.id);
+    const userId = req.userId;
+    const cls = await Class.findOne({
+      _id: req.params.id,
+      userId
+    });
     if (!cls) {
       return res.status(404).json({ error: "Class not found" });
     }
@@ -220,8 +228,9 @@ router.get("/:id", async (req, res) => {
  * POST /api/classes
  * Create a new class with validation
  */
-router.post("/", validateClass, handleValidationErrors, async (req, res) => {
+router.post("/", auth, validateClass, handleValidationErrors, async (req, res) => {
   try {
+    const userId = req.userId;
     const {
       title,
       location = "",
@@ -237,6 +246,7 @@ router.post("/", validateClass, handleValidationErrors, async (req, res) => {
     } = req.body;
 
     const newClass = new Class({
+      userId,
       title,
       location,
       instructor,
@@ -262,15 +272,17 @@ router.post("/", validateClass, handleValidationErrors, async (req, res) => {
  * PUT /api/classes/:id
  * Update an existing class with validation
  */
-router.put("/:id", validateClass, handleValidationErrors, async (req, res) => {
+router.put("/:id", auth, validateClass, handleValidationErrors, async (req, res) => {
   try {
+    const userId = req.userId;
     const { id } = req.params;
     const updates = req.body;
 
-    const updatedClass = await Class.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedClass = await Class.findOneAndUpdate(
+      { _id: id, userId },
+      updates,
+      { new: true, runValidators: true }
+    );
 
     if (!updatedClass) {
       return res.status(404).json({ error: "Class not found" });
@@ -287,10 +299,14 @@ router.put("/:id", validateClass, handleValidationErrors, async (req, res) => {
  * DELETE /api/classes/:id
  * Delete a class
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
+    const userId = req.userId;
     const { id } = req.params;
-    const deletedClass = await Class.findByIdAndDelete(id);
+    const deletedClass = await Class.findOneAndDelete({
+      _id: id,
+      userId
+    });
 
     if (!deletedClass) {
       return res.status(404).json({ error: "Class not found" });

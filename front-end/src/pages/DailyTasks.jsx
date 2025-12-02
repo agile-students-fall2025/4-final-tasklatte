@@ -21,21 +21,30 @@ export default function DailyTasks() {
       .split("T")[0];
 
     const queryDate = date || local;
+    const token = localStorage.getItem("token");
 
     Promise.all([
       fetch(`/api/tasks/daily/${queryDate}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
-      fetch(`/api/classes/daily/${queryDate}`).then((res) => res.json()),
+      fetch(`/api/classes/daily/${queryDate}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => res.json()),
     ])
       .then(([tasksData, classesData]) => {
-        const normalizedTasks = tasksData.map((t) => ({
+        // Handle potential errors - ensure arrays
+        const safeTasksData = Array.isArray(tasksData) ? tasksData : [];
+        const safeClassesData = Array.isArray(classesData) ? classesData : [];
+        
+        const normalizedTasks = safeTasksData.map((t) => ({
           ...t,
           completed: Boolean(t.completed),
         }));
-        const merged = [...normalizedTasks, ...classesData];
+        const merged = [...normalizedTasks, ...safeClassesData];
         merged.sort((a, b) => {
           const aTime = a.date || a.start;
           const bTime = b.date || b.start;
