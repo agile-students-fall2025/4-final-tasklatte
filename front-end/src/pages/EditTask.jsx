@@ -23,7 +23,11 @@ export default function EditTask({ tasks = [], setTasks }) {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`/api/tasks/${id}`)
+    fetch(`/api/tasks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) throw new Error("Task not found");
         return res.json();
@@ -60,7 +64,10 @@ export default function EditTask({ tasks = [], setTasks }) {
     try {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("Failed to save");
@@ -79,7 +86,12 @@ export default function EditTask({ tasks = [], setTasks }) {
   const onDelete = async () => {
   try {
     setLoading(true);
-    const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/tasks/${id}`, {
+      method: "DELETE",
+      header: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     if (!res.ok) throw new Error("Failed to delete task");
 
     if (setTasks) {

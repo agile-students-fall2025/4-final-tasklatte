@@ -88,6 +88,7 @@ const generateSafeSuggestions = (tasks, classes, acceptedTasks, today) => {
 
 // --- Component ---
 export default function AiSuggestions({ userId }) {
+  const token = localStorage.getItem("token");
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [classes, setClasses] = useState([]);
@@ -99,7 +100,11 @@ export default function AiSuggestions({ userId }) {
     try {
       const [classRes, taskRes] = await Promise.all([
         fetch(`/api/classes?userId=${userId}`),
-        fetch(`/api/tasks?userId=${userId}&date=${today}`),
+        fetch(`/api/tasks?userId=${userId}&date=${today}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }),
       ]);
 
       const classData = await classRes.json();
@@ -133,7 +138,10 @@ export default function AiSuggestions({ userId }) {
       try {
         await fetch(`/api/tasks/${id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ start: task.start, end: task.end, duration: task.duration }),
         });
 

@@ -34,7 +34,10 @@ export default function AddTasks({ onTaskAdded }) {
       const formattedDate = date.includes("T") ? date : `${date}:00`;
       const response = await fetch("/api/tasks", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({
           title,
           details,

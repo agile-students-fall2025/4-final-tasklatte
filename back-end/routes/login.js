@@ -1,38 +1,48 @@
-// routes/login.js
+// // routes/login.js
 const express = require("express");
 const bcrypt = require("bcrypt");
-const router = express.Router();
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+const router = express.Router();
+
 router.post("/", async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password){
-        return res.status(400).json({ error: "Username and password required" });
-    }
+  const { username, password } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ error: "Username and password required" });
 
-    try {
-        const user = await User.findOne({ username });
+  try {
+    const user = await User.findOne({ username });
+    if (!user)
+      return res.status(400).json({ error: "User not found" });
 
-        if (!user) {
-            return res.status(400).json({ error: "User not found" });
-        }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(400).json({ error: "Incorrect password" });
 
-        const isMatch = await bcrypt.compare(password, user.password);
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-        if (!isMatch) {
-            return res.status(400).json({ error: "Incorrect password" });
-        }
+    res.setHeader("Authorization", `Bearer ${token}`);
+    res.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-        req.session.userId = user._id;
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        name: user.name
+      }
+    });
 
-        res.status(200).json({
-            message: "Login successful",
-            user: { username: user.username, name: user.name }
-        });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Server error" });
-    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
 });
 
 module.exports = router;

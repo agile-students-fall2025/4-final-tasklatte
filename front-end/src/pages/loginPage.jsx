@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
-import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./loginPage.css";
 
@@ -24,6 +23,9 @@ export default function LoginPage() {
             console.log("Response from backend:", data);
 
             if (res.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("userId", data.user.id);
+                localStorage.setItem("name", data.user.name);
                 navigate("/dashboard");
             } else {
                 alert(data.error || "Login failed");

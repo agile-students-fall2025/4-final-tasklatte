@@ -23,7 +23,11 @@ export default function DailyTasks() {
     const queryDate = date || local;
 
     Promise.all([
-      fetch(`/api/tasks/daily/${queryDate}`).then((res) => res.json()),
+      fetch(`/api/tasks/daily/${queryDate}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }).then((res) => res.json()),
       fetch(`/api/classes/daily/${queryDate}`).then((res) => res.json()),
     ])
       .then(([tasksData, classesData]) => {
@@ -124,7 +128,10 @@ export default function DailyTasks() {
                       try {
                         const res = await fetch(`/api/tasks/${item.id}`, {
                           method: "PUT",
-                          headers: { "Content-Type": "application/json" },
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                          },
                           body: JSON.stringify({ completed: newVal }),
                         });
                         if (!res.ok) throw new Error("Failed to toggle");
