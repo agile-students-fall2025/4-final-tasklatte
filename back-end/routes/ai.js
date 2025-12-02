@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 router.get("/daily/:date", auth, async (req, res) => {
   const { date } = req.params;
   // const { userId } = req.query;
-  const userId = req.user.userId;
+  const userId = req.userId;
   if (!userId) return res.status(400).json({ error: "Missing userId" });
 
   try {
@@ -39,7 +39,7 @@ router.put("/task/:id", auth, async (req, res) => {
 
   try {
     const task = await Task.findById(id);
-    if (!task || task.userId.toString() !== req.user.userId) return res.status(404).json({ error: "Task not found" });
+    if (!task || task.userId.toString() !== req.userId) return res.status(404).json({ error: "Task not found" });
 
     if (duration !== undefined) task.duration = duration;
     if (title !== undefined) task.title = title;
@@ -62,8 +62,8 @@ router.put("/task/:id", auth, async (req, res) => {
 // GET /api/ai/classes
 // Fetch all classes for a user
 // ----------------------------
-router.get("/classes", async (req, res) => {
-  const { userId } = req.query;
+router.get("/classes", auth, async (req, res) => {
+  const userId = req.userId;
   if (!userId) return res.status(400).json({ error: "Missing userId" });
 
   try {

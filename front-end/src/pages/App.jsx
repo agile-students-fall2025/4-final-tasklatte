@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DailyTasks from "./DailyTasks.jsx";
-import Placeholder from "./Placeholder.jsx";
 import Settings from "./Settings.jsx";
 import AllTasks from "./AllTasks.jsx";
 import CalendarPage from "./Calendar.jsx";
@@ -20,6 +19,7 @@ import Goals from "./Goals.jsx";
 import Register from "./registerPage.jsx";
 import Dashboard from "./dashboardPage.jsx";
 import Account from "./Account.jsx";
+import NotFound from "./NotFound.jsx";
 
 const fmtLocalDate = (d) => {
   const y = d.getFullYear();
@@ -63,7 +63,7 @@ export default function App() {
 
         <Route path="/account" element={<Account />} /> 
 
-        <Route path="*" element={<Placeholder title="Not Found" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

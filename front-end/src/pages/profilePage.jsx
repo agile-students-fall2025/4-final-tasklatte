@@ -31,7 +31,16 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`http://localhost:5001/api/profile?userId=${userId}`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found");
+          return;
+        }
+        const res = await fetch(`http://localhost:5001/api/profile`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
         const data = await res.json();
         console.log("Fetched profile data:", data); // 👀 Debugging tip
         if (!res.ok) {

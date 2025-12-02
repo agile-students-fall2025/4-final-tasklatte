@@ -6,7 +6,6 @@ import "./Calendar.css";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
-import AddTask from "./AddTasks.jsx";
 
 export default function CalendarPage() {
   const [date, setDate] = useState(new Date());
@@ -16,10 +15,6 @@ export default function CalendarPage() {
   const handleDayClick = (value) => {
     const formattedDate = value.toISOString().split("T")[0];
     navigate(`/daily-tasks/${formattedDate}`);
-  };
-
-  const handleAddTask = () => {
-    navigate("/calendar/new");
   };
 
   const handleAddClass = () => {

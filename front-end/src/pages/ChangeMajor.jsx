@@ -16,16 +16,25 @@ const ChangeMajor = () => {
 
     useEffect(() => {
         if (!userId) return navigate("/login");
-        fetch(`http://localhost:5001/api/settings/major?userId=${userId}`)
+        const token = localStorage.getItem("token");
+        if (!token) return navigate("/login");
+        
+        fetch(`http://localhost:5001/api/settings/major`, {
+            headers: {"Authorization": `Bearer ${token}`}
+        })
             .then(res => res.json())
             .then(data => setMajor(data.major || ""))
             .catch(err => console.error(err));
     }, [userId, navigate]);
 
     const handleSave = async () => {
-        await fetch(`http://localhost:5001/api/settings/major?userId=${userId}`, {
+        const token = localStorage.getItem("token");
+        await fetch(`http://localhost:5001/api/settings/major`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({ value: major }),
         });
         navigate("/settings", { state: { userId } });

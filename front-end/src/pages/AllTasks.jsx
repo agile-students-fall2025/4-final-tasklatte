@@ -11,7 +11,7 @@ export default function AllTasks() {
 
   const [tasks, setTasks] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [items, setItems] = useState([]); // merged
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -38,14 +38,6 @@ export default function AllTasks() {
         }));
         setTasks(normalizedTasks);
         setClasses(safeClassesData);
-        // Merge and sort
-        const merged = [...normalizedTasks, ...safeClassesData];
-        merged.sort((a, b) => {
-          const aTime = a.date || a.start;
-          const bTime = b.date || b.start;
-          return aTime.localeCompare(bTime);
-        });
-        setItems(merged);
       })
       .catch(console.error);
   }, []);

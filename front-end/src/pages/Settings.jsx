@@ -18,7 +18,14 @@ const Settings = () => {
 
     useEffect(() => {
         if (!userId) return navigate("/login");
-        fetch(`http://localhost:5001/api/settings?userId=${userId}`)
+        const token = localStorage.getItem("token");
+        if (!token) return navigate("/login");
+        
+        fetch(`http://localhost:5001/api/settings`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
             .then(res => {
                 if (!res.ok) throw new Error("Failed to fetch settings");
                 return res.json();
@@ -28,9 +35,16 @@ const Settings = () => {
     }, [userId, location.pathname, navigate]);
 
     const handleDeleteAccount = async () => {
-        await fetch(`http://localhost:5001/api/settings/account?userId=${userId}`, { method: "DELETE" });
+        const token = localStorage.getItem("token");
+        await fetch(`http://localhost:5001/api/settings/account`, { 
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
         setConfirmOpen(false);
         localStorage.removeItem("userId");
+        localStorage.removeItem("token");
         navigate("/login");
     };
 

@@ -122,7 +122,7 @@ export default function AiSuggestions({ userId }) {
     } catch (err) {
       console.error("Failed to load daily tasks:", err);
     }
-  }, [userId, today]);
+  }, [userId, today, token]);
 
   useEffect(() => {
     loadDailyTasks();
