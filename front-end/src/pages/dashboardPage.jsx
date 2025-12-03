@@ -39,6 +39,20 @@ export default function DashboardPage() {
         });
     }, [navigate]);
 
+    const [quote, setQuote] = useState(null);
+
+    useEffect(() => {
+        fetch("/quotes.json")
+            .then(res => res.json())
+            .then(data => {
+                if (data.quotes && data.quotes.length > 0) {
+                    const random = data.quotes[Math.floor(Math.random() * data.quotes.length)];
+                    setQuote(random);
+                }
+            })
+            .catch(err => console.error(err));
+    }, []);
+
     return (
         <div className="page dashboard-page">
         <HeaderBar
@@ -65,7 +79,14 @@ export default function DashboardPage() {
             </div>
 
             <div className="motivation-card">
-            <p>Motivational Quote/Image</p>
+                {quote ? (
+                    <>
+                        <p className="quote-text">"{quote.quote}"</p>
+                        <p className="quote-author">— {quote.author}</p>
+                    </>
+                ) : (
+                    <p>Loading inspiration...</p>
+                )}
             </div>
 
             <div className="analytics-card">
