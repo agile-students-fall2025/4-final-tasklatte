@@ -44,7 +44,6 @@ const handleValidationErrors = (req,res,next) => {
     next();
 }
 
-
 // Get all goals for a user
 router.get("/goals", auth, async (req, res) => {
     try {
@@ -139,8 +138,6 @@ router.delete("/goals/:goalId", auth, async (req, res) => {
   }
 });
 
-
-
 // Delete account
 router.delete("/account", auth, async (req, res) => {
     const userId = req.userId;
@@ -153,21 +150,22 @@ router.delete("/account", auth, async (req, res) => {
     }
 });
 
-
-// Get all settings for a user
+// Get all settings for a user (minimal change: allow query userId)
 router.get("/", auth, async (req, res) => {
-    const userId = req.userId;
+    const userId = req.query.userId || req.userId;
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
         res.json({
             id: user._id,
+            name: user.name,
             bio: user.bio || "",
             major: user.major || "",
             school: user.school || "",
             grade: user.grade || "",
             timezone: user.timezone || "America/Los_Angeles",
+            photo: user.photo || "",
             goals: user.goals || [],
         });
     } catch (err) {
@@ -176,6 +174,26 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
+// Update profile photo (new route)
+router.put("/photo", auth, async (req, res) => {
+  const userId = req.query.userId || req.userId;
+  const { photo } = req.body;
+
+  if (!photo) return res.status(400).json({ error: "Photo is required" });
+
+  try {
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ error: "User not found" });
+
+      user.photo = photo;
+      await user.save();
+
+      res.json({ photo: user.photo });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Server error" });
+  }
+});
 
 // Dynamic GET / PUT for profile fields (catch-all, LAST)
 router.get("/:field", auth, async (req, res) => {

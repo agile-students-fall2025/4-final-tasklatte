@@ -7,102 +7,158 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DeleteConfirmOverlay from "../components/DeleteConfirmOverlay.jsx";
 
 const Settings = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { userId: stateUserId } = location.state || {};
-    const userId = stateUserId || localStorage.getItem("userId");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { userId: stateUserId } = location.state || {};
+  const userId = stateUserId || localStorage.getItem("userId");
 
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [confirmOpen, setConfirmOpen] = useState(false);
-    const [profile, setProfile] = useState({});
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [profile, setProfile] = useState({});
+  const [selectedPhoto, setSelectedPhoto] = useState("");
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        navigate("/login", { replace: true });
-    };
+  const settingsOptions = ["bio", "major", "school", "goals"];
 
-    useEffect(() => {
-        if (!userId) return navigate("/login");
-        const token = localStorage.getItem("token");
-        if (!token) return navigate("/login");
-        
-        fetch(`http://localhost:5001/api/settings`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Failed to fetch settings");
-                return res.json();
-            })
-            .then(data => setProfile(data))
-            .catch(err => console.error(err));
-    }, [userId, location.pathname, navigate]);
+  useEffect(() => {
+    if (!userId) return navigate("/login");
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/login");
 
-    const handleDeleteAccount = async () => {
-        const token = localStorage.getItem("token");
-        await fetch(`http://localhost:5001/api/settings/account`, { 
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-        setConfirmOpen(false);
-        localStorage.removeItem("userId");
-        localStorage.removeItem("token");
-        navigate("/login");
-    };
+    fetch(`http://localhost:5001/api/settings?userId=${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProfile(data);
+        setSelectedPhoto(data.photo || "");
+      })
+      .catch((err) => console.error(err));
+  }, [userId, navigate]);
 
-    const settingsOptions = ['bio','major','school', 'goals'];
+  // Handle photo click
+  const handlePhotoClick = async (photo) => {
+    setSelectedPhoto(photo);
+    const token = localStorage.getItem("token");
 
-    return (
-        <div className="Settings">
-            <HeaderBar 
-                title="Settings" 
-                onHamburger={() => setMenuOpen(true)} 
-                onLogo={() => navigate("/")} 
-            />
+    try {
+      const res = await fetch(
+        `http://localhost:5001/api/settings/photo?userId=${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ photo }),
+        }
+      );
 
-            <h1>Settings</h1>
-            <h4>Profile:</h4>
+      if (!res.ok) throw new Error("Failed to update photo");
 
-            {settingsOptions.map(option => (
-                <label key={option}>
-                    <input
-                        name={option}
-                        value={
-                            option === 'goals' 
-                                ? (profile.goals || []).map(goal => goal.title).join(', ')
-                                : (profile[option] || "")
-                        }
-                        readOnly
-                    />
-                    <button
-                        className="edit-button"
-                        onClick={() => navigate(`/settings/${option}`, { state: { userId: profile.id || userId } })}
-                    >
-                        Edit
-                    </button>
-                </label>
-            ))}
+      const data = await res.json();
+      setProfile((prev) => ({ ...prev, photo: data.photo }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-            <h4>Other:</h4>
-            <div className="button-row">
-                <button className="action-button" type="button" onClick={handleLogout}>
-                    Log Out
-                </button>
-                <button className="action-button" type="button" onClick={() => setConfirmOpen(true)}>
-                    Delete Account
-                </button>
-            </div>
+  return (
+    <div className="Settings">
+      <HeaderBar
+        title="Settings"
+        onHamburger={() => setMenuOpen(true)}
+        onLogo={() => navigate("/")}
+      />
 
-            <BottomNav /> 
+      <div className="settings-content">
+        <h1>Settings</h1>
 
-            {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
-            {confirmOpen && <DeleteConfirmOverlay onClose={() => setConfirmOpen(false)} onConfirm={handleDeleteAccount} />}
+        <h4>Profile Picture:</h4>
+        <div className="photo-selection">
+          {[...Array(10)].map((_, i) => {
+            const photo = `pic${i + 1}.jpeg`;
+            return (
+              <img
+                key={photo}
+                src={`${process.env.PUBLIC_URL}/profile-pics/${photo}`}
+                alt={`Photo ${i + 1}`}
+                className={`profile-photo ${
+                  selectedPhoto === photo ? "selected" : ""
+                }`}
+                onClick={() => handlePhotoClick(photo)}
+              />
+            );
+          })}
         </div>
-    );
+
+        <h4>Profile:</h4>
+        {settingsOptions.map((option) => (
+          <label key={option}>
+            <h5>{option}</h5>
+            <input
+              name={option}
+              value={
+                option === "goals"
+                  ? (profile.goals || []).map((g) => g.title).join(", ")
+                  : profile[option] || ""
+              }
+              readOnly
+            />
+            <button
+              className="edit-button"
+              onClick={() =>
+                navigate(`/settings/${option}`, {
+                  state: { userId: profile.id || userId },
+                })
+              }
+            >
+              Edit
+            </button>
+          </label>
+        ))}
+
+        <h4>Other:</h4>
+        <div className="button-row">
+          <button
+            className="action-button"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("userId");
+              navigate("/login");
+            }}
+          >
+            Log Out
+          </button>
+
+          <button
+            className="action-button"
+            onClick={() => setConfirmOpen(true)}
+          >
+            Delete Account
+          </button>
+        </div>
+      </div>
+
+      <BottomNav />
+
+      {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+      {confirmOpen && (
+        <DeleteConfirmOverlay
+          onClose={() => setConfirmOpen(false)}
+          onConfirm={async () => {
+            const token = localStorage.getItem("token");
+            await fetch(`http://localhost:5001/api/settings/account`, {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            localStorage.removeItem("token");
+            localStorage.removeItem("userId");
+            navigate("/login");
+          }}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Settings;

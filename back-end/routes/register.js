@@ -1,9 +1,10 @@
-// // routes/register.js
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
+
+const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
 
 router.post("/", async (req, res) => {
   const { username, name, password } = req.body;
@@ -17,7 +18,16 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Username already taken" });
 
     const hashed = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, name, password: hashed });
+
+    // Randomly assign a profile picture
+    const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
+
+    const newUser = new User({
+      username,
+      name,
+      password: hashed,
+      photo: randomPic, 
+    });
     await newUser.save();
 
     const token = jwt.sign(
@@ -35,8 +45,9 @@ router.post("/", async (req, res) => {
       user: {
         id: newUser._id,
         username: newUser.username,
-        name: newUser.name
-      }
+        name: newUser.name,
+        photo: newUser.photo,
+      },
     });
 
   } catch (err) {
