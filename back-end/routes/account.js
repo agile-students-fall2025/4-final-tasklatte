@@ -2,9 +2,50 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const { validationResult, body } = require("express-validator");
+
+const validateAccount = [
+  body("bio")
+    .trim()
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage("Bio cannot exceed 200 characters"),
+  body("major")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("Major cannot exceed 100 characters"),
+  body("school")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("School cannot exceed 100 characters"),
+  body("grade")
+    .optional()
+    .isIn(["Freshman", "Sophomore", "Junior", "Senior", "Graduate"])
+    .withMessage("Grade must be valid"),
+  body("timezone")
+    .optional()
+    .isIn([
+      "America/Los_Angeles",
+      "America/Denver",
+      "America/Chicago",
+      "America/New_York",
+      "UTC",
+    ])
+    .withMessage("Invalid timezone"),
+];
+
+const handleValidationErrors = (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+    next();
+}
 
 // Update account info
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, validateAccount, handleValidationErrors, async (req, res) => {
     const userId = req.userId;
     const { bio, major, school, grade, timezone } = req.body;
 
