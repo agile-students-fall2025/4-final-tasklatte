@@ -18,11 +18,11 @@ const EditGoal = ({goal, onClose, onSave, onDelete}) => {
                     <input value={description} onChange={(e) => setDescription(e.target.value)}/>
                 </label>
                 <div className = "edit-goal-buttons">
-                    <button className="delete-button" onClick={onDelete}>
+                    <button className="delete-button" onClick={() => onDelete(goal.id)}>
                     Delete
                     </button>
 
-                    <button className="save-button" onClick={() => onSave({id: goal.id, title, description})}>
+                    <button className="save-button" onClick={() => onSave({ id: goal.id, title, description })}>
                     Save
                     </button>
                 </div> 

@@ -1,4 +1,5 @@
 .notfound-page .notfound-content {
+  min-height: 76vh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -49,11 +49,17 @@ const handleValidationErrors = (req,res,next) => {
 
 // Get all goals for a user
 router.get("/goals", auth, async (req, res) => {
-    const userId = req.userId;
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(req.userId);
         if (!user) return res.status(404).json({ error: "User not found" });
-        res.json(user.goals || []);
+        const goals = user.goals.map((g) => ({
+          id: g._id.toString(),
+          title: g.title,
+          description: g.description,
+          completed: g.completed,
+          dueDate: g.dueDate,
+        }));
+        res.json(goals);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server error" });
@@ -62,18 +68,23 @@ router.get("/goals", auth, async (req, res) => {
 
 // Add a new goal
 router.post("/goals", auth, async (req, res) => {
-  const userId = req.userId;
   const { title, description } = req.body;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const newGoal = { title: title || "New Goal", description: description || "Describe your goal..." };
     user.goals.push(newGoal);
     await user.save();
-
-    res.json(user.goals[user.goals.length - 1]); // return goal with _id
+    const g = user.goals[user.goals.length - 1];
+    res.json({
+      id: g._id.toString(),
+      title: g.title,
+      description: g.description,
+      completed: g.completed,
+      dueDate: g.dueDate,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -82,12 +93,11 @@ router.post("/goals", auth, async (req, res) => {
 
 // Update goal
 router.put("/goals/:goalId", auth, async (req, res) => {
-  const userId = req.userId;
   const { goalId } = req.params;
   const { title, description } = req.body;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const goal = user.goals.id(goalId);
@@ -95,9 +105,16 @@ router.put("/goals/:goalId", auth, async (req, res) => {
 
     goal.title = title;
     goal.description = description;
-
+    goal.completed = req.body.completed ?? goal.completed;
+    goal.dueDate = req.body.dueDate ?? goal.dueDate;
     await user.save();
-    res.json(goal);
+    res.json({
+      id: goal._id.toString(),
+      title: goal.title,
+      description: goal.description,
+      completed: goal.completed,
+      dueDate: goal.dueDate,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -106,17 +123,16 @@ router.put("/goals/:goalId", auth, async (req, res) => {
 
 // Delete goal
 router.delete("/goals/:goalId", auth, async (req, res) => {
-  const userId = req.userId;
   const { goalId } = req.params;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const goal = user.goals.id(goalId);
     if (!goal) return res.status(404).json({ error: "Goal not found" });
 
-    goal.remove();
+    goal.deleteOne();
     await user.save();
     res.json({ success: true });
   } catch (err) {
@@ -125,48 +141,6 @@ router.delete("/goals/:goalId", auth, async (req, res) => {
   }
 });
 
-
-
-// Update a goal
-router.put("/goals/:goalId", auth, async (req, res) => {
-    const userId = req.userId;
-    const { goalId } = req.params;
-    const { title, description } = req.body;
-
-    try {
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
-
-        const goal = user.goals.find(g => g.id === goalId);
-        if (!goal) return res.status(404).json({ error: "Goal not found" });
-
-        goal.title = title;
-        goal.description = description;
-        await user.save();
-        res.json(goal);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// Delete a goal
-router.delete("/goals/:goalId", auth, async (req, res) => {
-    const userId = req.userId;
-    const { goalId } = req.params;
-
-    try {
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
-
-        user.goals = user.goals.filter(g => g.id !== goalId);
-        await user.save();
-        res.json({ success: true });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
 
 // -------------------------
 // Delete account
