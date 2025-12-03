@@ -2,7 +2,50 @@ const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task");
 const auth = require("../middleware/auth");
+const { validationResult, body } = require("express-validator");
 
+const validateTask = [
+  body("title")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("Title cannot exceed 100 characters"),
+  body("details")
+    .trim()
+    .optional()
+    .isLength({ max: 500 })
+    .withMessage("Details cannot exceed 500 characters"),
+  body("course")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("Course cannot exceed 100 characters"),
+  body("date")
+    .optional()
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 string"),
+  body("priority")
+    .trim()
+    .optional()
+    .isIn(["low", "medium", "high"])
+    .withMessage("Priority can only be low, medium, or high"),
+  body("completed")
+    .optional()
+    .isBoolean()
+    .withMessage("Completed must be true or false"),
+  body("duration")
+    .optional()
+    .isInt({min: 1})
+    .withMessage("Duration must be a positive integer"),
+];
+
+const handleValidationErrors = (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+    next();
+}
 
 
 router.get("/", auth, async (req, res) => {
@@ -67,7 +110,7 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 // CREATE new task
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, validateTask, handleValidationErrors, async (req, res) => {
   try {
     const userId = req.userId;
     const { title, details, course, date, priority, completed, duration } = req.body;
@@ -90,7 +133,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 // UPDATE task
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, validateTask, handleValidationErrors, async (req, res) => {
   try {
     const userId = req.userId;
     const updates = { ...req.body };
