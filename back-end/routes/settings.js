@@ -2,7 +2,47 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const auth = require("../middleware/auth");
+const { validationResult, body } = require("express-validator");
 
+const validateSettings = [
+  body("bio")
+    .trim()
+    .optional()
+    .isLength({ max: 200 })
+    .withMessage("Bio cannot exceed 200 characters"),
+  body("major")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("Major cannot exceed 100 characters"),
+  body("school")
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage("School cannot exceed 100 characters"),
+  body("grade")
+    .optional()
+    .isIn(["Freshman", "Sophomore", "Junior", "Senior", "Graduate"])
+    .withMessage("Grade must be valid"),
+  body("timezone")
+    .optional()
+    .isIn([
+      "America/Los_Angeles",
+      "America/Denver",
+      "America/Chicago",
+      "America/New_York",
+      "UTC",
+    ])
+    .withMessage("Invalid timezone"),
+];
+
+const handleValidationErrors = (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+    next();
+}
 // -------------------------
 // Goals CRUD (must be first)
 // -------------------------
@@ -186,16 +226,20 @@ router.get("/:field", auth, async (req, res) => {
     }
 });
 
-router.put("/:field", auth, async (req, res) => {
+router.put("/settings", auth, validateSettings, handleValidationErrors, async (req, res) => {
     const userId = req.userId;
-    const { field } = req.params;
-    const { value } = req.body;
 
     try {
-        const user = await User.findByIdAndUpdate(userId, { [field]: value }, { new: true });
+        const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        res.json({ [field]: user[field] });
+        res.json({ 
+            bio: user.bio,
+            major: user.major,
+            school: user.school,
+            grade: user.grade,
+            timezone: user.timezone,
+         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server error" });
