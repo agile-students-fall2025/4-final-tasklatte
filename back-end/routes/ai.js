@@ -3,14 +3,32 @@ const router = express.Router();
 const Task = require("../models/Task");
 const Class = require("../models/Class");
 const auth = require("../middleware/auth");
+const { validationResult, body, param } = require("express-validator");
+
+const validateDate = [
+  param("date")
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 string")
+    .toDate()
+]
+
+const handleValidationErrors = (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array()})
+    }
+    next();
+}
+
 // ----------------------------
 // GET /api/ai/daily/:date
 // Fetch all tasks for a user on a specific date
 // ----------------------------
-router.get("/daily/:date", auth, async (req, res) => {
+router.get("/daily/:date", auth, validateDate, handleValidationErrors, async (req, res) => {
   const { date } = req.params;
   // const { userId } = req.query;
   const userId = req.userId;
+  
   if (!userId) return res.status(400).json({ error: "Missing userId" });
 
   try {
@@ -29,11 +47,40 @@ router.get("/daily/:date", auth, async (req, res) => {
   }
 });
 
+const validateTask = [
+  body("duration")
+    .optional()
+    .isInt({ min: 1})
+    .withMessage("Duration must be a positive integer"),
+  body("title")
+    .optional()
+    .trim()
+    .isLength({ max: 100})
+    .withMessage("Title can not exceed 100 characters"),
+  body("details")
+    .optional()
+    .trim()
+    .isLength({ max: 500})
+    .withMessage("Details can not exceed 500 characters"),
+  body("date")
+    .optional()
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 string"),
+  body("priority")
+    .optional()
+    .isIn(["low", "medium", "high"])
+    .withMessage("Priority must be low, medium, or high"),
+  body("completed")
+    .optional()
+    .isBoolean()
+    .withMessage("Completed must be true or false"),
+]
+
 // ----------------------------
 // PUT /api/ai/task/:id
 // Update task duration or other fields
 // ----------------------------
-router.put("/task/:id", auth, async (req, res) => {
+router.put("/task/:id", auth, validateTask, handleValidationErrors, async (req, res) => {
   const { id } = req.params;
   const { duration, title, details, date, course, priority, completed } = req.body;
 
