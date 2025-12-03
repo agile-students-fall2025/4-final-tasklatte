@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import PrivateRoute from "../components/PrivateRoute";
+
 import DailyTasks from "./DailyTasks.jsx";
 import Settings from "./Settings.jsx";
 import AllTasks from "./AllTasks.jsx";
@@ -36,34 +38,172 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/all" element={<AllTasks />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/calendar/new" element={<AddTask />} />
-        <Route path="/calendar/add-class" element={<AddClass />} />
-
-        <Route path="/daily" element={<TodayRedirect />} />
-        <Route path="/daily-tasks/:date" element={<DailyTasks />} />
-        <Route path="/classes/:id/edit" element={<EditClass />} />
-
-        <Route path="/tasks/:id/edit" element={<EditTask title="Edit Task" />} />
-
-        <Route path="/AISuggestions" element={<AiSuggestions />} />
-        <Route path="/profilePage" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/settings/bio" element={<ChangeBio />} />
-        <Route path="/settings/major" element={<ChangeMajor />} />
-        <Route path="/settings/school" element={<ChangeSchool />} />
-        <Route path="/settings/timezone" element={<ChangeTimezone />} />
-        <Route path="/settings/goals" element={<Goals />} />
-
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />} /> 
-        <Route path="/login" element={<Login />} /> 
-        <Route path="/register" element={<Register />} /> 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route 
+          path="/dashboard" 
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          } 
+        />
 
-        <Route path="/account" element={<Account />} /> 
+        <Route 
+          path="/all" 
+          element={
+            <PrivateRoute>
+              <AllTasks />
+            </PrivateRoute>
+          } 
+        />
 
+        <Route 
+          path="/calendar" 
+          element={
+            <PrivateRoute>
+              <CalendarPage />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/calendar/new" 
+          element={
+            <PrivateRoute>
+              <AddTask />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/calendar/add-class" 
+          element={
+            <PrivateRoute>
+              <AddClass />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/daily" 
+          element={
+            <PrivateRoute>
+              <TodayRedirect />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/daily-tasks/:date" 
+          element={
+            <PrivateRoute>
+              <DailyTasks />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/classes/:id/edit" 
+          element={
+            <PrivateRoute>
+              <EditClass />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/tasks/:id/edit" 
+          element={
+            <PrivateRoute>
+              <EditTask />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/AISuggestions" 
+          element={
+            <PrivateRoute>
+              <AiSuggestions />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/profilePage" 
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings" 
+          element={
+            <PrivateRoute>
+              <Settings />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings/bio" 
+          element={
+            <PrivateRoute>
+              <ChangeBio />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings/major" 
+          element={
+            <PrivateRoute>
+              <ChangeMajor />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings/school" 
+          element={
+            <PrivateRoute>
+              <ChangeSchool />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings/timezone" 
+          element={
+            <PrivateRoute>
+              <ChangeTimezone />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/settings/goals" 
+          element={
+            <PrivateRoute>
+              <Goals />
+            </PrivateRoute>
+          } 
+        />
+
+        <Route 
+          path="/account" 
+          element={
+            <PrivateRoute>
+              <Account />
+            </PrivateRoute>
+          } 
+        />
         <Route path="*" element={<NotFound />} />
+
       </Routes>
     </BrowserRouter>
   );

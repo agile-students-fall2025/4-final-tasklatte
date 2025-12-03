@@ -38,18 +38,7 @@ if (require.main === module) {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET || "your-secret-key",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       httpOnly: true,
-//       secure: false,
-//       sameSite: "lax"
-//     }
-//   })
-// );
+
 
 app.use("/api/tasks", tasksRouter);
 app.use("/api/classes", classesRouter);
