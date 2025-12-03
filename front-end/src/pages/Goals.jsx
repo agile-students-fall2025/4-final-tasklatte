@@ -21,7 +21,7 @@ const Goals = () => {
             return;
         }
         fetch(`http://localhost:5001/api/settings/goals`, {
-            headers: {"Authorization": `Bearer ${token}`}
+            headers: {Authorization: `Bearer ${token}`}
         })
             .then(res => res.json())
             .then(data => setGoals(Array.isArray(data) ? data : []))
@@ -34,21 +34,21 @@ const Goals = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(updatedGoal)
         });
-        const savedGoal = await res.json();
-        setGoals(goals.map(g => g.id === savedGoal.id ? savedGoal : g));    
+        const saved = await res.json();
+        setGoals((prev) => prev.map((g) => (g.id === saved.id ? saved : g)));    
         setEditingGoal(null);
     }
     const handleDelete = async (id) => {
         const token = localStorage.getItem("token");
         await fetch(`http://localhost:5001/api/settings/goals/${id}`, {
             method: "DELETE",
-            headers: {"Authorization": `Bearer ${token}`}
+            headers: {Authorization: `Bearer ${token}`}
         });
-        setGoals(goals.filter(g => g.id !== id));
+        setGoals((prev) => prev.filter((g) => g.id !== id));
         setEditingGoal(null);
     }
     const handleAdd = async () => {
@@ -57,12 +57,12 @@ const Goals = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({title: "", description:""})
+            body: JSON.stringify({})
         });
         const newGoal = await res.json();
-        setGoals([...goals, newGoal]);
+        setGoals((prev) => [...prev, newGoal]);
         setEditingGoal(newGoal);
     }
 
@@ -74,7 +74,7 @@ const Goals = () => {
                 <h1>Goals</h1>
                 {goals.map(goal => ( 
                 <label key={goal.id}>
-                    <input name="myInput" defaultValue={goal.title} readOnly/>
+                    <input name="myInput" value={goal.title} readOnly/>
                      <button className="edit-button" onClick={() => setEditingGoal(goal)}>
                     Edit
                     </button> 
@@ -85,7 +85,6 @@ const Goals = () => {
                 </button>   
             </div>
               
-            <button className="save-button" type="button">Save</button>
             <button className="back-button" onClick={() => navigate("/settings")}>
             Back
             </button>
