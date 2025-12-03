@@ -10,16 +10,19 @@ export default function RegisterPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        
         try {
             const res = await fetch("http://localhost:5001/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, name, password }),
             });
+
             const data = await res.json();
             console.log("Response from backend:", data);
 
@@ -27,67 +30,91 @@ export default function RegisterPage() {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.user.id);
                 localStorage.setItem("name", data.user.name);
-                navigate("/account", {state: {userId: data.user.id, name:data.user.name}});
+
+                navigate("/account", {
+                    state: { userId: data.user.id, name: data.user.name }
+                });
             } else {
-                alert(data.error || "Registration failed");
+                setPopupMessage(data.error || "Registration failed");
+                setShowPopup(true);
             }
         } catch (err) {
             console.error("Error registering user:", err);
+            setPopupMessage("Server error. Please try again.");
+            setShowPopup(true);
         }
-
     };
 
     return (
         <div className="page register-page">
-        <HeaderBar 
-            title="Register"
-            onHamburger={() => setMenuOpen(true)}
-            onLogo={() => navigate("/")} />
-
-        <main className="register-content">
-            <h1>Enter Details</h1>
-            <form className="register-form" onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Name"
-                className="register-input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-            />
-            <input
-                type="text"
-                placeholder="Username"
-                className="register-input"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                className="register-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+            <HeaderBar
+                title="Register"
+                onHamburger={() => setMenuOpen(true)}
+                onLogo={() => navigate("/")}
             />
 
-            <div className="register-buttons">
-                <button
-                type="button"
-                className="pixel-button"
-                onClick={() => navigate("/")}
-                >
-                Go Back
-                </button>
-                <button type="submit" className="pixel-button" onClick={() => navigate('/account' , {state: {name}})}>
-                Next
-                </button>
-            </div>
-            </form>
-        </main>
+            <main className="register-content">
+                <h1>Enter Details</h1>
 
-        {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+                <form className="register-form" onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        className="register-input"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        className="register-input"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="register-input"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+
+                    <div className="register-buttons">
+                        <button
+                            type="button"
+                            className="pixel-button"
+                            onClick={() => navigate("/")}
+                        >
+                            Go Back
+                        </button>
+
+                        <button type="submit" className="pixel-button">
+                            Register
+                        </button>
+                    </div>
+                </form>
+            </main>
+
+            {showPopup && (
+                <div className="popup-overlay">
+                    <div className="popup-box">
+                        <p>{popupMessage}</p>
+                        <button
+                            className="popup-close"
+                            onClick={() => setShowPopup(false)}
+                        >
+                            OK
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
         </div>
     );
 }
