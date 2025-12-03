@@ -77,7 +77,7 @@ export default function ProfilePage() {
             <p className="pixel-font">Grade: {profile.grade}</p>
             <p className="pixel-font">Major: {profile.major}</p>
             <p className="pixel-font cafe-name">School: {profile.school}</p>
-            <p className="pixel-font">Timezone: {profile.timezone}</p>
+            {/* <p className="pixel-font">Timezone: {profile.timezone}</p> */}
           </div>
         </div>
 

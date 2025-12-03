@@ -43,9 +43,7 @@ const handleValidationErrors = (req,res,next) => {
     }
     next();
 }
-// -------------------------
-// Goals CRUD (must be first)
-// -------------------------
+
 
 // Get all goals for a user
 router.get("/goals", auth, async (req, res) => {
@@ -142,9 +140,8 @@ router.delete("/goals/:goalId", auth, async (req, res) => {
 });
 
 
-// -------------------------
+
 // Delete account
-// -------------------------
 router.delete("/account", auth, async (req, res) => {
     const userId = req.userId;
     try {
@@ -156,9 +153,8 @@ router.delete("/account", auth, async (req, res) => {
     }
 });
 
-// -------------------------
+
 // Get all settings for a user
-// -------------------------
 router.get("/", auth, async (req, res) => {
     const userId = req.userId;
     try {
@@ -180,9 +176,8 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-// -------------------------
+
 // Dynamic GET / PUT for profile fields (catch-all, LAST)
-// -------------------------
 router.get("/:field", auth, async (req, res) => {
     const userId = req.userId;
     const { field } = req.params;
@@ -200,20 +195,22 @@ router.get("/:field", auth, async (req, res) => {
     }
 });
 
-router.put("/settings", auth, validateSettings, handleValidationErrors, async (req, res) => {
-    const userId = req.userId;
+router.put("/:field", auth, async (req, res) => {
+    const { field } = req.params;
+    const allowedFields = ["bio", "major", "school", "grade", "timezone"];
+
+    if (!allowedFields.includes(field)) {
+        return res.status(400).json({ error: "Invalid field" });
+    }
 
     try {
-        const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+        const user = await User.findById(req.userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        res.json({ 
-            bio: user.bio,
-            major: user.major,
-            school: user.school,
-            grade: user.grade,
-            timezone: user.timezone,
-         });
+        user[field] = req.body.value; 
+        await user.save();
+
+        res.json({ success: true, [field]: user[field] });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server error" });

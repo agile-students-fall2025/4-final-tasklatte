@@ -16,6 +16,12 @@ const Settings = () => {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [profile, setProfile] = useState({});
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        navigate("/login", { replace: true });
+    };
+
     useEffect(() => {
         if (!userId) return navigate("/login");
         const token = localStorage.getItem("token");
@@ -48,7 +54,7 @@ const Settings = () => {
         navigate("/login");
     };
 
-    const settingsOptions = ['bio','major','school','timezone', 'goals'];
+    const settingsOptions = ['bio','major','school', 'goals'];
 
     return (
         <div className="Settings">
@@ -83,7 +89,7 @@ const Settings = () => {
 
             <h4>Other:</h4>
             <div className="button-row">
-                <button className="action-button" type="button" onClick={() => navigate("/login")}>
+                <button className="action-button" type="button" onClick={handleLogout}>
                     Log Out
                 </button>
                 <button className="action-button" type="button" onClick={() => setConfirmOpen(true)}>

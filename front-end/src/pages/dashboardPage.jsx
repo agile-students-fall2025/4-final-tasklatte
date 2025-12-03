@@ -88,10 +88,6 @@ export default function DashboardPage() {
                     <p>Loading inspiration...</p>
                 )}
             </div>
-
-            <div className="analytics-card">
-            <p>Analytics / Recap</p>
-            </div>
         </main>
 
         <BottomNav />

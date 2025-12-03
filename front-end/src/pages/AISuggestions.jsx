@@ -4,7 +4,6 @@ import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AISuggestions.css";
 
-// --- Helper Functions ---
 const timeToMinutes = (t) => {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
@@ -27,12 +26,27 @@ const addTime = (timeStr, minutes) => {
 const randomDuration = (min = 30, max = 120) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-// --- Busy Minutes ---
-const buildBusyMinutes = (classes, acceptedTasks, today) => {
-  const busy = new Array(24 * 60).fill(false);
-  const todayIndex = new Date(today).getDay();
+const fmtLocalDate = (d) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
 
-  classes.forEach((c) => {
+// --- Busy Minutes ---
+const buildBusyMinutes = (classes, otherTasks, today) => {
+  const busy = new Array(24 * 60).fill(false);
+
+  const todayDate = today instanceof Date ? today : new Date(today);
+  const todayIndex = todayDate.getDay();
+
+  const safeClasses = Array.isArray(classes) ? classes : [];
+  const safeOtherTasks = Array.isArray(otherTasks) ? otherTasks : [];
+
+  safeClasses.forEach((c) => {
+    if (!c.days || !Array.isArray(c.days)) return;
+    if (!c.startTime || !c.endTime) return;
+
     if (c.days.includes(todayIndex)) {
       const start = timeToMinutes(c.startTime);
       const end = timeToMinutes(c.endTime);
@@ -40,12 +54,11 @@ const buildBusyMinutes = (classes, acceptedTasks, today) => {
     }
   });
 
-  acceptedTasks.forEach((t) => {
-    if (t.start && t.end) {
-      const start = timeToMinutes(t.start);
-      const end = timeToMinutes(t.end);
-      for (let m = start; m < end; m++) busy[m] = true;
-    }
+  safeOtherTasks.forEach((t) => {
+    if (!t.start || !t.end) return;
+    const start = timeToMinutes(t.start);
+    const end = timeToMinutes(t.end);
+    for (let m = start; m < end; m++) busy[m] = true;
   });
 
   return busy;
@@ -57,7 +70,7 @@ const findFreeBlock = (busy, duration, dayStart = 480, dayEnd = 1320) => {
     for (let j = 0; j < duration; j++) {
       if (busy[i + j]) {
         canFit = false;
-        i += j; // skip busy minutes
+        i += j;
         break;
       }
     }
@@ -66,132 +79,153 @@ const findFreeBlock = (busy, duration, dayStart = 480, dayEnd = 1320) => {
   return null;
 };
 
-const generateSafeSuggestions = (tasks, classes, acceptedTasks, today) => {
+const generateSafeSuggestions = (tasks, classes, otherTasks, today) => {
   const suggestions = [];
-  const busy = buildBusyMinutes(classes, acceptedTasks, today);
+  const busy = buildBusyMinutes(classes, otherTasks, today);
 
-  tasks.forEach((task) => {
-    const startMin = findFreeBlock(busy, task.duration);
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+
+  safeTasks.forEach((task) => {
+    const deadline = task.deadline
+      ? new Date(task.deadline)
+      : null;
+
+    let deadlineMinutes = null;
+
+    if (deadline) {
+      deadlineMinutes =
+        deadline.getHours() * 60 + deadline.getMinutes(); 
+    }
+
+    let startMin = null;
+
+    for (let minute = 480; minute <= 1320 - task.duration; minute++) {
+      if (deadlineMinutes != null && minute + task.duration > deadlineMinutes) {
+        break;
+      }
+
+      let canFit = true;
+      for (let j = 0; j < task.duration; j++) {
+        if (busy[minute + j]) {
+          canFit = false;
+          minute += j;
+          break;
+        }
+      }
+
+      if (canFit) {
+        startMin = minute;
+        break;
+      }
+    }
+
     if (startMin !== null) {
       const startTime = minutesToTime(startMin);
       const endTime = addTime(startTime, task.duration);
-      suggestions.push({ ...task, start: startTime, end: endTime, accepted: null });
 
-      for (let m = startMin; m < startMin + task.duration; m++) busy[m] = true;
+      suggestions.push({
+        ...task,
+        start: startTime,
+        end: endTime,
+      });
+
+      for (let m = startMin; m < startMin + task.duration; m++) {
+        busy[m] = true;
+      }
     } else {
-      suggestions.push({ ...task, start: "TBD", end: "TBD", accepted: null });
+      suggestions.push({
+        ...task,
+        start: "(not applicable) try again to find better",
+        end: "",
+      });
     }
   });
 
   return suggestions;
 };
 
+
 // --- Component ---
-export default function AiSuggestions({ userId }) {
+export default function AiSuggestions() {
   const token = localStorage.getItem("token");
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [classes, setClasses] = useState([]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const todayDate = new Date();
+  const todayStr = fmtLocalDate(todayDate);
 
   // --- Load daily tasks & classes ---
   const loadDailyTasks = useCallback(async () => {
     try {
       const [classRes, taskRes] = await Promise.all([
         fetch(`/api/classes`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch(`/api/tasks?date=${today}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
+        fetch(`/api/tasks?date=${todayStr}`, {
+          headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
+
       const classData = await classRes.json();
-      setClasses(classData);
+      setClasses(Array.isArray(classData) ? classData : []);
 
       const tasks = await taskRes.json();
-      const dailyTasks = tasks.map((t) => ({
+      const safeTasks = Array.isArray(tasks) ? tasks : [];
+
+      const dailyTasks = safeTasks.map((t) => ({
         id: t._id,
         task: t.title,
         duration: t.duration || randomDuration(30, 120),
+        deadline: t.date
       }));
 
-      const safeSuggestions = generateSafeSuggestions(dailyTasks, classData, [], today);
+      const safeSuggestions = generateSafeSuggestions(
+        dailyTasks,
+        classData,
+        [], 
+        todayDate
+      );
       setSuggestions(safeSuggestions);
     } catch (err) {
       console.error("Failed to load daily tasks:", err);
     }
-  }, [userId, today, token]);
+  }, [todayStr, token]);
 
   useEffect(() => {
     loadDailyTasks();
   }, [loadDailyTasks]);
 
-  // --- Accept / Decline task ---
-  const handleDecision = async (id, decision) => {
-    const task = suggestions.find((t) => t.id === id);
-    if (!task) return;
 
-    if (decision) {
-      // Accept → update MongoDB
-      try {
-        await fetch(`/api/tasks/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ start: task.start, end: task.end, duration: task.duration }),
-        });
+  const handleDecline = (id) => {
+    const declinedTask = suggestions.find((s) => s.id === id);
+    if (!declinedTask) return;
 
-        // Remove accepted task from suggestions
-        setSuggestions((prev) => prev.filter((t) => t.id !== id));
-      } catch (err) {
-        console.error("Failed to save task:", err);
-      }
-    } else {
-      // Decline → regenerate this task
-      const newTask = {
-        ...task,
-        start: undefined,
-        end: undefined,
-        duration: randomDuration(30, 120),
-      };
 
-      const newSuggestion = generateSafeSuggestions([newTask], classes, suggestions.filter((t) => t.id !== id), today);
-      setSuggestions((prev) => prev.map((t) => (t.id === id ? newSuggestion[0] : t)));
-    }
-  };
+    const otherTasks = suggestions.filter((t) => t.id !== id);
 
-  // --- Regenerate unaccepted tasks and update accepted tasks in MongoDB ---
-  const handleRegenerate = async () => {
-    if (!suggestions.length) return;
+    const taskToRegenerate = {
+      ...declinedTask,
+      start: undefined,
+      end: undefined,
+      duration: randomDuration(30, 120),
+    };
 
-    const acceptedTasks = suggestions.filter((t) => t.accepted === true);
-    const unacceptedTasks = suggestions.filter((t) => t.accepted !== true);
+    const regenerated = generateSafeSuggestions(
+      [taskToRegenerate],
+      classes,
+      otherTasks,
+      todayDate
+    )[0];
 
-    // Regenerate unaccepted tasks
-    const newSuggestions = generateSafeSuggestions(unacceptedTasks, classes, acceptedTasks, today);
-
-    setSuggestions([...acceptedTasks, ...newSuggestions]);
-
-    // Update accepted tasks in MongoDB (just to make sure times are synced)
-    await Promise.all(
-      acceptedTasks.map((t) =>
-        fetch(`/api/tasks/${t.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ start: t.start, end: t.end, duration: t.duration }),
-        })
-      )
+    setSuggestions((prev) =>
+      prev.map((t) => (t.id === id ? regenerated : t))
     );
   };
 
   const totalTime = suggestions.reduce(
     (acc, t) => {
-      acc.m += t.duration;
+      acc.m += t.duration || 0;
       acc.h += Math.floor(acc.m / 60);
       acc.m %= 60;
       return acc;
@@ -216,21 +250,14 @@ export default function AiSuggestions({ userId }) {
             <div key={t.id} className="suggestion-card pixel-frame">
               <p className="pixel-font task">{t.task}</p>
               <p className="pixel-font time">
-                {t.start} - {t.end} ({Math.floor(t.duration / 60)}h {t.duration % 60}m)
+                {t.start} - {t.end} (
+                {Math.floor((t.duration || 0) / 60)}h {(t.duration || 0) % 60}m)
               </p>
 
               <div className="decision-buttons">
                 <button
-                  className="pixel-button"
-                  onClick={() => handleDecision(t.id, true)}
-                  disabled={t.accepted !== null}
-                >
-                  Accept
-                </button>
-                <button
                   className="pixel-button decline"
-                  onClick={() => handleDecision(t.id, false)}
-                  disabled={t.accepted !== null}
+                  onClick={() => handleDecline(t.id)}
                 >
                   Decline
                 </button>
@@ -238,10 +265,6 @@ export default function AiSuggestions({ userId }) {
             </div>
           ))}
         </div>
-
-        <button className="pixel-button regenerate" onClick={handleRegenerate}>
-          Regenerate
-        </button>
       </main>
 
       <BottomNav />

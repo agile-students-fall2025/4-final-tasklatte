@@ -116,14 +116,14 @@ export default function Account() {
                 onChange={(e) => setGrade(e.target.value)}
                 required
             />
-            <input
+            {/* <input
                 type="text"
                 placeholder="Timezone"
                 className="account-input"
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
                 required
-            />
+            /> */}
 
             <div className="account-buttons">
                 <button
