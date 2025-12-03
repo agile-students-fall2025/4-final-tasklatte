@@ -1,75 +1,118 @@
-.Settings{
-    width:402px; 
-    height:100vh;
-    background:#f4e7d3;
-    display:flex; 
-    flex-direction:column;
-    justify-content: space-between; 
-    overflow-y: auto;
-    position:relative;
-    border-radius:24px; 
-    border:1px solid #1f1f1f;
-    font-family: "Press Start 2P", monospace;
+.Settings {
+  width: 402px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 24px;
+  border: 1px solid #1f1f1f;
+  background: #f4e7d3;
+  font-family: "Press Start 2P", monospace;
+  overflow: hidden; /* prevents extra scrollbars */
 }
 
-.Settings h1{
-    text-align: center;
-    font-family: "Press Start 2P", monospace;
-    letter-spacing: 1px;
+.settings-content {
+  flex: 1;             
+  overflow-y: auto;     
+  padding: 10px;
 }
 
-.Settings h4{
-    padding-left: 10px;
-    font-family: "Press Start 2P", monospace;
-    letter-spacing: 1px;
+.header-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.edit-button{
-    background-color: #8b5a2b;
-    width: 15%;
-    padding: 10px 0;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
-    font-family: "Press Start 2P", monospace;
-    letter-spacing: 1px;
+.bottom-nav-wrapper {
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: #f4e7d3;
+}
+
+h1 {
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+h4 {
+  padding-left: 10px;
+  letter-spacing: 1px;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+h5 {
+  margin: 0;
+  margin-left: 10px;
+}
+
+.edit-button {
+  background-color: #8b5a2b;
+  width: 15%;
+  padding: 10px 0;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .button-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  margin-top: 1rem;
 }
 
 .action-button {
-    background-color: #8b5a2b;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 0;
-    border: 4px solid #4b2e05;
-    width: 40%;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease;
-    font-family: "Press Start 2P", monospace;
-    letter-spacing: 1px;
-    cursor:pointer;
+  background-color: #8b5a2b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 0;
+  border: 4px solid #4b2e05;
+  width: 40%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .action-button:hover {
-    background-color: #a16b36;
-    transform: translateY(-2px);
-    font-family: "Press Start 2P", monospace;
-    letter-spacing: 1px;
-    cursor:pointer;
+  background-color: #a16b36;
+  transform: translateY(-2px);
 }
 
+.photo-selection {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 5px;
+  margin-bottom: 1.5rem;
+  margin-top: 10px;
+}
+
+.profile-photo {
+  width: 60px;
+  height: 60px;
+  border: 3px solid #c8a979;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.profile-photo.selected {
+  border-color: #5a3c15
+}
+
+h5{
+    font-style: italic;
+}

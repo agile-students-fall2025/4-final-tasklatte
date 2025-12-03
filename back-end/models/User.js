@@ -17,8 +17,9 @@ const userSchema = new mongoose.Schema(
     major: { type: String, default: "" },
     school: { type: String, default: "" },
     grade: { type: String, default: "" },
+    photo: { type: String, default: "" },
     timezone: { type: String, default: "" },
-
+    photo: { type: String, default: "" },
     goals: [goalSchema]
   },
   { timestamps: true }
