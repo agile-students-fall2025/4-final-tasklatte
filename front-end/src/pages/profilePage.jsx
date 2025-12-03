@@ -31,50 +31,46 @@ export default function ProfilePage() {
   const toggleGoal = (id) => setExpandedGoal((prev) => (prev === id ? null : id));
 
   useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-      const res = await fetch(`http://localhost:5001/api/settings?userId=${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        const res = await fetch("http://localhost:5001/api/settings", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      const data = await res.json();
-      console.log("API response:", data);
+        const data = await res.json();
 
-      if (!res.ok) {
-        console.error("Error fetching profile:", data.error);
-        return;
+        if (!res.ok) {
+          console.error("Error fetching profile:", data.error);
+          return;
+        }
+
+        // Fallback profile pics
+        const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
+        const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
+
+        setProfile({
+          id: data.id || null,
+          name: data.name?.trim() || "Unknown User",
+          username: data.username || "",
+          bio: data.bio || "",
+          major: data.major || "",
+          school: data.school || "",
+          grade: data.grade || "N/A",
+          timezone: data.timezone || "UTC",
+          // Prioritize statePhoto > DB photo > random fallback
+          photo: statePhoto || data.photo || randomPic,
+          goals: Array.isArray(data.goals) ? data.goals : [],
+        });
+      } catch (err) {
+        console.error("Error fetching profile:", err);
       }
+    };
 
-      // List of 10 possible profile pics
-      const profilePics = Array.from({ length: 10 }, (_, i) => `profile${i + 1}.png`);
-      // Random pic fallback
-      const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
-
-      const safeProfile = {
-        id: data.id || null,
-        name: data.name && data.name.trim() !== "" ? data.name : "Unknown User",
-        username: data.username || "",
-        bio: data.bio || "",
-        major: data.major || "",
-        school: data.school || "",
-        grade: data.grade || "N/A",
-        timezone: data.timezone || "UTC",
-        // Use statePhoto > data.photo > random fallback
-        photo: statePhoto || data.photo || randomPic,
-        goals: Array.isArray(data.goals) ? data.goals : [],
-      };
-
-      setProfile(safeProfile);
-    } catch (err) {
-      console.error("Error fetching profile:", err);
-    }
-  };
-
-  fetchProfile();
-}, [statePhoto, userId]);
+    fetchProfile();
+  }, [statePhoto, userId]);
 
   return (
     <div className="page">
@@ -98,6 +94,7 @@ export default function ProfilePage() {
             />
             <h2 className="pixel-font">{profile?.name || "User"}</h2>
           </div>
+
           <div className="profile-right">
             <p className="pixel-font">Grade: {profile.grade}</p>
             <p className="pixel-font">Major: {profile.major}</p>

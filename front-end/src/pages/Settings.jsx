@@ -19,46 +19,48 @@ const Settings = () => {
 
   const settingsOptions = ["bio", "major", "school", "goals"];
 
+  // Fetch user profile on mount
   useEffect(() => {
     if (!userId) return navigate("/login");
+
     const token = localStorage.getItem("token");
     if (!token) return navigate("/login");
 
-    fetch(`http://localhost:5001/api/settings?userId=${userId}`, {
+    fetch(`http://localhost:5001/api/settings`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
         setProfile(data);
-        setSelectedPhoto(data.photo || "");
+        setSelectedPhoto(data.photo || ""); // current saved photo
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Fetch profile error:", err));
   }, [userId, navigate]);
 
-  // Handle photo click
+  // Update profile photo in DB and UI
   const handlePhotoClick = async (photo) => {
     setSelectedPhoto(photo);
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(
-        `http://localhost:5001/api/settings/photo?userId=${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ photo }),
-        }
-      );
+      const res = await fetch(`http://localhost:5001/api/settings/photo`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ photo }), // send { photo: "picX.jpeg" }
+      });
 
-      if (!res.ok) throw new Error("Failed to update photo");
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Failed to update photo");
+      }
 
       const data = await res.json();
       setProfile((prev) => ({ ...prev, photo: data.photo }));
     } catch (err) {
-      console.error(err);
+      console.error("Photo update error:", err.message);
     }
   };
 
@@ -74,6 +76,8 @@ const Settings = () => {
         <h1>Settings</h1>
 
         <h4>Profile Picture:</h4>
+        <h5>Select one of the images below</h5>
+
         <div className="photo-selection">
           {[...Array(10)].map((_, i) => {
             const photo = `pic${i + 1}.jpeg`;
@@ -82,9 +86,7 @@ const Settings = () => {
                 key={photo}
                 src={`${process.env.PUBLIC_URL}/profile-pics/${photo}`}
                 alt={`Photo ${i + 1}`}
-                className={`profile-photo ${
-                  selectedPhoto === photo ? "selected" : ""
-                }`}
+                className={`profile-photo ${selectedPhoto === photo ? "selected" : ""}`}
                 onClick={() => handlePhotoClick(photo)}
               />
             );

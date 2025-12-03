@@ -112,3 +112,7 @@ h5 {
 .profile-photo.selected {
   border-color: #5a3c15
 }
+
+h5{
+    font-style: italic;
+}

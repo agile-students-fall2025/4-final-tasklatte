@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
     grade: { type: String, default: "" },
     photo: { type: String, default: "" },
     timezone: { type: String, default: "" },
-
+    photo: { type: String, default: "" },
     goals: [goalSchema]
   },
   { timestamps: true }

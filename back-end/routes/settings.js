@@ -36,31 +36,31 @@ const validateSettings = [
     .withMessage("Invalid timezone"),
 ];
 
+// Middleware to handle validation errors
 const handleValidationErrors = (req,res,next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()})
-    }
-    next();
-}
-
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array()});
+  }
+  next();
+};
 // Get all goals for a user
 router.get("/goals", auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
-        const goals = user.goals.map((g) => ({
-          id: g._id.toString(),
-          title: g.title,
-          description: g.description,
-          completed: g.completed,
-          dueDate: g.dueDate,
-        }));
-        res.json(goals);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    const goals = user.goals.map((g) => ({
+      id: g._id.toString(),
+      title: g.title,
+      description: g.description,
+      completed: g.completed,
+      dueDate: g.dueDate,
+    }));
+    res.json(goals);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // Add a new goal
@@ -71,9 +71,13 @@ router.post("/goals", auth, async (req, res) => {
     const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    const newGoal = { title: title || "New Goal", description: description || "Describe your goal..." };
+    const newGoal = {
+      title: title || "New Goal",
+      description: description || "Describe your goal...",
+    };
     user.goals.push(newGoal);
     await user.save();
+
     const g = user.goals[user.goals.length - 1];
     res.json({
       id: g._id.toString(),
@@ -100,11 +104,12 @@ router.put("/goals/:goalId", auth, async (req, res) => {
     const goal = user.goals.id(goalId);
     if (!goal) return res.status(404).json({ error: "Goal not found" });
 
-    goal.title = title;
-    goal.description = description;
+    goal.title = title ?? goal.title;
+    goal.description = description ?? goal.description;
     goal.completed = req.body.completed ?? goal.completed;
     goal.dueDate = req.body.dueDate ?? goal.dueDate;
     await user.save();
+
     res.json({
       id: goal._id.toString(),
       title: goal.title,
@@ -140,99 +145,98 @@ router.delete("/goals/:goalId", auth, async (req, res) => {
 
 // Delete account
 router.delete("/account", auth, async (req, res) => {
-    const userId = req.userId;
-    try {
-        await User.findByIdAndDelete(userId);
-        res.json({ success: true });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// Get all settings for a user (minimal change: allow query userId)
-router.get("/", auth, async (req, res) => {
-    const userId = req.query.userId || req.userId;
-    try {
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
-
-        res.json({
-            id: user._id,
-            name: user.name,
-            bio: user.bio || "",
-            major: user.major || "",
-            school: user.school || "",
-            grade: user.grade || "",
-            timezone: user.timezone || "America/Los_Angeles",
-            photo: user.photo || "",
-            goals: user.goals || [],
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-// Update profile photo (new route)
-router.put("/photo", auth, async (req, res) => {
-  const userId = req.query.userId || req.userId;
-  const { photo } = req.body;
-
-  if (!photo) return res.status(400).json({ error: "Photo is required" });
-
   try {
-      const user = await User.findById(userId);
-      if (!user) return res.status(404).json({ error: "User not found" });
-
-      user.photo = photo;
-      await user.save();
-
-      res.json({ photo: user.photo });
+    await User.findByIdAndDelete(req.userId);
+    res.json({ success: true });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Server error" });
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-// Dynamic GET / PUT for profile fields (catch-all, LAST)
+// Get all settings for a user
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.json({
+      id: user._id,
+      username: user.username,
+      name: user.name,
+      bio: user.bio || "",
+      major: user.major || "",
+      school: user.school || "",
+      grade: user.grade || "",
+      timezone: user.timezone || "America/Los_Angeles",
+      photo: user.photo || "",
+      goals: user.goals || [],
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Update profile photo
+router.put("/photo", auth, async (req, res) => {
+  const { photo } = req.body;
+
+  if (!photo) {
+    return res.status(400).json({ error: "No photo provided" });
+  }
+
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.photo = photo;
+    await user.save();
+
+    res.json({ success: true, photo: user.photo });
+  } catch (err) {
+    console.error("Photo update error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Dynamic GET / PUT for other profile fields
 router.get("/:field", auth, async (req, res) => {
-    const userId = req.userId;
-    const { field } = req.params;
+  const { field } = req.params;
 
-    try {
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-        if (!(field in user)) return res.status(400).json({ error: "Invalid field" });
+    if (!(field in user)) return res.status(400).json({ error: "Invalid field" });
 
-        res.json({ [field]: user[field] });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
+    res.json({ [field]: user[field] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 router.put("/:field", auth, async (req, res) => {
-    const { field } = req.params;
-    const allowedFields = ["bio", "major", "school", "grade", "timezone"];
+  const { field } = req.params;
+  const allowedFields = ["bio", "major", "school", "grade", "timezone"];
 
-    if (!allowedFields.includes(field)) {
-        return res.status(400).json({ error: "Invalid field" });
-    }
+  if (!allowedFields.includes(field)) {
+    return res.status(400).json({ error: "Invalid field" });
+  }
 
-    try {
-        const user = await User.findById(req.userId);
-        if (!user) return res.status(404).json({ error: "User not found" });
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-        user[field] = req.body.value; 
-        await user.save();
+    user[field] = req.body.value;
+    await user.save();
 
-        res.json({ success: true, [field]: user[field] });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server error" });
-    }
+    res.json({ success: true, [field]: user[field] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 module.exports = router;

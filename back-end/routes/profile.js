@@ -18,6 +18,7 @@ router.get("/", auth, async (req, res) => {
       bio: user.bio || "",
       major: user.major || "",
       school: user.school || "",
+      photo: user.photo || "",
       grade: user.grade || "",
       timezone: user.timezone || "America/Los_Angeles",
       goals: user.goals || [],
