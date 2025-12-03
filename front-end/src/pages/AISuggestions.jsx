@@ -99,14 +99,15 @@ export default function AiSuggestions({ userId }) {
   const loadDailyTasks = useCallback(async () => {
     try {
       const [classRes, taskRes] = await Promise.all([
-        fetch(`/api/classes?userId=${userId}`),
-        fetch(`/api/tasks?userId=${userId}&date=${today}`, {
+        fetch(`/api/classes`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
+        fetch(`/api/tasks?date=${today}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
         }),
       ]);
-
       const classData = await classRes.json();
       setClasses(classData);
 
