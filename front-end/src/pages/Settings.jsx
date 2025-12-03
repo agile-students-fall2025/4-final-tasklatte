@@ -54,7 +54,7 @@ const Settings = () => {
         navigate("/login");
     };
 
-    const settingsOptions = ['bio','major','school','timezone', 'goals'];
+    const settingsOptions = ['bio','major','school', 'goals'];
 
     return (
         <div className="Settings">

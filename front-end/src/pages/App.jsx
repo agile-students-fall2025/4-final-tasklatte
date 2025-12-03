@@ -176,14 +176,14 @@ export default function App() {
           } 
         />
 
-        <Route 
+        {/* <Route 
           path="/settings/timezone" 
           element={
             <PrivateRoute>
               <ChangeTimezone />
             </PrivateRoute>
           } 
-        />
+        /> */}
 
         <Route 
           path="/settings/goals" 
