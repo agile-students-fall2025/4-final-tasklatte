@@ -48,8 +48,8 @@ export default function ProfilePage() {
         }
 
         // Fallback profile pics
-        const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
-        const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
+        // const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
+        // const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
 
         setProfile({
           id: data.id || null,
@@ -60,8 +60,7 @@ export default function ProfilePage() {
           school: data.school || "",
           grade: data.grade || "N/A",
           timezone: data.timezone || "UTC",
-          // Prioritize statePhoto > DB photo > random fallback
-          photo: statePhoto || data.photo || randomPic,
+          photo: statePhoto || data.photo || profile.photo || "pic1.jpeg",
           goals: Array.isArray(data.goals) ? data.goals : [],
         });
       } catch (err) {
