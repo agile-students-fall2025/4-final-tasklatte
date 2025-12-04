@@ -15,7 +15,7 @@ export default function EditTask({ tasks = [], setTasks }) {
     details: "",
     course: "",
     due: "",
-    priority: "Medium",
+    priority: "medium",
     completed: false,
   });
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,7 @@ export default function EditTask({ tasks = [], setTasks }) {
           details: task.details || "",
           course: task.course || "",
           due: task.date || "",
-          priority: task.priority || "Medium",
+          priority: (task.priority || "medium").toLowerCase(),
           completed: Boolean(task.completed),
         });
       })
@@ -57,7 +57,7 @@ export default function EditTask({ tasks = [], setTasks }) {
       details: form.details,
       course: form.course,
       date: form.due,
-      priority: form.priority,
+      priority: form.priority.toLowerCase(),
       completed: Boolean(form.completed),
     };
 
@@ -88,7 +88,7 @@ export default function EditTask({ tasks = [], setTasks }) {
     setLoading(true);
     const res = await fetch(`/api/tasks/${id}`, {
       method: "DELETE",
-      header: {
+      headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
@@ -160,11 +160,13 @@ export default function EditTask({ tasks = [], setTasks }) {
             id="priority"
             className="input"
             value={form.priority}
-            onChange={update("priority")}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, priority: e.target.value.toLowerCase() }))
+            }
           >
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
           </select>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

@@ -13,7 +13,7 @@ export default function AddTasks({ onTaskAdded }) {
   const [details, setDetails] = useState("");
   const [course, setCourse] = useState("");
   const [date, setDate] = useState("");
-  const [priority, setPriority] = useState("Medium");
+  const [priority, setPriority] = useState("medium");
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -110,11 +110,11 @@ export default function AddTasks({ onTaskAdded }) {
           <select
             className="addtask-input"
             value={priority}
-            onChange={(e) => setPriority(e.target.value)}
+            onChange={(e) => setPriority(e.target.value.toLowerCase())}
           >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
           </select>
 
           {error && <div className="addtask-error">{error}</div>}
