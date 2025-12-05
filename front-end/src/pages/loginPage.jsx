@@ -12,29 +12,34 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      
         try {
             const res = await fetch("http://localhost:5001/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),
             });
+      
             const data = await res.json();
             console.log("Response from backend:", data);
-
+      
             if (res.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.user.id);
                 localStorage.setItem("name", data.user.name);
                 navigate("/dashboard");
             } else {
-                alert(data.error || "Login failed");
+                if (data.errors) {
+                    alert(data.errors.map(e => e.msg).join("\n"));
+                } else {
+                    alert(data.error || "Login failed");
+                }
             }
+      
         } catch (err) {
-            console.error("Error logging in:", err);
+          console.error("Error logging in:", err);
         }
-
-    };
+    };      
 
     return (
         <div className="page login-page">
