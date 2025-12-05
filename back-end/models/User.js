@@ -10,8 +10,8 @@ const goalSchema = new mongoose.Schema(
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    username: { type: String, required: true, unique: true, maxlength: 15 },
+    name: { type: String, required: true, maxlength: 20 },
     password: { type: String, required: true },
     bio: { type: String, default: "" },
     major: { type: String, default: "" },
