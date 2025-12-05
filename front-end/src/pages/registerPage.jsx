@@ -59,19 +59,19 @@ export default function RegisterPage() {
                 <form className="register-form" onSubmit={handleSubmit}>
                     <input
                         type="text"
-                        placeholder="Name"
+                        placeholder="Username"
                         className="register-input"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                     />
 
                     <input
                         type="text"
-                        placeholder="Username"
+                        placeholder="Name"
                         className="register-input"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                     />
 

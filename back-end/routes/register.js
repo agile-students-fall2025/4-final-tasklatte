@@ -3,19 +3,46 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
+const { body, validationResult } = require("express-validator");
 
 // Profile pics
 const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
 
-router.post("/", async (req, res) => {
-  const { username, name, password } = req.body;
+const registerValidation = [
+  body("username")
+    .trim()
+    .notEmpty().withMessage("Username is required")
+    .isLength({ max: 15 }).withMessage("Username cannot exceed 15 characters"),
 
-  if (!username || !name || !password)
-    return res.status(400).json({ error: "All fields are required" });
+  body("name")
+    .trim()
+    .notEmpty().withMessage("Name is required")
+    .isLength({ max: 20 }).withMessage("Name cannot exceed 20 characters"),
+
+  body("password")
+    .notEmpty().withMessage("Password is required")
+    .isLength({ max: 15 }).withMessage("Password cannot exceed 15 characters"),
+];
+
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  console.log("Validation errors:", errors.array());
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: errors.array()[0].msg
+    });
+  }
+  next();
+};
+
+router.post("/", registerValidation, handleValidationErrors, async (req, res) => {
+  const { username, name, password } = req.body;
 
   try {
     const existingUser = await User.findOne({ username });
-    if (existingUser) return res.status(400).json({ error: "Username already taken" });
+    if (existingUser) {
+      return res.status(400).json({ error: "Username already taken" });
+    }
 
     const hashed = await bcrypt.hash(password, 10);
     const randomPic = profilePics[Math.floor(Math.random() * profilePics.length)];
@@ -29,11 +56,9 @@ router.post("/", async (req, res) => {
 
     await newUser.save();
 
-    const token = jwt.sign(
-      { userId: newUser._id },
-       process.env.JWT_SECRET, 
-       { expiresIn: "7d" }
-      );
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.setHeader("Authorization", `Bearer ${token}`);
     res.setHeader("Access-Control-Expose-Headers", "Authorization");
@@ -50,7 +75,14 @@ router.post("/", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        error: Object.values(err.errors).map(e => e.message)[0]
+      });
+    }
+
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
