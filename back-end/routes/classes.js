@@ -4,9 +4,6 @@ const router = express.Router();
 const Class = require("../models/Class");
 const auth = require("../middleware/auth");
 
-/**
- * Validation middleware for class data
- */
 const validateClass = [
   body("title")
     .trim()
@@ -78,9 +75,7 @@ const validateClass = [
     .withMessage("Notes cannot exceed 500 characters"),
 ];
 
-/**
- * Middleware to handle validation errors
- */
+
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -89,14 +84,9 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
-/**
- * Helper: expand class occurrences for a given date range
- * Returns array of occurrence objects with source: "class"
- */
 function expandClassOccurrences(classList, startDate, endDate) {
   const occurrences = [];
 
-  // Parse YYYY-MM-DD into a local Date at midnight to avoid TZ shifts
   const ymdToLocal = (ymd) => {
     const [y, m, d] = ymd.split("-");
     return new Date(Number(y), Number(m) - 1, Number(d));
@@ -109,18 +99,14 @@ function expandClassOccurrences(classList, startDate, endDate) {
     const classStart = cls.startDate ? ymdToLocal(cls.startDate) : start;
     const classEnd = cls.endDate ? ymdToLocal(cls.endDate) : end;
 
-    // Clamp to query range
     const rangeStart = new Date(Math.max(start.getTime(), classStart.getTime()));
     const rangeEnd = new Date(Math.min(end.getTime(), classEnd.getTime()));
 
-    // Iterate through each day in range
     const current = new Date(rangeStart);
     while (current <= rangeEnd) {
-      const dayOfWeek = current.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+      const dayOfWeek = current.getDay();
 
-      // If this class occurs on this day of week
       if (cls.days.includes(dayOfWeek)) {
-        // Format date as local YYYY-MM-DD (avoid toISOString which uses UTC)
         const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
         const dateStr = `${current.getFullYear()}-${pad(current.getMonth() + 1)}-${pad(current.getDate())}`;
         const startDateTime = `${dateStr}T${cls.startTime}`;
@@ -141,7 +127,6 @@ function expandClassOccurrences(classList, startDate, endDate) {
         });
       }
 
-      // Move to next day
       current.setDate(current.getDate() + 1);
     }
   });
@@ -149,10 +134,6 @@ function expandClassOccurrences(classList, startDate, endDate) {
   return occurrences.sort((a, b) => a.start.localeCompare(b.start));
 }
 
-/**
- * GET /api/classes
- * Returns all class definitions (not expanded)
- */
 router.get("/", auth, async (req, res) => {
   try {
     const userId = req.userId;
@@ -164,11 +145,6 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-/**
- * GET /api/classes/daily/:date
- * Returns expanded occurrences for a specific date
- * Date format: YYYY-MM-DD
- */
 router.get("/daily/:date", auth, async (req, res) => {
   try {
     const userId = req.userId;
@@ -182,11 +158,6 @@ router.get("/daily/:date", auth, async (req, res) => {
   }
 });
 
-/**
- * GET /api/classes/range
- * Returns expanded occurrences for a date range
- * Query params: start=YYYY-MM-DD, end=YYYY-MM-DD
- */
 router.get("/range", auth, async (req, res) => {
   try {
     const userId = req.userId;
@@ -203,10 +174,6 @@ router.get("/range", auth, async (req, res) => {
   }
 });
 
-/**
- * GET /api/classes/:id
- * Returns a single class definition
- */
 router.get("/:id", auth, async (req, res) => {
   try {
     const userId = req.userId;
@@ -224,10 +191,6 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-/**
- * POST /api/classes
- * Create a new class with validation
- */
 router.post("/", auth, validateClass, handleValidationErrors, async (req, res) => {
   try {
     const userId = req.userId;
@@ -268,10 +231,7 @@ router.post("/", auth, validateClass, handleValidationErrors, async (req, res) =
   }
 });
 
-/**
- * PUT /api/classes/:id
- * Update an existing class with validation
- */
+
 router.put("/:id", auth, validateClass, handleValidationErrors, async (req, res) => {
   try {
     const userId = req.userId;
@@ -295,10 +255,7 @@ router.put("/:id", auth, validateClass, handleValidationErrors, async (req, res)
   }
 });
 
-/**
- * DELETE /api/classes/:id
- * Delete a class
- */
+
 router.delete("/:id", auth, async (req, res) => {
   try {
     const userId = req.userId;

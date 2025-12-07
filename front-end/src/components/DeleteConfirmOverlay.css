@@ -4,7 +4,7 @@
     background: rgba(0, 0, 0, 0.45);
     display: grid;
     place-items: center;
-    z-index: 40; /* slightly above menu overlay */
+    z-index: 40;
     animation: fadeIn 0.2s ease-out;
 }
 

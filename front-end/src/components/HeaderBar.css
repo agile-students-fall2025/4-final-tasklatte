@@ -9,14 +9,12 @@
   box-sizing: border-box;
 }
 
-/* Title */
 .header-title {
   font-size: 16px;
   font-weight: 600;
   margin: 0;
 }
 
-/* Hamburger icon */
 .hamburger {
   width: 40px;
   height: 36px;
@@ -44,7 +42,6 @@
   top: 24px;
 }
 
-/* Logo button */
 .logo {
   width: 50px;
   height: auto;

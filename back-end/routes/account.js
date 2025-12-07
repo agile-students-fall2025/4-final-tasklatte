@@ -44,7 +44,6 @@ const handleValidationErrors = (req,res,next) => {
     next();
 }
 
-// Update account info
 router.post("/", auth, validateAccount, handleValidationErrors, async (req, res) => {
     const userId = req.userId;
     const { bio, major, school, grade, timezone } = req.body;
@@ -57,7 +56,6 @@ router.post("/", auth, validateAccount, handleValidationErrors, async (req, res)
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        // Update fields if provided
         user.bio = bio || user.bio;
         user.major = major || user.major;
         user.school = school || user.school;
@@ -85,7 +83,6 @@ router.post("/", auth, validateAccount, handleValidationErrors, async (req, res)
     }
 });
 
-// Delete account
 router.delete("/account", auth, async (req, res) => {
     const userId = req.userId;
     if (!userId) {
@@ -96,7 +93,6 @@ router.delete("/account", auth, async (req, res) => {
         const user = await User.findByIdAndDelete(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        // Optionally destroy session
         req.session.destroy();
 
         res.json({ success: true, message: "Account deleted" });

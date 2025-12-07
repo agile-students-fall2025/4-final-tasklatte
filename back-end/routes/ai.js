@@ -20,13 +20,9 @@ const handleValidationErrors = (req,res,next) => {
     next();
 }
 
-// ----------------------------
-// GET /api/ai/daily/:date
-// Fetch all tasks for a user on a specific date
-// ----------------------------
+
 router.get("/daily/:date", auth, validateDate, handleValidationErrors, async (req, res) => {
   const { date } = req.params;
-  // const { userId } = req.query;
   const userId = req.userId;
   
   if (!userId) return res.status(400).json({ error: "Missing userId" });
@@ -37,7 +33,7 @@ router.get("/daily/:date", auth, validateDate, handleValidationErrors, async (re
     const dailyTasks = tasks.map((t) => ({
       id: t._id,
       task: t.title,
-      duration: t.duration || 60, // default 1 hour if not set
+      duration: t.duration || 60,
     }));
 
     res.json(dailyTasks);
@@ -76,10 +72,7 @@ const validateTask = [
     .withMessage("Completed must be true or false"),
 ]
 
-// ----------------------------
-// PUT /api/ai/task/:id
-// Update task duration or other fields
-// ----------------------------
+
 router.put("/task/:id", auth, validateTask, handleValidationErrors, async (req, res) => {
   const { id } = req.params;
   const { duration, title, details, date, course, priority, completed } = req.body;
@@ -105,10 +98,7 @@ router.put("/task/:id", auth, validateTask, handleValidationErrors, async (req, 
   }
 });
 
-// ----------------------------
-// GET /api/ai/classes
-// Fetch all classes for a user
-// ----------------------------
+
 router.get("/classes", auth, async (req, res) => {
   const userId = req.userId;
   if (!userId) return res.status(400).json({ error: "Missing userId" });
