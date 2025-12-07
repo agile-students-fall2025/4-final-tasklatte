@@ -12,9 +12,9 @@ Sprint 0
 | Name | GitHub |
 |------|---------|
 | **Susan Thao** | [@susan-t](https://github.com/susan-t)
-| **Muhammad Abyan Ahmed (Product Owner)** | [@mabyan22](https://github.com/mabyan22)
-| **Valeria Chang (Scrum Master)** | [@ValeriaChang](https://github.com/ValeriaChang) |
-| **Mandy Mao** | [@manrongm](https://github.com/manrongm) | 
+| **Muhammad Abyan Ahmed (Scrum Master)** | [@mabyan22](https://github.com/mabyan22)
+| **Valeria Chang** | [@ValeriaChang](https://github.com/ValeriaChang) |
+| **Mandy Mao (Product Owner)** | [@manrongm](https://github.com/manrongm) | 
 | **Yasmine Ksiyer** | [@yasminek27](https://github.com/yasminek27) | 
 
 Sprint 1

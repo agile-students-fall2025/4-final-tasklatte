@@ -1,4 +1,3 @@
-// src/components/HeaderBar.jsx
 import "./HeaderBar.css";
 import logo from './logo.png';
 
