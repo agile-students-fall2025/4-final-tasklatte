@@ -13,13 +13,14 @@ const ChangeSchool = () => {
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [school, setSchool] = useState("");
+    const API_BASE = process.env.REACT_APP_API_URL || "";
 
     useEffect(() => {
         if (!userId) return navigate("/login");
         const token = localStorage.getItem("token");
         if (!token) return navigate("/login");
         
-        fetch(`http://localhost:5001/api/settings/school`, {
+        fetch(`${API_BASE}/api/settings/school`, {
             headers: {"Authorization": `Bearer ${token}`}
         })
             .then(res => res.json())
@@ -29,7 +30,7 @@ const ChangeSchool = () => {
 
     const handleSave = async () => {
         const token = localStorage.getItem("token");
-        await fetch(`http://localhost:5001/api/settings/school`, {
+        await fetch(`${API_BASE}/api/settings/school`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",

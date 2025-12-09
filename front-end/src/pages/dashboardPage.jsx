@@ -11,6 +11,7 @@ export default function DashboardPage() {
     const [dailyTasks, setDailyTasks] = useState({ total: 0, completed: 0 });
     const [weeklyTasks, setWeeklyTasks] = useState({ total: 0, completed: 0 });
     const navigate = useNavigate();
+    const API_BASE = process.env.REACT_APP_API_URL || "";
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -18,7 +19,7 @@ export default function DashboardPage() {
             navigate("/login");
             return;
         }
-        fetch(`http://localhost:5001/api/dashboard`, {
+        fetch(`${API_BASE}/api/dashboard`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -42,7 +43,7 @@ export default function DashboardPage() {
     const [quote, setQuote] = useState(null);
 
     useEffect(() => {
-        fetch("/quotes.json")
+        fetch(`${API_BASE}/quotes.json`)
             .then(res => res.json())
             .then(data => {
                 if (data.quotes && data.quotes.length > 0) {

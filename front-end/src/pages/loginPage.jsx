@@ -9,12 +9,13 @@ export default function LoginPage() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const API_BASE = process.env.REACT_APP_API_URL || "";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
       
         try {
-            const res = await fetch("http://localhost:5001/api/login", {
+            const res = await fetch(`${API_BASE}/api/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),

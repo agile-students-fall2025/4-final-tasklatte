@@ -16,6 +16,7 @@ const Settings = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [profile, setProfile] = useState({});
   const [selectedPhoto, setSelectedPhoto] = useState("");
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   const settingsOptions = ["bio", "major", "school", "goals"];
 
@@ -26,7 +27,7 @@ const Settings = () => {
     const token = localStorage.getItem("token");
     if (!token) return navigate("/login");
 
-    fetch(`http://localhost:5001/api/settings`, {
+    fetch(`${API_BASE}/api/settings`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -43,7 +44,7 @@ const Settings = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://localhost:5001/api/settings/photo`, {
+      const res = await fetch(`${API_BASE}/api/settings/photo`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +150,7 @@ const Settings = () => {
           onClose={() => setConfirmOpen(false)}
           onConfirm={async () => {
             const token = localStorage.getItem("token");
-            await fetch(`http://localhost:5001/api/settings/account`, {
+            await fetch(`${API_BASE}/api/settings/account`, {
               method: "DELETE",
               headers: { Authorization: `Bearer ${token}` },
             });
