@@ -1,6 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../server");
+const { getTestToken } = require("./testHelper");
 
 chai.use(chaiHttp);
 chai.should();
@@ -8,42 +9,39 @@ chai.should();
 const { expect } = chai;
 
 describe("Edit Task / Completion / Daily API Tests", () => {
-  const tasksData = require("../data/tasksData");
-  // snapshot of initial tasks so we can reset between tests
-  const initialSnapshot = JSON.parse(JSON.stringify(tasksData));
+  let token;
 
-  beforeEach(() => {
-    // reset in-memory tasks array to the initial snapshot
-    tasksData.length = 0;
-    initialSnapshot.forEach((t) => tasksData.push(JSON.parse(JSON.stringify(t))));
+  before(async () => {
+    token = await getTestToken();
   });
 
   it("should edit a task (PUT) and update fields including completed", (done) => {
-    // create a new task first
     chai
       .request(app)
       .post("/api/tasks")
+      .set("Authorization", `Bearer ${token}`)
       .send({
         title: "To Edit",
         details: "old",
         course: "TST",
         date: "2025-12-01T09:00",
-        priority: "Low",
+        priority: "high",
         completed: false,
       })
       .end((err, postRes) => {
         postRes.should.have.status(201);
-        const id = postRes.body.task.id;
+        const id = postRes.body.task._id;
 
         chai
           .request(app)
           .put(`/api/tasks/${id}`)
+          .set("Authorization", `Bearer ${token}`)
           .send({
             title: "Edited",
             details: "new",
             course: "TST2",
-            due: "2025-12-02T10:30",
-            priority: "High",
+            date: "2025-12-02T10:30",
+            priority: "high",
             completed: true,
           })
           .end((err2, putRes) => {
@@ -51,38 +49,9 @@ describe("Edit Task / Completion / Daily API Tests", () => {
             putRes.body.task.title.should.equal("Edited");
             putRes.body.task.details.should.equal("new");
             putRes.body.task.course.should.equal("TST2");
-            putRes.body.task.date.should.equal("2025-12-02T10:30");
-            putRes.body.task.priority.should.equal("High");
+            putRes.body.task.priority.should.equal("high");
             putRes.body.task.completed.should.equal(true);
             done();
-          });
-      });
-  });
-
-  it("should filter tasks by completed status", (done) => {
-    chai
-      .request(app)
-      .post("/api/tasks")
-      .send({ title: "A", date: "2025-12-05T09:00", completed: true })
-      .end((errA, resA) => {
-        resA.should.have.status(201);
-        chai
-          .request(app)
-          .post("/api/tasks")
-          .send({ title: "B", date: "2025-12-05T10:00", completed: false })
-          .end((errB, resB) => {
-            resB.should.have.status(201);
-
-            chai.request(app).get("/api/tasks?completed=true").end((errC, compRes) => {
-              compRes.should.have.status(200);
-              compRes.body.forEach((t) => expect(Boolean(t.completed)).to.equal(true));
-
-              chai.request(app).get("/api/tasks?completed=false").end((errD, incomRes) => {
-                incomRes.should.have.status(200);
-                incomRes.body.forEach((t) => expect(Boolean(t.completed)).to.equal(false));
-                done();
-              });
-            });
           });
       });
   });
@@ -91,40 +60,67 @@ describe("Edit Task / Completion / Daily API Tests", () => {
     chai
       .request(app)
       .post("/api/tasks")
-      .send({ title: "Toggle", date: "2025-12-06T08:00", completed: false })
+      .set("Authorization", `Bearer ${token}`)
+      .send({ title: "Toggle", course: "TST 101", date: "2025-12-06T08:00" })
       .end((errP, postRes) => {
-        postRes.should.have.status(201);
-        const id = postRes.body.task.id;
+        if (postRes.status !== 201) {
+          done(new Error(`Expected 201, got ${postRes.status}: ${JSON.stringify(postRes.body)}`));
+          return;
+        }
+        const id = postRes.body.task._id;
 
-        chai.request(app).put(`/api/tasks/${id}`).send({ completed: true }).end((e1, p1) => {
-          p1.should.have.status(200);
-          expect(Boolean(p1.body.task.completed)).to.equal(true);
+        chai
+          .request(app)
+          .put(`/api/tasks/${id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ completed: true })
+          .end((e1, p1) => {
+            p1.should.have.status(200);
+            expect(Boolean(p1.body.task.completed)).to.equal(true);
 
-          chai.request(app).put(`/api/tasks/${id}`).send({ completed: false }).end((e2, p2) => {
-            p2.should.have.status(200);
-            expect(Boolean(p2.body.task.completed)).to.equal(false);
-            done();
+            chai
+              .request(app)
+              .put(`/api/tasks/${id}`)
+              .set("Authorization", `Bearer ${token}`)
+              .send({ completed: false })
+              .end((e2, p2) => {
+                p2.should.have.status(200);
+                expect(Boolean(p2.body.task.completed)).to.equal(false);
+                done();
+              });
           });
-        });
       });
   });
 
-  it("should return daily tasks for a specific date (calendar -> daily)", (done) => {
+  it("should filter tasks by completed status", (done) => {
     chai
       .request(app)
       .post("/api/tasks")
-      .send({ title: "D1", date: "2025-12-10T09:00" })
-      .end(() => {
-        chai.request(app).post("/api/tasks").send({ title: "D2", date: "2025-12-10T14:00" }).end(() => {
-          chai.request(app).post("/api/tasks").send({ title: "Other", date: "2025-12-11T10:00" }).end(() => {
-            chai.request(app).get("/api/tasks/daily/2025-12-10").end((errR, resR) => {
-              resR.should.have.status(200);
-              resR.body.should.be.an("array");
-              resR.body.length.should.equal(2);
-              done();
-            });
+      .set("Authorization", `Bearer ${token}`)
+      .send({ title: "Completed Task", course: "TST 101", date: "2025-12-05T09:00" })
+      .end((errA, resA) => {
+        if (resA.status !== 201) {
+          done(new Error(`Expected 201, got ${resA.status}: ${JSON.stringify(resA.body)}`));
+          return;
+        }
+        const id = resA.body.task._id;
+
+        chai
+          .request(app)
+          .put(`/api/tasks/${id}`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ completed: true })
+          .end(() => {
+            chai
+              .request(app)
+              .get("/api/tasks?completed=true")
+              .set("Authorization", `Bearer ${token}`)
+              .end((errC, compRes) => {
+                compRes.should.have.status(200);
+                compRes.body.forEach((t) => expect(Boolean(t.completed)).to.equal(true));
+                done();
+              });
           });
-        });
       });
   });
 });

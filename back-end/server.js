@@ -30,8 +30,11 @@ const connectDB = async () => {
   }
 };
 
-// Connect to DB only when server starts (not during tests)
-if (require.main === module) {
+// Connect to DB both for server and tests
+if (require.main === module || process.env.NODE_ENV === "test") {
+  connectDB();
+} else if (!mongoose.connection.readyState) {
+  // If module is imported (for tests), also connect
   connectDB();
 }
 

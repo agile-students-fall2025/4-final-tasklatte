@@ -57,8 +57,11 @@ export default function DailyTasks() {
       .catch(console.error);
   }, [date]);
 
-  const pillText = (p) =>
-    p === "High" ? "High" : p === "Medium" ? "Medium" : p === "Low" ? "Low" : p;
+  const priorityText = (p) => {
+    if (!p) return "";
+    const lower = p.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  };
 
   const openEdit = (id) => navigate(`/tasks/${id}/edit`);
 
@@ -97,7 +100,7 @@ export default function DailyTasks() {
                     <span className="allpixel-title">{item.title}</span>
                     {!isClass && (
                       <span className={`allpixel-pill allpixel-pill-${item.priority.toLowerCase()}`}>
-                        {pillText(item.priority)}
+                        {priorityText(item.priority)}
                       </span>
                     )}
                     {isClass && <span className="allpixel-pill allpixel-pill-class">Class</span>}
