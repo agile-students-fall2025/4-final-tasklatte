@@ -77,6 +77,12 @@ export default function AllTasks() {
     return true;
   });
 
+  const priorityText = (p) => {
+    if (!p) return "";
+    const lower = p.toLowerCase();
+    return lower.charAt(0).toUpperCase() + lower.slice(1);
+  };
+
   const openEdit = (id) => navigate(`/tasks/${id}/edit`);
 
   return (
@@ -145,7 +151,7 @@ export default function AllTasks() {
                 <div className="allpixel-title-row">
                   <span className="allpixel-title">{t.title}</span>
                   <span className={`allpixel-pill allpixel-pill-${t.priority.toLowerCase()}`}>
-                    {t.priority}
+                    {priorityText(t.priority)}
                   </span>
                 </div>
 
