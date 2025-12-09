@@ -34,6 +34,9 @@ jobs:
         npm test
       env:
         CI: true 
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        PORT: 5001
 
     - name: Setup Node (Frontend)
       uses: actions/setup-node@v3
