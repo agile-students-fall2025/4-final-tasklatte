@@ -15,6 +15,8 @@ export default function Account() {
     const location = useLocation();
     const {userId, name} = location.state || {};
 
+    const API_BASE = process.env.REACT_APP_API_URL || "";
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -25,7 +27,7 @@ export default function Account() {
         }
 
         try {
-            await fetch(`http://localhost:5001/api/settings/bio`, {
+            await fetch(`${API_BASE}/api/settings/bio`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",
@@ -33,7 +35,7 @@ export default function Account() {
                 },
                 body: JSON.stringify({value: bio }),
             });
-             await fetch(`http://localhost:5001/api/settings/major`, {
+             await fetch(`${API_BASE}/api/settings/major`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",
@@ -41,7 +43,7 @@ export default function Account() {
                 },
                 body: JSON.stringify({value: major }),
             });
-             await fetch(`http://localhost:5001/api/settings/school`, {
+             await fetch(`${API_BASE}/api/settings/school`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",
@@ -49,7 +51,7 @@ export default function Account() {
                 },
                 body: JSON.stringify({value: school }),
             });
-             await fetch(`http://localhost:5001/api/settings/grade`, {
+             await fetch(`${API_BASE}/api/settings/grade`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",
@@ -57,7 +59,7 @@ export default function Account() {
                 },
                 body: JSON.stringify({value: grade }),
             });
-             await fetch(`http://localhost:5001/api/settings/timezone`, {
+             await fetch(`${API_BASE}/api/settings/timezone`, {
                 method: "PUT",
                 headers: { 
                     "Content-Type": "application/json",

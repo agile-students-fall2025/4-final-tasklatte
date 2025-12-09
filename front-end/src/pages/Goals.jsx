@@ -13,6 +13,7 @@ const Goals = () => {
     const [editingGoal, setEditingGoal] = useState(null);
     const [goals, setGoals] = useState([]);
     const userId = localStorage.getItem("userId")
+    const API_BASE = process.env.REACT_APP_API_URL || "";
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -20,7 +21,7 @@ const Goals = () => {
             navigate("/login");
             return;
         }
-        fetch(`http://localhost:5001/api/settings/goals`, {
+        fetch(`${API_BASE}api/settings/goals`, {
             headers: {Authorization: `Bearer ${token}`}
         })
             .then(res => res.json())
@@ -30,7 +31,7 @@ const Goals = () => {
 
     const handleSave = async (updatedGoal) => {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:5001/api/settings/goals/${updatedGoal.id}`, {
+        const res = await fetch(`${API_BASE}/api/settings/goals/${updatedGoal.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -44,7 +45,7 @@ const Goals = () => {
     }
     const handleDelete = async (id) => {
         const token = localStorage.getItem("token");
-        await fetch(`http://localhost:5001/api/settings/goals/${id}`, {
+        await fetch(`${API_BASE}/api/settings/goals/${id}`, {
             method: "DELETE",
             headers: {Authorization: `Bearer ${token}`}
         });
@@ -53,7 +54,7 @@ const Goals = () => {
     }
     const handleAdd = async () => {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:5001/api/settings/goals`, {
+        const res = await fetch(`${API_BASE}/api/settings/goals`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

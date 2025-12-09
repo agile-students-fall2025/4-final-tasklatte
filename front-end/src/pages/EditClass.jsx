@@ -11,10 +11,11 @@ export default function EditClass() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(null);
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch(`/api/classes/${id}`, {
+    fetch(`${API_BASE}/api/classes/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -42,7 +43,7 @@ export default function EditClass() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`/api/classes/${id}`, {
+      const res = await fetch(`${API_BASE}/api/classes/${id}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
@@ -63,7 +64,7 @@ export default function EditClass() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this class?")) return;
     try {
-      const res = await fetch(`/api/classes/${id}`, { 
+      const res = await fetch(`${API_BASE}/api/classes/${id}`, { 
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

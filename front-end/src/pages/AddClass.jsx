@@ -12,6 +12,8 @@ export default function AddClass() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const API_BASE = process.env.REACT_APP_API_URL || "";
+
   const [formData, setFormData] = useState({
     title: "",
     location: "",
@@ -67,7 +69,7 @@ export default function AddClass() {
     }
 
     try {
-      const res = await fetch("/api/classes", {
+      const res = await fetch(`${API_BASE}/api/classes`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

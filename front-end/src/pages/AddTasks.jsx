@@ -19,6 +19,8 @@ export default function AddTasks({ onTaskAdded }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const API_BASE = process.env.REACT_APP_API_URL || "";
+
   const handleSave = async (e) => {
     e.preventDefault();
     setError("");
@@ -32,7 +34,7 @@ export default function AddTasks({ onTaskAdded }) {
 
     try {
       const formattedDate = date.includes("T") ? date : `${date}:00`;
-      const response = await fetch("/api/tasks", {
+      const response = await fetch(`${API_BASE}/api/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

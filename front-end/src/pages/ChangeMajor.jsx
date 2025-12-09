@@ -14,12 +14,14 @@ const ChangeMajor = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [major, setMajor] = useState("");
 
+    const API_BASE = process.env.REACT_APP_API_URL || "";
+
     useEffect(() => {
         if (!userId) return navigate("/login");
         const token = localStorage.getItem("token");
         if (!token) return navigate("/login");
         
-        fetch(`http://localhost:5001/api/settings/major`, {
+        fetch(`${API_BASE}/api/settings/major`, {
             headers: {"Authorization": `Bearer ${token}`}
         })
             .then(res => res.json())
@@ -29,7 +31,7 @@ const ChangeMajor = () => {
 
     const handleSave = async () => {
         const token = localStorage.getItem("token");
-        await fetch(`http://localhost:5001/api/settings/major`, {
+        await fetch(`${API_BASE}/api/settings/major`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",

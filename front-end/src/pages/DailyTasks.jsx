@@ -13,6 +13,7 @@ export default function DailyTasks() {
 
   const [tasks, setTasks] = useState([]);
   const [items, setItems] = useState([]); // merged tasks + classes
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   useEffect(() => {
     const today = new Date();
@@ -24,12 +25,12 @@ export default function DailyTasks() {
     const token = localStorage.getItem("token");
 
     Promise.all([
-      fetch(`/api/tasks/daily/${queryDate}`, {
+      fetch(`${API_BASE}/api/tasks/daily/${queryDate}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
-      fetch(`/api/classes/daily/${queryDate}`, {
+      fetch(`${API_BASE}/api/classes/daily/${queryDate}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,7 +136,7 @@ export default function DailyTasks() {
                       e.stopPropagation();
                       const newVal = e.target.checked;
                       try {
-                        const res = await fetch(`/api/tasks/${item.id}`, {
+                        const res = await fetch(`${API_BASE}/api/tasks/${item.id}`, {
                           method: "PUT",
                           headers: {
                             "Content-Type": "application/json",

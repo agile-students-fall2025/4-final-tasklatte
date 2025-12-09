@@ -9,6 +9,7 @@ export default function EditTask({ tasks = [], setTasks }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   const [form, setForm] = useState({
     title: "",
@@ -23,7 +24,7 @@ export default function EditTask({ tasks = [], setTasks }) {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`/api/tasks/${id}`, {
+    fetch(`${API_BASE}/api/tasks/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -62,7 +63,7 @@ export default function EditTask({ tasks = [], setTasks }) {
     };
 
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await fetch(`${API_BASE}/api/tasks/${id}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
@@ -86,7 +87,7 @@ export default function EditTask({ tasks = [], setTasks }) {
   const onDelete = async () => {
   try {
     setLoading(true);
-    const res = await fetch(`/api/tasks/${id}`, {
+    const res = await fetch(`${API_BASE}/api/tasks/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

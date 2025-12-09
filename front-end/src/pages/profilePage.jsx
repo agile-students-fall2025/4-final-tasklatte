@@ -29,6 +29,7 @@ export default function ProfilePage() {
 
   const [expandedGoal, setExpandedGoal] = useState(null);
   const toggleGoal = (id) => setExpandedGoal((prev) => (prev === id ? null : id));
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,7 +37,7 @@ export default function ProfilePage() {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const res = await fetch("http://localhost:5001/api/settings", {
+        const res = await fetch(`${API_BASE}/api/settings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

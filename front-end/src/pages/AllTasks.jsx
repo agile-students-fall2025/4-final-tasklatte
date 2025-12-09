@@ -12,16 +12,17 @@ export default function AllTasks() {
   const [tasks, setTasks] = useState([]);
   const [classes, setClasses] = useState([]);
   
+  const API_BASE = process.env.REACT_APP_API_URL || "";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     Promise.all([
-      fetch("/api/tasks", {
+      fetch(`${API_BASE}/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
-      fetch("/api/classes", {
+      fetch(`${API_BASE}/api/classes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -167,7 +168,7 @@ export default function AllTasks() {
                   e.stopPropagation();
                   const newVal = e.target.checked;
                   try {
-                    const res = await fetch(`/api/tasks/${t._id}`, {
+                    const res = await fetch(`${API_BASE}/api/tasks/${t._id}`, {
                       method: "PUT",
                       headers: {
                         "Content-Type": "application/json",

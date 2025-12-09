@@ -4,6 +4,8 @@ import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
 import "./AISuggestions.css";
 
+const API_BASE = process.env.REACT_APP_API_URL || "";
+
 const timeToMinutes = (t) => {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
@@ -159,10 +161,10 @@ export default function AiSuggestions() {
   const loadDailyTasks = useCallback(async () => {
     try {
       const [classRes, taskRes] = await Promise.all([
-        fetch(`/api/classes`, {
+        fetch(`${API_BASE}/api/classes`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch(`/api/tasks?date=${todayStr}`, {
+        fetch(`${API_BASE}/api/tasks?date=${todayStr}`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -239,7 +241,7 @@ export default function AiSuggestions() {
 
       <main className="suggestions-main">
         <div className="blurb pixel-font">
-          <p>Here’s the best order to complete your tasks today</p>
+          <p>Here’s the best order to complete your tasks today before the deadline</p>
           <p>
             You’ll need {totalTime.h}h {totalTime.m}m
           </p>

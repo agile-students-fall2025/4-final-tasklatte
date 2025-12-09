@@ -14,12 +14,14 @@ const ChangeBio = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [bio, setBio] = useState("");
 
+    const API_BASE = process.env.REACT_APP_API_URL || "";
+
     useEffect(() => {
         if (!userId) return navigate("/login");
         const token = localStorage.getItem("token");
         if (!token) return navigate("/login");
         
-        fetch(`http://localhost:5001/api/settings/bio`, {
+        fetch(`${API_BASE}/api/settings/bio`, {
             headers: {"Authorization": `Bearer ${token}`}
         })
             .then(res => res.json())
@@ -29,7 +31,7 @@ const ChangeBio = () => {
 
     const handleSave = async () => {
         const token = localStorage.getItem("token");
-        await fetch(`http://localhost:5001/api/settings/bio`, {
+        await fetch(`${API_BASE}/api/settings/bio`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",

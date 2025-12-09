@@ -12,12 +12,13 @@ export default function RegisterPage() {
     const [name, setName] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
+    const API_BASE = process.env.REACT_APP_API_URL || "";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         try {
-            const res = await fetch("http://localhost:5001/api/register", {
+            const res = await fetch(`${API_BASE}/api/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, name, password }),
