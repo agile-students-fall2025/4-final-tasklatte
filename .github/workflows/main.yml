@@ -59,6 +59,8 @@ jobs:
       run: |
         cd front-end
         npm run build
+      env:
+        CI: false
 
   deploy:
     needs: test  

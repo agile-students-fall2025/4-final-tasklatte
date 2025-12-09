@@ -1,5 +1,5 @@
 .page {
-  background: #f4e7d3 url("") repeat;
+  background: #f4e7d3;
   background-size: 32px 32px;
   display: flex;
   flex-direction: column;
