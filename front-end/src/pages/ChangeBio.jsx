@@ -44,16 +44,32 @@ const ChangeBio = () => {
 
     return (
         <div className="ChangeBio">
-            <HeaderBar title="Change Bio" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
+
+            <HeaderBar title="Change Bio" 
+                onHamburger={() => setMenuOpen(true)} 
+                onLogo={() => navigate("/dashboard")} 
+            />
+            
             <div className="bio-content">
+
                 <h1>Settings</h1>
                 <h4>Bio:</h4>
+
                 <input value={bio} onChange={e => setBio(e.target.value)} />
-                <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
+
+                <button className="save-button" onClick={handleSave}>
+                    Save
+                </button>
+
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>
+                    Back
+                </button>
+            
             </div>
+
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+
         </div>
     );
 };

@@ -19,7 +19,7 @@
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  font-family: "Pixelify Sans", "Press Start 2P", monospace;
+  font-family: "Pixelify Sans", sans-serif;
   color: #4b2e05;
   /* overflow-y: auto; */
 }
@@ -67,7 +67,7 @@
 
 
 .pixel-font {
-  font-family: "Pixelify Sans", "Press Start 2P", monospace;
+  font-family: "Pixelify Sans", sans-serif;
   letter-spacing: 1px;
 }
 
