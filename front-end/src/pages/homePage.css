@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+.pixelify-sans-regular {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.pixelify-sans-bold {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
 .page {
     background: #f4e7d3;
     background-size: 32px 32px;
@@ -5,7 +20,7 @@
     flex-direction: column;
     height: 100vh;
     overflow: hidden;
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
     color: #4b2e05;
 }
 

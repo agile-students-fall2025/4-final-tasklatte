@@ -11,7 +11,7 @@
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
     color: #4b2e05;
 }
 
@@ -23,7 +23,7 @@
 
 
 .ChangeBio h1{
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
     letter-spacing: 1px;
 }
 
@@ -59,7 +59,7 @@ margin-top: 1rem;
   width: 50%;
     margin-left: 100px;
     border-radius: 10px;
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
 }
 
 .back-button:hover{
@@ -76,6 +76,6 @@ input{
 }
 
 .ChangeBio h4{
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
     letter-spacing: 1px;
 }

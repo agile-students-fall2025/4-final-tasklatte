@@ -19,7 +19,7 @@ export default function HomePage() {
         /> */}
 
         <main className="home-content">
-            <h1>TaskLatte</h1>
+            <h1 className="pixelify-sans-bold">TaskLatte</h1>
             <img src={logo} alt="Logo" className="logo" />
 
             <div className="button-section">

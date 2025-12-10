@@ -32,7 +32,7 @@
   width: 50%;
   margin-left: 100px;
   border-radius: 10px;
-  font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
 }
 .save-button:hover {
     background: #a16b36;
@@ -53,7 +53,7 @@
   width: 50%;
   margin-left: 100px;
   border-radius: 10px;
-  font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
 }
 .delete-button:hover {
     background: #a16b36;
