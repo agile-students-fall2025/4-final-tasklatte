@@ -17,6 +17,10 @@ Sprint 0
 | **Mandy Mao (Product Owner)** | [@manrongm](https://github.com/manrongm) | 
 | **Yasmine Ksiyer** | [@yasminek27](https://github.com/yasminek27) | 
 
+Sprint 0
+**Muhammad Abyan Ahmed (Product Owner)**
+**Valeria Chang (Scrum Matser)**
+
 Sprint 1
 **Susan Thao (Product Owner)** 
 **Mandy Mao (Scrum Master)**
@@ -28,6 +32,10 @@ Sprint 2
 Sprint 3
 **Yasmine Ksiyer (Product Owner)** 
 **Susan Thao (Scrum Master)**
+
+Sprint 4
+**Mandy Mao (Product Owner)**
+**Muhammad Abyan Ahmed (Scrum Matser)**
 
 ---
 
