@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderBar from "../components/HeaderBar.jsx";
-import BottomNav from "../components/BottomNav.jsx";
-import MenuOverlay from "../components/MenuOverlay.jsx";
+//import HeaderBar from "../components/HeaderBar.jsx";
+//import BottomNav from "../components/BottomNav.jsx";
+//import MenuOverlay from "../components/MenuOverlay.jsx";
 import logo from "../components/logo.png";
 import "./homePage.css";
 
@@ -19,8 +19,8 @@ export default function HomePage() {
         /> */}
 
         <main className="home-content">
-            <h1 className="pixelify-sans-bold">TaskLatte</h1>
-            <img src={logo} alt="Logo" className="logo" />
+            <h1 className="pixelify-sans-bold title">TaskLatte</h1>
+            <img src={logo} alt="Logo" className="home-logo" />
 
             <div className="button-section">
             <button
@@ -38,8 +38,8 @@ export default function HomePage() {
             </div>
         </main>
 
-        {/* <BottomNav /> */}
-        {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+        {/* <BottomNav />
+        {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />} */}
         </div>
     );
 }
