@@ -127,7 +127,7 @@ const Settings = () => {
             onClick={() => {
               localStorage.removeItem("token");
               localStorage.removeItem("userId");
-              navigate("/login");
+              navigate("/");
             }}
           >
             Log Out

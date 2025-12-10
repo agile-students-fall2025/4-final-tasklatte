@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
@@ -153,6 +154,7 @@ export default function AiSuggestions() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [classes, setClasses] = useState([]);
+  const navigate = useNavigate();
 
   const todayDate = new Date();
   const todayStr = fmtLocalDate(todayDate);
