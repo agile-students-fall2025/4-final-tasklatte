@@ -85,7 +85,9 @@ export default function Account() {
         <main className="account-content">
             <h1>Hi, {name}!</h1>
             <h3>Please set up your account</h3>
+
             <form className="account-form" onSubmit={handleSubmit}>
+
             <input
                 type="text"
                 placeholder="Bio"
@@ -94,6 +96,7 @@ export default function Account() {
                 onChange={(e) => setBio(e.target.value)}
                 required
             />
+
             <input
                 type="text"
                 placeholder="Major"
@@ -102,6 +105,7 @@ export default function Account() {
                 onChange={(e) => setMajor(e.target.value)}
                 required
             />
+
             <input
                 type="text"
                 placeholder="School"
@@ -110,6 +114,7 @@ export default function Account() {
                 onChange={(e) => setSchool(e.target.value)}
                 required
             />
+
             <input
                 type="text"
                 placeholder="Grade"
@@ -128,6 +133,7 @@ export default function Account() {
             /> */}
 
             <div className="account-buttons">
+
                 <button
                 type="button"
                 className="pixel-button"
@@ -135,9 +141,11 @@ export default function Account() {
                 >
                 Go Back
                 </button>
+
                 <button type="submit" className="pixel-button">
                 Save
                 </button>
+                
             </div>
             </form>
         </main>
