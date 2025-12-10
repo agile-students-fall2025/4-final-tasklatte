@@ -7,12 +7,18 @@ import "./loginPage.css";
 
 export default function LoginPage() {
     const navigate = useNavigate();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+
+    // -----------------------------
+    // Component State
+    // -----------------------------
+    const [menuOpen, setMenuOpen] = useState(false); // Controls hamburger menu
+    const [username, setUsername] = useState(""); // Username input field
+    const [password, setPassword] = useState(""); // Password input field
     const API_BASE = process.env.REACT_APP_API_URL || "";
 
+    // -----------------------------
+    // Handle Login Submission
+    // -----------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
       
@@ -26,11 +32,18 @@ export default function LoginPage() {
             const data = await res.json();
             console.log("Response from backend:", data);
       
+            // -----------------------------
+            // Successful login
+            // -----------------------------
             if (res.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.user.id);
                 localStorage.setItem("name", data.user.name);
                 navigate("/dashboard");
+                
+            // -----------------------------
+            // Error occurred (validation or auth error)
+            // -----------------------------    
             } else {
                 if (data.errors) {
                     alert(data.errors.map(e => e.msg).join("\n"));

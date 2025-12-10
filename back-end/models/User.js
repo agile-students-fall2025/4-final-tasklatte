@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+// -----------------------------
+// Goal Schema
+// -----------------------------
 const goalSchema = new mongoose.Schema(
   {
     title: { type: String, default: "New Goal" },
@@ -10,9 +13,21 @@ const goalSchema = new mongoose.Schema(
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true, unique: true, maxlength: 15 },
-    name: { type: String, required: true, maxlength: 20 },
-    password: { type: String, required: true },
+    username: { 
+      type: String, 
+      required: [ true, "Username is required" ],
+      unique: true, 
+      maxlength: [ 15, "Username cannot exceed 15 characters" ]
+    },
+    name: { 
+      type: String, 
+      required: [ true, "Name is required" ],
+      maxlength: [ 20, "Name cannot exceed 20 characters" ]
+    },
+    password: { 
+      type: String, 
+      required: [ true, "Password is required" ]
+    },
     bio: { type: String, default: "" },
     major: { type: String, default: "" },
     school: { type: String, default: "" },
