@@ -112,7 +112,6 @@ describe("Settings API Tests", function () {
     expect(res.body.success).to.be.true;
   });
 
-  // DELETE /settings/account
   it("should delete the account", async function () {
     sinon.stub(User, "findByIdAndDelete").resolves(true);
 
