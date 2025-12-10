@@ -8,6 +8,9 @@ const { body, validationResult } = require("express-validator");
 // Profile pics
 const profilePics = Array.from({ length: 10 }, (_, i) => `pic${i + 1}.jpeg`);
 
+// ---------------------------------------------
+// Validation Rules for Registration
+// ---------------------------------------------
 const registerValidation = [
   body("username")
     .trim()
@@ -24,6 +27,9 @@ const registerValidation = [
     .isLength({ max: 15 }).withMessage("Password cannot exceed 15 characters"),
 ];
 
+// ---------------------------------------------
+// Validation Error Handler
+// ---------------------------------------------
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   console.log("Validation errors:", errors.array());
@@ -35,6 +41,10 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+// ---------------------------------------------
+// POST /register
+// Creates a new user
+// ---------------------------------------------
 router.post("/", registerValidation, handleValidationErrors, async (req, res) => {
   const { username, name, password } = req.body;
 

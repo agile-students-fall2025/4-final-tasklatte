@@ -6,14 +6,21 @@ import "./registerPage.css";
 
 export default function RegisterPage() {
     const navigate = useNavigate();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupMessage, setPopupMessage] = useState("");
+
+    // -----------------------------
+    // Component State
+    // -----------------------------
+    const [menuOpen, setMenuOpen] = useState(false); // Controls hamburger menu
+    const [username, setUsername] = useState(""); // Username input field
+    const [password, setPassword] = useState(""); // Password input field
+    const [name, setName] = useState(""); // Name input field
+    const [showPopup, setShowPopup] = useState(false); // Controls error popup visibility
+    const [popupMessage, setPopupMessage] = useState(""); // Message shown inside popup
     const API_BASE = process.env.REACT_APP_API_URL || "";
 
+    // -----------------------------
+    // Handle Form Submission
+    // -----------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -27,6 +34,9 @@ export default function RegisterPage() {
             const data = await res.json();
             console.log("Response from backend:", data);
 
+            // -----------------------------
+            // If registration succeeded
+            // -----------------------------
             if (res.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.user.id);
@@ -35,6 +45,9 @@ export default function RegisterPage() {
                 navigate("/account", {
                     state: { userId: data.user.id, name: data.user.name }
                 });
+            // -----------------------------
+            // If registration failed (400 error)
+            // -----------------------------    
             } else {
                 setPopupMessage(data.error || "Registration failed");
                 setShowPopup(true);
