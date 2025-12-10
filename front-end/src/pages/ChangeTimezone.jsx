@@ -43,10 +43,17 @@ const ChangeTimezone = () => {
 
     return (
         <div className="ChangeTimezone">
-            <HeaderBar title="Change Timezone" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
+
+            <HeaderBar title="Change Timezone" 
+                onHamburger={() => setMenuOpen(true)} 
+                onLogo={() => navigate("/dashboard")} 
+            />
+           
             <div className="timezone-content">
+
                 <h1>Settings</h1>
                 <h4>Timezone:</h4>
+
                 <select value={timezone} onChange={e => setTimezone(e.target.value)}>
                     <option value="America/Los_Angeles">Pacific Time</option>
                     <option value="America/Denver">Mountain Time</option>
@@ -54,11 +61,20 @@ const ChangeTimezone = () => {
                     <option value="America/New_York">Eastern Time</option>
                     <option value="UTC">UTC</option>
                 </select>
-                <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
+
+                <button className="save-button" onClick={handleSave}>
+                    Save
+                </button>
+
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>
+                    Back
+                </button>
+
             </div>
+
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+
         </div>
     );
 };

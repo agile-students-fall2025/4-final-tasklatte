@@ -43,13 +43,27 @@ const ChangeSchool = () => {
 
     return (
         <div className="ChangeSchool">
-            <HeaderBar title="Change School" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
+
+            <HeaderBar title="Change School" 
+                onHamburger={() => setMenuOpen(true)} 
+                onLogo={() => navigate("/dashboard")} 
+            />
+           
             <div className="school-content">
+
                 <h1>Settings</h1>
                 <h4>School:</h4>
+
                 <input value={school} onChange={e => setSchool(e.target.value)} />
-                <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
+
+                <button className="save-button" onClick={handleSave}>
+                    Save
+                </button>
+
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>
+                    Back
+                </button>
+            
             </div>
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}

@@ -78,7 +78,7 @@ const Settings = () => {
 
         <h4>Profile Picture:</h4>
         <h5>Select one of the images below</h5>
-
+ 
         <div className="photo-selection">
           {[...Array(10)].map((_, i) => {
             const photo = `pic${i + 1}.jpeg`;

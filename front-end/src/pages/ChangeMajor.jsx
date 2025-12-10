@@ -44,16 +44,32 @@ const ChangeMajor = () => {
 
     return (
         <div className="ChangeMajor">
-            <HeaderBar title="Change Major" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
+
+            <HeaderBar title="Change Major" 
+                onHamburger={() => setMenuOpen(true)} 
+                onLogo={() => navigate("/dashboard")} 
+            />
+            
             <div className="major-content">
+
                 <h1>Settings</h1>
                 <h4>Major:</h4>
+
                 <input value={major} onChange={e => setMajor(e.target.value)} />
-                <button className="save-button" onClick={handleSave}>Save</button>
-                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>Back</button>
+
+                <button className="save-button" onClick={handleSave}>
+                    Save
+                </button>
+
+                <button className="back-button" onClick={() => navigate("/settings", { state: { userId } })}>
+                    Back 
+                </button>
+           
             </div>
+
             <BottomNav />
             {menuOpen && <MenuOverlay onClose={() => setMenuOpen(false)} />}
+
         </div>
     );
 };

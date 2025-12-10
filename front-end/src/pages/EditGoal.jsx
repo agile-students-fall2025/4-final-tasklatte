@@ -16,11 +16,16 @@ const EditGoal = ({ goal, onClose, onSave, onDelete }) => {
   return (
     <div className="EditGoals">
       <div className="edit-goals-content">
+
         <h1>Edit Goal</h1>
+
         <label>
           Title:
-          <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input 
+          value={title} 
+          onChange={(e) => setTitle(e.target.value)} />
         </label>
+
         <label>
           Description:
           <input class="my-input"
@@ -28,19 +33,24 @@ const EditGoal = ({ goal, onClose, onSave, onDelete }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
         </label>
+
         <div className="edit-goal-buttons">
-          <button className="delete-button" onClick={() => onDelete(goalId)}>
+          <button className="delete-button" 
+          onClick={() => onDelete(goalId)}>
             Delete
           </button>
+
           <button
             className="save-button"
             onClick={() => onSave({ id: goalId, title, description })}
           >
             Save
           </button>
+
           <button className="cancel-button" onClick={onClose}>
             Cancel
           </button>
+          
         </div>
       </div>
     </div>
