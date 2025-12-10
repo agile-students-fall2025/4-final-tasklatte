@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderBar from "../components/HeaderBar.jsx";
 import MenuOverlay from "../components/MenuOverlay.jsx";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./loginPage.css";
 
 export default function LoginPage() {
@@ -74,14 +75,23 @@ export default function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
             />
-            <input
-                type="password"
-                placeholder="Password"
-                className="login-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
+            <div className="password-wrapper">
+                <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    className="login-input password-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+
+                <span
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+            </div>
 
             <div className="login-buttons">
                 <button
