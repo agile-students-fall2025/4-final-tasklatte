@@ -91,6 +91,34 @@ Then **TaskLatte** is the perfect companion to help you study smarter, not harde
 
 ---
 
+## Deployment & Live Demo
+
+**Live Application:** **[http://167.172.18.57](http://167.172.18.57)**
+
+### Extra Credit Implementation
+We have successfully implemented a full **CI/CD Pipeline** using GitHub Actions to automate our testing and deployment process.
+
+* **Continuous Integration (CI):**
+    * Every Pull Request automatically triggers a workflow that installs dependencies and runs our full test suite (`npm test`).
+    * The workflow also attempts a production build (`npm run build`) to ensure no syntax or compilation errors exist.
+    * **Result:** Broken code is blocked from being merged into the main branch.
+
+* **Continuous Deployment (CD):**
+    * When code is successfully merged into the `main` branch, a second workflow is triggered.
+    * This workflow securely logs into our Digital Ocean droplet via SSH, pulls the latest code, rebuilds the frontend, and restarts the backend services via PM2.
+    * **Result:** Updates go live automatically without manual server intervention.
+
+---
+
+### Deployment Tech Stack
+* **Hosting:** Digital Ocean Droplet (Ubuntu 24.04 LTS)
+* **Web Server:** Nginx (Reverse Proxy)
+* **Process Management:** PM2
+* **Automation:** GitHub Actions
+* **Security:** Environment variables stored in secure server-side `.env` files and injected into CI/CD via GitHub Secrets.
+
+---
+
 ## Build Instructions
 
 > *(These will be updated as the project reaches later stages of development.)*
