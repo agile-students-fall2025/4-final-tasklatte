@@ -7,35 +7,51 @@ It’s not just another to-do list — it’s a **smart scheduling companion** t
 
 ---
 
+### Live Demo
+The deployed version of our application is available at:
+
+🔗 **http://167.172.18.57/**
+
+This instance reflects the latest merged changes from the main branch.
+
 ## Team
-Sprint 0
 | Name | GitHub |
 |------|---------|
 | **Susan Thao** | [@susan-t](https://github.com/susan-t)
-| **Muhammad Abyan Ahmed (Scrum Master)** | [@mabyan22](https://github.com/mabyan22)
+| **Muhammad Abyan Ahmed** | [@mabyan22](https://github.com/mabyan22)
 | **Valeria Chang** | [@ValeriaChang](https://github.com/ValeriaChang) |
-| **Mandy Mao (Product Owner)** | [@manrongm](https://github.com/manrongm) | 
+| **Mandy Mao** | [@manrongm](https://github.com/manrongm) | 
 | **Yasmine Ksiyer** | [@yasminek27](https://github.com/yasminek27) | 
 
-Sprint 0
-**Muhammad Abyan Ahmed (Product Owner)**
-**Valeria Chang (Scrum Matser)**
+**Sprint 0**
 
-Sprint 1
-**Susan Thao (Product Owner)** 
-**Mandy Mao (Scrum Master)**
+- **Muhammad Abyan Ahmed (Product Owner)**
 
-Sprint 2
-**Valeria Chang (Product Owner)** 
-**Yasmine Ksiyer (Scrum Master)**
+- **Valeria Chang (Scrum Matser)**
 
-Sprint 3
-**Yasmine Ksiyer (Product Owner)** 
-**Susan Thao (Scrum Master)**
+**Sprint 1**
 
-Sprint 4
-**Mandy Mao (Product Owner)**
-**Muhammad Abyan Ahmed (Scrum Matser)**
+- **Susan Thao (Product Owner)**
+
+- **Mandy Mao (Scrum Master)**
+
+**Sprint 2**
+
+- **Valeria Chang (Product Owner)**
+
+- **Yasmine Ksiyer (Scrum Master)**
+
+**Sprint 3**
+
+- **Yasmine Ksiyer (Product Owner)**
+
+- **Susan Thao (Scrum Master)**
+
+**Sprint 4**
+
+- **Mandy Mao (Product Owner)**
+
+- **Muhammad Abyan Ahmed (Scrum Matser)**
 
 ---
 
