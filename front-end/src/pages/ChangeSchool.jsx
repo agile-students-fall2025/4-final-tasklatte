@@ -43,7 +43,7 @@ const ChangeSchool = () => {
 
     return (
         <div className="ChangeSchool">
-            <HeaderBar title="Change School" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+            <HeaderBar title="Change School" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
             <div className="school-content">
                 <h1>Settings</h1>
                 <h4>School:</h4>

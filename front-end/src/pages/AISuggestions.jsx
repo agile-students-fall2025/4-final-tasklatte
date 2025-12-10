@@ -237,7 +237,7 @@ export default function AiSuggestions() {
 
   return (
     <div className="page">
-      <HeaderBar title="AI Suggestions" onHamburger={() => setMenuOpen(true)} />
+      <HeaderBar title="AI Suggestions" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")}/>
 
       <main className="suggestions-main">
         <div className="blurb pixel-font">

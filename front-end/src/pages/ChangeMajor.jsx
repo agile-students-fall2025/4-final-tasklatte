@@ -44,7 +44,7 @@ const ChangeMajor = () => {
 
     return (
         <div className="ChangeMajor">
-            <HeaderBar title="Change Major" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+            <HeaderBar title="Change Major" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
             <div className="major-content">
                 <h1>Settings</h1>
                 <h4>Major:</h4>

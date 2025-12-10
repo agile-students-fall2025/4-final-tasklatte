@@ -59,7 +59,7 @@ export default function DashboardPage() {
         <HeaderBar
             title="Dashboard"
             onHamburger={() => setMenuOpen(true)}
-            onLogo={() => navigate("/")}
+            onLogo={() => navigate("/dashboard")}
         />
 
         <main className="dashboard-content">

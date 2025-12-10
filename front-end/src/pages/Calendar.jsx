@@ -26,7 +26,7 @@ export default function CalendarPage() {
       <HeaderBar
         title="Calendar" 
         onHamburger={() => setMenuOpen(true)}
-        onLogo={() => {}}
+        onLogo={() => navigate("/dashboard")}
       />
       {/* <h1 className="calendar-title">Calendar</h1> */}
 

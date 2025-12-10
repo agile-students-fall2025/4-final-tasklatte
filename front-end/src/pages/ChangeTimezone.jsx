@@ -43,7 +43,7 @@ const ChangeTimezone = () => {
 
     return (
         <div className="ChangeTimezone">
-            <HeaderBar title="Change Timezone" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+            <HeaderBar title="Change Timezone" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
             <div className="timezone-content">
                 <h1>Settings</h1>
                 <h4>Timezone:</h4>

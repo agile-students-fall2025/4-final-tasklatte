@@ -69,7 +69,7 @@ const Goals = () => {
 
     return(
         <div className = "Goals">
-            <HeaderBar title="Goals" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+            <HeaderBar title="Goals" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
 
             <div className = "goal-content">
                 <h1>Goals</h1>

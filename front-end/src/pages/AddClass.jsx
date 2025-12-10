@@ -94,7 +94,7 @@ export default function AddClass() {
 
   return (
     <div className="addtask-container">
-      <HeaderBar title="Add Class" onHamburger={() => setMenuOpen(true)} />
+      <HeaderBar title="Add Class" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
 
       <main className="addtask-main">
         <form className="addtask-sheet" onSubmit={handleSubmit}>

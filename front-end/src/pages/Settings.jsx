@@ -70,7 +70,7 @@ const Settings = () => {
       <HeaderBar
         title="Settings"
         onHamburger={() => setMenuOpen(true)}
-        onLogo={() => navigate("/")}
+        onLogo={() => navigate("/dashboard")}
       />
 
       <div className="settings-content">

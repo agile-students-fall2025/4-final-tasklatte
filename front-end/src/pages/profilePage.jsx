@@ -56,10 +56,10 @@ export default function ProfilePage() {
           id: data.id || null,
           name: data.name?.trim() || "Unknown User",
           username: data.username || "",
-          bio: data.bio || "",
-          major: data.major || "",
-          school: data.school || "",
-          grade: data.grade || "N/A",
+          bio: data.bio || "No Bio",
+          major: data.major || "No Major",
+          school: data.school || "No School",
+          grade: data.grade || "No Grade",
           timezone: data.timezone || "UTC",
           photo: statePhoto || data.photo || profile.photo || "pic1.jpeg",
           goals: Array.isArray(data.goals) ? data.goals : [],
@@ -77,7 +77,7 @@ export default function ProfilePage() {
       <HeaderBar
         title="Profile Page"
         onHamburger={() => setMenuOpen(true)}
-        onLogo={() => navigate("/")}
+        onLogo={() => navigate("/dashboard")}
       />
 
       <main className="profile-main">

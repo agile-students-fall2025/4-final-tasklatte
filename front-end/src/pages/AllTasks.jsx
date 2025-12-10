@@ -87,7 +87,7 @@ export default function AllTasks() {
 
   return (
     <div className="allpixel-page">
-      <HeaderBar title="All Tasks" onHamburger={() => setMenuOpen(true)} onLogo={() => {}} />
+      <HeaderBar title="All Tasks" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
 
       <section className="allpixel-filters">
         <div className="allpixel-row">

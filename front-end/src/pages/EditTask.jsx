@@ -113,7 +113,7 @@ export default function EditTask({ tasks = [], setTasks }) {
       <HeaderBar
         title="Edit Task"
         onHamburger={() => setMenuOpen(true)}
-        onLogo={() => {}}
+        onLogo={() => navigate("/dashboard")}
       />
 
       <main className="edittask-main">

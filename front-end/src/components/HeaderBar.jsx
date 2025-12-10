@@ -8,7 +8,7 @@ export default function HeaderBar({ title = "Page Title", onHamburger, onLogo })
         <span /><span /><span />
       </button>
       <h1 className="header-title">{title}</h1>
-      <img src={logo} alt="Logo" className="logo" />
+      <img src={logo} alt="Logo" className="logo" onClick={onLogo} />
     </header>
   );
 }

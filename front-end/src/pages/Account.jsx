@@ -80,7 +80,7 @@ export default function Account() {
         <HeaderBar 
             title="Account Setup"
             onHamburger={() => setMenuOpen(true)}
-            onLogo={() => navigate("/")} />
+            onLogo={() => navigate("/dashboard")} />
 
         <main className="account-content">
             <h1>Hi, {name}!</h1>
