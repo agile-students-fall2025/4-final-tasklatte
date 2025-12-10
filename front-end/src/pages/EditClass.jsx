@@ -85,7 +85,7 @@ export default function EditClass() {
 
   return (
     <div className="edittask-container">
-      <HeaderBar title="Edit Class" onHamburger={() => setMenuOpen(true)} />
+      <HeaderBar title="Edit Class" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")} />
 
       <main className="edittask-main">
         <form className="sheet" onSubmit={handleSave}>

@@ -70,7 +70,7 @@ export default function DailyTasks() {
       <HeaderBar
         title={`Daily Tasks${date ? ` (${date})` : ""}`}
         onHamburger={() => setMenuOpen(true)}
-        onLogo={() => {}}
+        onLogo={() => navigate("/dashboard")}
       />
 
       <main className="dailypixel-main">

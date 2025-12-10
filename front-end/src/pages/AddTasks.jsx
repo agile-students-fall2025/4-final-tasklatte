@@ -70,7 +70,7 @@ export default function AddTasks({ onTaskAdded }) {
 
   return (
     <div className="addtask-container">
-      <HeaderBar title="Add Task" onHamburger={() => setMenuOpen(true)} />
+      <HeaderBar title="Add Task" onHamburger={() => setMenuOpen(true)} onLogo={() => navigate("/dashboard")}/>
 
       <main className="addtask-main">
         <form className="addtask-sheet" onSubmit={handleSave}>
