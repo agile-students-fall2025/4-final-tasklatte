@@ -79,8 +79,12 @@ export default function ProfilePage() {
         onHamburger={() => setMenuOpen(true)}
         onLogo={() => navigate("/dashboard")}
       />
-
       <main className="profile-main">
+            <span id="settings"
+          onClick={() => navigate("/settings")}
+          style={{ cursor: "pointer" }}
+        >⚙
+      </span>
         <div className="profile-card pixel-frame">
           <div className="profile-left">
             <img
@@ -108,6 +112,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="goals-section">
+          {/* <span id="add-goal">⊕</span> */}
           <h3 className="pixel-font section-title">Goals</h3>
           {profile.goals.map((g, index) => (
             <div

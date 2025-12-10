@@ -67,7 +67,7 @@ const buildBusyMinutes = (classes, otherTasks, today) => {
   return busy;
 };
 
-const findFreeBlock = (busy, duration, dayStart = 480, dayEnd = 1320) => {
+const findFreeBlock = (busy, duration, dayStart = 420, dayEnd = 1320) => {
   for (let i = dayStart; i <= dayEnd - duration; i++) {
     let canFit = true;
     for (let j = 0; j < duration; j++) {
@@ -102,7 +102,7 @@ const generateSafeSuggestions = (tasks, classes, otherTasks, today) => {
 
     let startMin = null;
 
-    for (let minute = 480; minute <= 1320 - task.duration; minute++) {
+    for (let minute = 420; minute <= 1320 - task.duration; minute++) {
       if (deadlineMinutes != null && minute + task.duration > deadlineMinutes) {
         break;
       }
