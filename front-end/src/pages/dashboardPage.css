@@ -1,7 +1,7 @@
 .dashboard-page {
     background: #f4e7d3;
     color: #4b2e05;
-    font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
     display: flex;
     flex-direction: column;
     height: 100vh;

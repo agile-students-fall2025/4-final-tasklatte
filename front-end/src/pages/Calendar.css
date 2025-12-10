@@ -67,7 +67,7 @@
   border: 1px solid #1f1f1f;
   background: #f4e7d3;
   overflow: hidden;
-  font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
   color: #4b2e05;
 }
 
@@ -89,7 +89,7 @@
   box-shadow: 4px 4px 0 #b9895a;
   padding: 1rem;
   color: #4b2e05;
-  font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
 }
 
 .react-calendar__navigation {
@@ -104,7 +104,7 @@
   border: 2px solid #5a3c15;
   border-radius: 4px;
   color: #4b2e05;
-  font-family: "Press Start 2P", monospace;
+    font-family: "Pixelify Sans", sans-serif;
   font-size: 8px;
   padding: 8px 12px;
   cursor: pointer;
