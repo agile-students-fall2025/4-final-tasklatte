@@ -14,6 +14,7 @@ export default function LoginPage() {
     const [menuOpen, setMenuOpen] = useState(false); // Controls hamburger menu
     const [username, setUsername] = useState(""); // Username input field
     const [password, setPassword] = useState(""); // Password input field
+    const [showPassword, setShowPassword] = useState(false);
     const API_BASE = process.env.REACT_APP_API_URL || "";
 
     // -----------------------------
